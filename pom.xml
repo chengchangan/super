@@ -17,12 +17,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
+        <spring.boot.version>2.2.5.RELEASE</spring.boot.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
         <spring.cloud.openfeign.version>2.2.2.RELEASE</spring.cloud.openfeign.version>
         <junit.version>4.12</junit.version>
         <log4j.version>1.2.17</log4j.version>
-        <lombok.version>1.16.18</lombok.version>
+        <lombok.version>1.18.0</lombok.version>
         <mysql.version>6.0.6</mysql.version>
         <druid.version>1.1.16</druid.version>
         <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
@@ -31,7 +31,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--spring boot 2.2.2-->
+            <!--spring boot 2.2.5.RELEASE-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -166,7 +166,6 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
-
 
 
     </dependencies>
