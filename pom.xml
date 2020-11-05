@@ -19,7 +19,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
         <spring.cloud.alibaba.version>2.2.3.RELEASE</spring.cloud.alibaba.version>
-        <spring.cloud.openfeign.version>2.2.2.RELEASE</spring.cloud.openfeign.version>
+        <spring.cloud.version>Hoxton.SR3</spring.cloud.version>
         <junit.version>4.12</junit.version>
         <log4j.version>1.2.17</log4j.version>
         <lombok.version>1.18.0</lombok.version>
@@ -48,11 +48,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- openFeign -->
+            <!--spring cloud Hoxton.SR3-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-openfeign-dependencies</artifactId>
-                <version>${spring.cloud.openfeign.version}</version>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
