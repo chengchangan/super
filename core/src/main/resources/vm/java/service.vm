@@ -1,0 +1,21 @@
+#set($moduleName="")
+#if(${table.module})
+    ${moduleName}=.${table.module}
+#end
+package ${context.basePackage}.service${moduleName};
+
+import com.cca.core.generator.supperClass.service.BaseService;
+import ${context.basePackage}.mode.domain${moduleName}.${table.className};
+import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
+
+/**
+ * ${table.comment} service
+ *
+ * @author code-generator
+ * @version 1.0
+ * @date ${date}
+ */
+public interface ${table.className}Service extends BaseService<${table.className}, ${table.className}Query> {
+
+
+}

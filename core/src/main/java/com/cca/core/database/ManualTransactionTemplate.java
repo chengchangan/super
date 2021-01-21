@@ -1,4 +1,4 @@
-package database;
+package com.cca.core.database;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;

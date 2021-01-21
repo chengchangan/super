@@ -1,0 +1,29 @@
+package ${context.basePackage}.mode.vo #if(${table.module}) .${table.module} #end;
+
+import lombok.Data;
+
+#foreach($import in ${table.domainImports})
+import $import;
+#end
+
+/**
+ * ${table.comment} VO
+ *
+ * @author code-generator
+ * @version 1.0
+ * @date ${date}
+ */
+@Data
+public class ${table.className}VO {
+
+#foreach($column in ${table.columnList})
+#if(!$column.javaIgnore)
+    /**
+     * ${column.comment}
+     */
+    private ${column.javaType} ${column.fieldName};
+#end
+
+#end
+
+}

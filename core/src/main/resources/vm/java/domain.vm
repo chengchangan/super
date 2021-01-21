@@ -1,0 +1,37 @@
+package ${context.basePackage}.mode.domain #if(${table.module}) .${table.module} #end;
+
+import com.cca.core.generator.supperClass.entity.BaseDO;
+import lombok.Data;
+
+#foreach($import in ${table.domainImports})
+import $import;
+#end
+
+/**
+ * ${table.comment}
+ *
+ * @author code-generator
+ * @version 1.0
+ * @date ${date}
+ */
+@Data
+public class ${table.className} extends BaseDO {
+
+#foreach($column in ${table.columnList})
+#if(!$column.javaIgnore)
+    /**
+     * ${column.comment}
+     */
+    private ${column.javaType} ${column.fieldName};
+
+#end
+#if($column.pkColumn)
+    #set($pkField="${column.fieldName}")
+#end
+#end
+
+    @Override
+    public Long getPrimaryKey() {
+        return ${pkField};
+    }
+}

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+## 模块
+#set($module ="")
+#if(${table.module})
+    $module = .${table.module}
+#end
+
+#set($fullName=${context.basePackage}+".dao"+${module}+"."+${table.className})
+#set($domainName=${context.basePackage}+".mode.domain"+${module}+"."+${table.className})
+#set($queryName=${context.basePackage}+".mode.query"+${module}+"."+${table.className}+"Query")
+#set($order="DESC")
+<mapper namespace="${fullName}Mapper">
+
+    <sql id="columns">${table.getColumns()}</sql>
+
+## 结果集映射
+    <resultMap id="resultMap" type="${domainName}">
+#foreach(${column} in ${table.columnList})
+#if(${column.pkColumn})
+        <id column="${column.columnName}" property="${column.fieldName}"/>
+#else
+        <result column="${column.columnName}" property="${column.fieldName}"/>
+#end
+#end
+    </resultMap>
+
+    <sql id="columnMapping">
+#foreach(${column} in ${table.columnList})
+        ${column.columnName}                AS ${column.fieldName}
+#end
+    </sql>
+
+## eq where条件
+    <sql id="equalWhere">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+#foreach(${column} in ${table.columnList})
+#if($column.javaType=="String")
+            <if test="ew.${column.fieldName}!=null and ew.${column.fieldName}!=''">
+                AND ${column.columnName}=#{ew.${column.fieldName}}
+            </if>
+#else
+            <if test="ew.${column.fieldName}!=null">
+                AND ${column.fieldName}=#{ew.${column.fieldName}}
+            </if>
+#end
+#end
+        </trim>
+    </sql>
+
+## 主键条件
+    <sql id="pkWhere">
+#if(${table.getPkColumn()})
+        WHERE ${table.getPkColumn().columnName}=#{pk}
+#end
+    </sql>
+
+## 新增
+    <insert id="insert" parameterType="${domainName}">
+        INSERT INTO ${table.tableName}(${columnNames})
+        VALUES(
+        <trim suffixOverrides=",">
+#foreach($field in ${table.columnList})
+            #{entity.${field.fieldName}},
+#end
+        </trim>)
+    </insert>
+
+## 更新
+    <update id="updateByExample" parameterType="${domainName}">
+        UPDATE ${table.tableName}
+        <trim prefix="SET" suffixOverrides=",">
+#foreach($field in ${table.columnList})
+#if(${field.columnName}=="version")
+    <if test="entity.${field.fieldName}!=null">
+                ${field.columnName}=#{entity.${field.fieldName}}+1,
+            </if>
+#else
+            <if test="entity.${field.fieldName}!=null">${field.columnName}=#{entity.${field.fieldName}},</if>
+#end
+#end
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+#foreach($field in ${table.columnList})
+#if(${field.columnName}=="version")
+            AND ${field.columnName}=#{ew.${field.fieldName}}
+#else
+            <if test="ew.${field.fieldName}!=null">
+                AND ${field.columnName}=#{ew.${field.fieldName}}
+            </if>
+#end
+#end
+        </trim>
+        LIMIT 1
+    </update>
+
+## 根据主键更新
+<update id="updateByPk" parameterType="${domainName}">
+    UPDATE ${table.tableName}
+    <trim prefix="SET" suffixOverrides=",">
+#foreach($field in ${table.columnList})
+#if(${field.columnName}=="version")
+        <if test="entity.${field.fieldName}!=null">
+            ${field.columnName}=#{entity.${field.fieldName}}+1,
+        </if>
+#else
+        <if test="entity.${field.fieldName}!=null">${field.columnName}=#{entity.${field.fieldName}},</if>
+#end
+#end
+    </trim>
+    <include refid="pkWhere"/>
+    LIMIT 1
+</update>
+
+    deleteByPk
+## 删除
+    <delete id="deleteByPk">
+        DELETE FROM ${table.tableName}
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </delete>
+
+    <delete id="deleteByExample">
+        DELETE FROM ${table.tableName}
+        <include refid="equalWhere"/>
+    </delete>
+
+## 查询
+    <select id="getByKey" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM ${table.tableName}
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </select>
+
+    <select id="list" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM ${table.tableName}
+        <include refid="equalWhere"/>
+        ORDER BY ${table.getPkColumn().columnName} ${order}
+    </select>
+
+    <select id="listPage" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM ${table.tableName}
+        <include refid="equalWhere"/>
+        ORDER BY ${table.getPkColumn().columnName} ${order}
+    </select>
+
+</mapper>
