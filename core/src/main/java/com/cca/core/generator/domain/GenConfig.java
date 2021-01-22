@@ -18,6 +18,11 @@ public class GenConfig {
     private String basePackage;
 
     /**
+     * 数据源名称
+     */
+    private String dataSource;
+
+    /**
      * 需要生成那些表的代码
      */
     private List<String> generateTableList;
@@ -28,8 +33,8 @@ public class GenConfig {
     private boolean ignoreTableFirstWord;
 
     /**
-     * 数据源名称
+     * 是否忽略生成service代码
      */
-    private String dataSource;
+    private boolean ignoreServiceCode;
 
 }

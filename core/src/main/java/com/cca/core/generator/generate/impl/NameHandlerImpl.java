@@ -45,14 +45,14 @@ public class NameHandlerImpl implements NameHandler {
 
     protected String parseBeanName(boolean ignoreTableFirstWord, String columnName) {
         List<String> words = StringUtil.words(columnName);
-
-        String name = "";
+        StringBuilder name = new StringBuilder();
         for (int i = 0; i < words.size(); i++) {
-            if (ignoreTableFirstWord && i != 0) {
-                name += StringUtil.upCaseFirst(words.get(i));
+            if (ignoreTableFirstWord && i == 0) {
+                continue;
             }
+            name.append(StringUtil.upCaseFirst(words.get(i)));
         }
-        return name;
+        return name.toString();
     }
 
     protected String parseFieldName(String columnName) {

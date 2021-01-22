@@ -7,8 +7,10 @@ import com.cca.core.generator.domain.property.DataBase;
 import com.cca.core.generator.generate.impl.MssqlCommentHandler;
 import com.cca.core.generator.generate.impl.NameHandlerImpl;
 import com.cca.core.generator.generate.impl.TemplateEngineImpl;
+import com.cca.core.util.Assert;
 import com.cca.core.util.FileUtil;
 import com.cca.core.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,6 +23,7 @@ import java.util.Properties;
  * @version 1.0
  * @date 2021/1/18 17:04
  */
+@Slf4j
 public class Generator {
 
     protected Connection conn;
@@ -53,6 +56,10 @@ public class Generator {
 
         tableMap.forEach((tableName, table) -> {
             for (TemplateConfig templateConfig : config.getTemplateList()) {
+                if (Assert.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("service")) {
+                    log.info("忽略生成 service：{}" , tableName);
+                    continue;
+                }
                 nameHandler.processTableToClass(config, table);
                 String content = templateEngine.parseTemplate(config, templateConfig.getTemplatePath(), table);
                 String writePath = templateEngine.getWritePath(config.getBasePackage(), templateConfig, table);

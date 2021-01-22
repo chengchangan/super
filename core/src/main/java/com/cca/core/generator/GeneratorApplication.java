@@ -6,6 +6,7 @@ import com.cca.core.generator.domain.Configuration;
 import com.cca.core.generator.domain.GenConfig;
 import com.cca.core.generator.domain.property.DataBase;
 import com.cca.core.generator.generate.Generator;
+import com.cca.core.util.Assert;
 import com.cca.core.util.FileUtil;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
@@ -87,6 +88,7 @@ public class GeneratorApplication implements ApplicationContextAware {
         }
         config.setGenerateTableList(genConfig.getGenerateTableList());
         config.setIgnoreTableFirstWord(Boolean.TRUE.equals(genConfig.isIgnoreTableFirstWord()));
+        config.setIgnoreServiceCode(Assert.isTrue(genConfig.isIgnoreServiceCode()));
     }
 
 

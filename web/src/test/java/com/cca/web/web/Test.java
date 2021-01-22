@@ -1,7 +1,7 @@
 package com.cca.web.web;
 
-import com.cca.web.BaseTest;
 import com.cca.core.generator.GeneratorApplication;
+import com.cca.web.BaseTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -15,7 +15,7 @@ public class Test extends BaseTest {
     private GeneratorApplication generatorApplication;
 
     @org.junit.Test
-    public void test01(){
+    public void test01() {
         generatorApplication.generate(null);
     }
 }

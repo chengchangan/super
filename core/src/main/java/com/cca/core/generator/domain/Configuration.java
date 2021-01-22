@@ -43,11 +43,10 @@ public class Configuration {
      */
     private boolean ignoreTableFirstWord;
 
-//    /**
-//     * 表
-//     */
-//    private List<Table> tableList;
-
+    /**
+     * 是否忽略生成service代码
+     */
+    private boolean ignoreServiceCode;
 
 
 }
