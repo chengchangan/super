@@ -26,7 +26,7 @@ import javax.annotation.Resource;
  * @date ${date}
  */
 @Service
-public class ${table.className}ServiceImpl extends AbstractService<${table.className}, ${table.className}Query> implements CategoryService {
+public class ${table.className}ServiceImpl extends AbstractService<${table.className}, ${table.className}Query> implements ${table.className}Service {
 
     @Resource
     private ${mapperClass} ${mapperName};

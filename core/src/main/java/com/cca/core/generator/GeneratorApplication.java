@@ -33,11 +33,6 @@ public class GeneratorApplication implements ApplicationContextAware {
     }
 
     public void generate(GenConfig genConfig) {
-        new GeneratorApplication().beginGenerate(genConfig);
-    }
-
-
-    private void beginGenerate(GenConfig genConfig) {
         //解析命令行
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option<String> configOperation = parser.addStringOption('c', "config");

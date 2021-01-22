@@ -58,7 +58,7 @@
 
 ## 新增
     <insert id="insert" parameterType="${domainName}">
-        INSERT INTO ${table.tableName}(${columnNames})
+        INSERT INTO ${table.tableName}(${table.getColumns()})
         VALUES(
         <trim suffixOverrides=",">
 #foreach($field in ${table.columnList})
@@ -96,24 +96,23 @@
     </update>
 
 ## 根据主键更新
-<update id="updateByPk" parameterType="${domainName}">
-    UPDATE ${table.tableName}
-    <trim prefix="SET" suffixOverrides=",">
+    <update id="updateByPk" parameterType="${domainName}">
+        UPDATE ${table.tableName}
+        <trim prefix="SET" suffixOverrides=",">
 #foreach($field in ${table.columnList})
 #if(${field.columnName}=="version")
-        <if test="entity.${field.fieldName}!=null">
-            ${field.columnName}=#{entity.${field.fieldName}}+1,
-        </if>
+            <if test="entity.${field.fieldName}!=null">
+                ${field.columnName}=#{entity.${field.fieldName}}+1,
+            </if>
 #else
-        <if test="entity.${field.fieldName}!=null">${field.columnName}=#{entity.${field.fieldName}},</if>
+            <if test="entity.${field.fieldName}!=null">${field.columnName}=#{entity.${field.fieldName}},</if>
 #end
 #end
-    </trim>
-    <include refid="pkWhere"/>
-    LIMIT 1
-</update>
+        </trim>
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </update>
 
-    deleteByPk
 ## 删除
     <delete id="deleteByPk">
         DELETE FROM ${table.tableName}

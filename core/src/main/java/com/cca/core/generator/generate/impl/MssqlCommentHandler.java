@@ -1,11 +1,10 @@
 package com.cca.core.generator.generate.impl;
 
 
-
 import cn.hutool.core.collection.CollectionUtil;
-import com.cca.core.generator.generate.CommentHandler;
 import com.cca.core.generator.domain.Column;
 import com.cca.core.generator.domain.Table;
+import com.cca.core.generator.generate.CommentHandler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -30,13 +29,13 @@ public class MssqlCommentHandler implements CommentHandler {
         if (CollectionUtil.isNotEmpty(tables)) {
             tables = tables.stream().map((table -> "'" + table + "'")).collect(Collectors.toList());
 
-            builder.append(" AND TABLE_NAME IN (").append(String.join(",", tables)).append(")");
+            builder.append(" AND TABLE_NAME IN (").append(String.join("," , tables)).append(")");
         }
         ResultSet rs = runSql(connection, builder.toString());
-        return buildTableMap(connection, rs);
+        return buildTableMap(connection, database, rs);
     }
 
-    private Map<String, Table> buildTableMap(Connection connection, ResultSet rs) {
+    private Map<String, Table> buildTableMap(Connection connection, String database, ResultSet rs) {
         Map<String, Table> map = new HashMap<>(100);
         try {
             if (rs != null) {
@@ -44,7 +43,7 @@ public class MssqlCommentHandler implements CommentHandler {
                     Table table = new Table();
                     table.setTableName(rs.getString("TABLE_NAME"));
                     table.setComment(rs.getString("TABLE_COMMENT"));
-                    table.setColumnList(getColumnInfo(connection, table));
+                    table.setColumnList(getColumnInfo(connection, database, table));
                     table.setDomainImports(new HashSet<>());
                     map.put(table.getTableName(), table);
                 }
@@ -57,8 +56,8 @@ public class MssqlCommentHandler implements CommentHandler {
         return map;
     }
 
-    private List<Column> getColumnInfo(Connection connection, Table table) {
-        ResultSet rs = runSql(connection, "select DISTINCT column_name,data_type,column_key,column_comment from information_schema.columns where table_name='" + table.getTableName() + "' order By ORDINAL_POSITION");
+    private List<Column> getColumnInfo(Connection connection, String database, Table table) {
+        ResultSet rs = runSql(connection, "select DISTINCT column_name,data_type,column_key,column_comment from information_schema.columns where TABLE_SCHEMA='" + database + "' AND TABLE_NAME='" + table.getTableName() + "' order By ORDINAL_POSITION");
         return buildColumn(rs);
     }
 

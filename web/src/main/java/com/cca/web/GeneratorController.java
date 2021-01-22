@@ -4,6 +4,7 @@ import com.cca.core.generator.GeneratorApplication;
 import com.cca.core.generator.domain.GenConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +27,7 @@ public class GeneratorController {
      * @param genConfig 配置
      */
     @PostMapping("/java")
-    public void generate(GenConfig genConfig) {
+    public void generate(@RequestBody GenConfig genConfig) {
         generatorApplication.generate(genConfig);
     }
 
