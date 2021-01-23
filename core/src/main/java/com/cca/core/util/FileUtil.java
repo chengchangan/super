@@ -75,8 +75,8 @@ public class FileUtil {
             dir = path.substring(0, path.lastIndexOf("/"));
             pattern = path.substring(dir.length() + 1);
         }
-        pattern = pattern.replace("*" , ".*");
-        pattern = pattern.replace("?" , ".?");
+        pattern = pattern.replace("*", ".*");
+        pattern = pattern.replace("?", ".?");
         List<File> files = findClassPathFiles(dir);
         List<File> result = new ArrayList<>();
         for (File file : files) {

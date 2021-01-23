@@ -37,10 +37,10 @@ public class Generator {
         Class.forName(database.getDriverClass());
 
         Properties properties = new Properties();
-        properties.setProperty("user" , database.getUser());
-        properties.setProperty("password" , database.getPassword());
-        properties.setProperty("remarks" , "true");
-        properties.setProperty("useInformationSchema" , "true");
+        properties.setProperty("user", database.getUser());
+        properties.setProperty("password", database.getPassword());
+        properties.setProperty("remarks", "true");
+        properties.setProperty("useInformationSchema", "true");
         conn = DriverManager.getConnection(database.getUrl(), properties);
 
         templateEngine = new TemplateEngineImpl();
@@ -57,7 +57,7 @@ public class Generator {
         tableMap.forEach((tableName, table) -> {
             for (TemplateConfig templateConfig : config.getTemplateList()) {
                 if (Assert.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("service")) {
-                    log.info("忽略生成 service：{}" , tableName);
+                    log.info("忽略生成 service：{}", tableName);
                     continue;
                 }
                 nameHandler.processTableToClass(config, table);

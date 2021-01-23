@@ -13,27 +13,27 @@ public class TypeConvert {
     static HashMap<String, String> TYPE_CLASS_MAP = new HashMap<>();
 
     static {
-        TYPE_MAP.put("bit" , "Boolean");
-        TYPE_MAP.put("date" , "LocalDate");
-        TYPE_MAP.put("timestamp" , "LocalDateTime");
-        TYPE_MAP.put("datetime" , "LocalDateTime");
-        TYPE_MAP.put("varchar" , "String");
-        TYPE_MAP.put("nvarchar" , "String");
-        TYPE_MAP.put("mediumtext" , "String");
-        TYPE_MAP.put("char" , "String");
-        TYPE_MAP.put("bigint" , "Long");
-        TYPE_MAP.put("bigint unsigned" , "Long");
-        TYPE_MAP.put("int" , "Integer");
-        TYPE_MAP.put("int unsigned" , "Integer");
-        TYPE_MAP.put("double" , "Double");
-        TYPE_MAP.put("double unsigned" , "Double");
-        TYPE_MAP.put("decimal" , "Double");
-        TYPE_MAP.put("decimal unsigned" , "Double");
-        TYPE_MAP.put("tinyint" , "Integer");
-        TYPE_MAP.put("tinyint unsigned" , "Integer");
+        TYPE_MAP.put("bit", "Boolean");
+        TYPE_MAP.put("date", "LocalDate");
+        TYPE_MAP.put("timestamp", "LocalDateTime");
+        TYPE_MAP.put("datetime", "LocalDateTime");
+        TYPE_MAP.put("varchar", "String");
+        TYPE_MAP.put("nvarchar", "String");
+        TYPE_MAP.put("mediumtext", "String");
+        TYPE_MAP.put("char", "String");
+        TYPE_MAP.put("bigint", "Long");
+        TYPE_MAP.put("bigint unsigned", "Long");
+        TYPE_MAP.put("int", "Integer");
+        TYPE_MAP.put("int unsigned", "Integer");
+        TYPE_MAP.put("double", "Double");
+        TYPE_MAP.put("double unsigned", "Double");
+        TYPE_MAP.put("decimal", "Double");
+        TYPE_MAP.put("decimal unsigned", "Double");
+        TYPE_MAP.put("tinyint", "Integer");
+        TYPE_MAP.put("tinyint unsigned", "Integer");
 
-        TYPE_CLASS_MAP.put("LocalDate" , "java.time.LocalDate");
-        TYPE_CLASS_MAP.put("LocalDateTime" , "java.time.LocalDateTime");
+        TYPE_CLASS_MAP.put("LocalDate", "java.time.LocalDate");
+        TYPE_CLASS_MAP.put("LocalDateTime", "java.time.LocalDateTime");
 
     }
 

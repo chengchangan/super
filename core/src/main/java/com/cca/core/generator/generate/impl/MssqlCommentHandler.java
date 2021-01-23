@@ -29,7 +29,7 @@ public class MssqlCommentHandler implements CommentHandler {
         if (CollectionUtil.isNotEmpty(tables)) {
             tables = tables.stream().map((table -> "'" + table + "'")).collect(Collectors.toList());
 
-            builder.append(" AND TABLE_NAME IN (").append(String.join("," , tables)).append(")");
+            builder.append(" AND TABLE_NAME IN (").append(String.join(",", tables)).append(")");
         }
         ResultSet rs = runSql(connection, builder.toString());
         return buildTableMap(connection, database, rs);

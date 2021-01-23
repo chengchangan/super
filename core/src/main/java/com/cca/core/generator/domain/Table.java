@@ -50,7 +50,7 @@ public class Table {
         return String.join(",", columns);
     }
 
-    public Column getPkColumn(){
+    public Column getPkColumn() {
         Optional<Column> optional = columnList.stream().filter(Column::isPkColumn).findFirst();
         return optional.orElse(null);
     }
