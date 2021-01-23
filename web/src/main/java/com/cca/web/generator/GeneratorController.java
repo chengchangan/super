@@ -1,7 +1,9 @@
-package com.cca.web;
+package com.cca.web.generator;
 
 import com.cca.core.generator.GeneratorApplication;
-import com.cca.core.generator.domain.GenConfig;
+import com.cca.mode.inner.GenrateDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @date 2021/1/21 16:37
  */
+@Api(tags = "代码生成器")
 @RestController("ccaGenerator")
 @RequestMapping("/gen")
 public class GeneratorController {
@@ -26,8 +29,9 @@ public class GeneratorController {
      *
      * @param genConfig 配置
      */
+    @ApiOperation("代码生成器入口")
     @PostMapping("/java")
-    public void generate(@RequestBody GenConfig genConfig) {
+    public void generate(@RequestBody GenrateDTO genConfig) {
         generatorApplication.generate(genConfig);
     }
 

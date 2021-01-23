@@ -1,5 +1,5 @@
 {
-  "basePackage": "com.cca.demo",
+  "basePackage": "com.cca",
   "database": {
     "url": "jdbc:mysql://172.30.9.159:3306/scce-cos-cmc?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2b8&useSSL=false&verifyServerCertificate=true&requireSSL=false&useOldAliasMetadataBehavior=true&allowMultiQueries=true&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useAffectedRows=true",
     "driverClass": "com.mysql.cj.jdbc.Driver",

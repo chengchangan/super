@@ -3,11 +3,11 @@ package com.cca.core.generator;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSON;
 import com.cca.core.generator.domain.Configuration;
-import com.cca.core.generator.domain.GenConfig;
 import com.cca.core.generator.domain.property.DataBase;
 import com.cca.core.generator.generate.Generator;
 import com.cca.core.util.Assert;
 import com.cca.core.util.FileUtil;
+import com.cca.mode.inner.GenrateDTO;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
@@ -33,7 +33,7 @@ public class GeneratorApplication implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    public void generate(GenConfig genConfig) {
+    public void generate(GenrateDTO genrateDTO) {
         //解析命令行
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option<String> configOperation = parser.addStringOption('c', "config");
@@ -42,7 +42,7 @@ public class GeneratorApplication implements ApplicationContextAware {
             String json = FileUtil.readFileAsStream(configFile);
             Configuration config = JSON.parseObject(json, Configuration.class);
 
-            parseConfig(config, genConfig);
+            parseConfig(config, genrateDTO);
             Generator generator = new Generator();
             System.out.println("generate begin 开始：" + LocalDateTime.now());
             generator.run(config);
@@ -57,11 +57,11 @@ public class GeneratorApplication implements ApplicationContextAware {
      * 从spring 上下文中获取参数
      * 1、datasource
      */
-    private void parseConfig(Configuration config, GenConfig genConfig) {
+    private void parseConfig(Configuration config, GenrateDTO genrateDTO) {
         DataSource dataSource;
-        if (StringUtils.isNotBlank(genConfig.getDataSource())) {
+        if (StringUtils.isNotBlank(genrateDTO.getDataSource())) {
             // getByName
-            dataSource = (DataSource) applicationContext.getBean(genConfig.getDataSource());
+            dataSource = (DataSource) applicationContext.getBean(genrateDTO.getDataSource());
         } else {
             // getByType
             dataSource = applicationContext.getBean(DataSource.class);
@@ -83,12 +83,12 @@ public class GeneratorApplication implements ApplicationContextAware {
             throw new IllegalArgumentException("暂不支持数据源：" + dataSource.getClass().getName() + ",请使用[HikariDataSource，DruidDataSource]");
         }
         config.setDatabase(dataBase);
-        if (StringUtils.isNotEmpty(genConfig.getBasePackage())) {
-            config.setBasePackage(genConfig.getBasePackage());
+        if (StringUtils.isNotEmpty(genrateDTO.getBasePackage())) {
+            config.setBasePackage(genrateDTO.getBasePackage());
         }
-        config.setGenerateTableList(genConfig.getGenerateTableList());
-        config.setIgnoreTableFirstWord(Boolean.TRUE.equals(genConfig.isIgnoreTableFirstWord()));
-        config.setIgnoreServiceCode(Assert.isTrue(genConfig.isIgnoreServiceCode()));
+        config.setGenerateTableList(genrateDTO.getGenerateTableList());
+        config.setIgnoreTableFirstWord(Boolean.TRUE.equals(genrateDTO.isIgnoreTableFirstWord()));
+        config.setIgnoreServiceCode(Assert.isTrue(genrateDTO.isIgnoreServiceCode()));
     }
 
 
