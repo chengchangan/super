@@ -1,7 +1,7 @@
 package com.cca.web.generator;
 
 import com.cca.core.generator.GeneratorApplication;
-import com.cca.mode.inner.GenrateDTO;
+import com.cca.mode.inner.GenerateDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class GeneratorController {
      */
     @ApiOperation("代码生成器入口")
     @PostMapping("/java")
-    public void generate(@RequestBody GenrateDTO genConfig) {
+    public void generate(@RequestBody GenerateDTO genConfig) {
         generatorApplication.generate(genConfig);
     }
 
