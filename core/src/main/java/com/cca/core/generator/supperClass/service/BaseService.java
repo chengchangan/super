@@ -61,6 +61,15 @@ public interface BaseService<T extends BaseDO, Q extends Query> {
     T getByKey(Long id);
 
     /**
+     * 根据主键查询数据.
+     *
+     * @param id     主键
+     * @param fields 查询字段
+     * @return 实体对象
+     */
+    T getByKey(Long id, String fields);
+
+    /**
      * 根据示例获取单条数据.
      *
      * @param q 查询条件对象

@@ -1,5 +1,6 @@
 package com.cca.core.generator;
 
+import cn.hutool.core.util.BooleanUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSON;
 import com.cca.core.generator.domain.Configuration;
@@ -36,6 +37,8 @@ public class GeneratorApplication implements ApplicationContextAware {
     private String password;
     @Value("${spring.datasource.driver-class-name:#{null}}")
     private String driver;
+    @Value("${generator.test:false}")
+    private Boolean test;
 
 
     @Override
@@ -69,7 +72,27 @@ public class GeneratorApplication implements ApplicationContextAware {
      * 2、单数据源yml配置中取
      */
     private void parseConfig(Configuration config, GenerateDTO generateDTO) {
+        // 非测试环境，进行数据源自动选择
+        if (BooleanUtil.isFalse(test)) {
+            setDataSource(config, generateDTO);
+        }
 
+        if (StringUtils.isNotEmpty(generateDTO.getBasePackage())) {
+            config.setBasePackage(generateDTO.getBasePackage());
+        }
+        config.setGenerateTableList(generateDTO.getGenerateTableList());
+        config.setIgnoreTableFirstWord(Boolean.parseBoolean(generateDTO.getIgnoreTableFirstWord()));
+        config.setIgnoreServiceCode(Boolean.parseBoolean(generateDTO.getIgnoreServiceCode()));
+    }
+
+
+    /**
+     * 设置生成代码的数据源
+     *
+     * @param config      代码生成配置
+     * @param generateDTO controller 传入的配置
+     */
+    private void setDataSource(Configuration config, GenerateDTO generateDTO) {
         DataSource dataSource = null;
         if (StringUtils.isNotEmpty(generateDTO.getDataSource())) {
             // 多数据源，指定优先级最高
@@ -102,14 +125,7 @@ public class GeneratorApplication implements ApplicationContextAware {
         } else {
             throw new IllegalArgumentException("暂无发现数据源配置，请配置数据源相关信息重试！");
         }
-
         config.setDatabase(dataBase);
-        if (StringUtils.isNotEmpty(generateDTO.getBasePackage())) {
-            config.setBasePackage(generateDTO.getBasePackage());
-        }
-        config.setGenerateTableList(generateDTO.getGenerateTableList());
-        config.setIgnoreTableFirstWord(Boolean.parseBoolean(generateDTO.getIgnoreTableFirstWord()));
-        config.setIgnoreServiceCode(Boolean.parseBoolean(generateDTO.getIgnoreServiceCode()));
     }
 
 

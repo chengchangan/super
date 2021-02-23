@@ -45,7 +45,12 @@ public abstract class AbstractService<T extends BaseDO, Q extends Query> impleme
 
     @Override
     public T getByKey(Long id) {
-        return getMapper().getByKey(id);
+        return this.getByKey(id, "");
+    }
+
+    @Override
+    public T getByKey(Long id, String fields) {
+        return getMapper().getByKey(id, fields);
     }
 
     @Override

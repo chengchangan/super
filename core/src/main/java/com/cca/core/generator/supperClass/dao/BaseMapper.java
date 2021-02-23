@@ -59,11 +59,18 @@ public interface BaseMapper<T, Q extends Query> {
     /**
      * 根据主键查询
      *
-     * @param pk 主键
+     * @param pk     主键
+     * @param fields 查询字段
      * @return 返回的对象
      */
-    T getByKey(@Param("pk") Long pk);
+    T getByKey(@Param("pk") Long pk, @Param("fields") String fields);
 
+    /**
+     * 列表查询
+     *
+     * @param query 条件
+     * @return 返回值
+     */
     List<T> list(@Param("ew") Q query);
 
     Collection<T> listPage(@Param("ew") Q query);

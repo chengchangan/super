@@ -32,6 +32,46 @@
 #end
     </sql>
 
+## 查询
+    <select id="getByKey" resultMap="resultMap">
+        SELECT
+        <choose>
+            <when test="fields!=null and fields!=''">
+                #{fields}
+            </when>
+            <otherwise>
+                <include refid="columns"/>
+            </otherwise>
+        </choose>
+        FROM ${table.tableName}
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </select>
+
+    <select id="list" resultMap="resultMap">
+        SELECT
+        <choose>
+            <when test="ew.queryFields!=null and ew.queryFields!=''">
+                #{ew.queryFields}
+            </when>
+            <otherwise>
+                <include refid="columns"/>
+            </otherwise>
+        </choose>
+        FROM ${table.tableName}
+        <include refid="equalWhere"/>
+        ORDER BY ${table.getPkColumn().columnName} ${order}
+    </select>
+
+    <select id="listPage" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM ${table.tableName}
+        <include refid="equalWhere"/>
+        ORDER BY ${table.getPkColumn().columnName} ${order}
+    </select>
+
+
 ## eq where条件
     <sql id="equalWhere">
         <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -125,29 +165,5 @@
         <include refid="equalWhere"/>
     </delete>
 
-## 查询
-    <select id="getByKey" resultMap="resultMap">
-        SELECT
-        <include refid="columns"/>
-        FROM ${table.tableName}
-        <include refid="pkWhere"/>
-        LIMIT 1
-    </select>
-
-    <select id="list" resultMap="resultMap">
-        SELECT
-        <include refid="columns"/>
-        FROM ${table.tableName}
-        <include refid="equalWhere"/>
-        ORDER BY ${table.getPkColumn().columnName} ${order}
-    </select>
-
-    <select id="listPage" resultMap="resultMap">
-        SELECT
-        <include refid="columns"/>
-        FROM ${table.tableName}
-        <include refid="equalWhere"/>
-        ORDER BY ${table.getPkColumn().columnName} ${order}
-    </select>
 
 </mapper>
