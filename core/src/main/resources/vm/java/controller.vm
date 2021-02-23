@@ -16,6 +16,7 @@ import ${context.basePackage}.mode.domain${moduleName}.${table.className};
 import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /**
@@ -25,7 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0
  * @date ${date}
  */
-@RestController("/${baseMapping}")
+@RestController
+@RequestMapping("/${baseMapping}")
 public class ${table.className}Controller extends BaseController<${table.className}, ${table.className}Query> {
 
     @Autowired
