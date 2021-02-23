@@ -43,8 +43,8 @@ public class TemplateEngineImpl implements TemplateParse {
     }
 
     @Override
-    public String parseTemplate(Configuration config, String template1, Table table) {
-        Template template = Velocity.getTemplate(template1, Constants.UTF8);
+    public String parseTemplate(Configuration config, String templatePath, Table table) {
+        Template template = Velocity.getTemplate(templatePath, Constants.UTF8);
         VelocityContext context = createContext();
         context.put("table", table);
         context.put("context", config);
@@ -53,8 +53,6 @@ public class TemplateEngineImpl implements TemplateParse {
         return writer.toString();
     }
 
-    //    java.${basePackage}.mode.domain.${moduleName}.${fileName}
-//    resources.mappers.${module.name}.${bean.beanName}Mapper
     @Override
     public String getWritePath(String basePackage, TemplateConfig templateConfig, Table table) {
         StringBuilder builder = new StringBuilder(System.getProperty("user.dir")).append("\\src.main\\");

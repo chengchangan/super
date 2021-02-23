@@ -12,6 +12,13 @@ import com.cca.core.generator.domain.Table;
 public interface NameHandler {
 
 
+    /**
+     * 转换表名->类名
+     *    列名->字段名
+     *
+     * @param configuration 配置信息
+     * @param table 表信息
+     */
     void processTableToClass(Configuration configuration, Table table);
 
 }
