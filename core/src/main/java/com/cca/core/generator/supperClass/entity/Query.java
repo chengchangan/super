@@ -1,5 +1,7 @@
 package com.cca.core.generator.supperClass.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 查询基类
  *
@@ -9,7 +11,7 @@ package com.cca.core.generator.supperClass.entity;
  */
 public class Query {
 
-
+    @ApiModelProperty(value = "查询列", hidden = true)
     private String queryFields;
 
     public String getQueryFields() {
