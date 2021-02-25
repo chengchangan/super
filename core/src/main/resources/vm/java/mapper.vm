@@ -28,7 +28,11 @@
 
     <sql id="columnMapping">
 #foreach(${column} in ${table.columnList})
+#if(${velocityCount} == ${table.columnList.size()})
         ${column.columnName}                AS ${column.fieldName}
+#else
+        ${column.columnName}                AS ${column.fieldName},
+#end
 #end
     </sql>
 
@@ -82,7 +86,7 @@
             </if>
 #else
             <if test="ew.${column.fieldName}!=null">
-                AND ${column.fieldName}=#{ew.${column.fieldName}}
+                AND ${column.columnName}=#{ew.${column.fieldName}}
             </if>
 #end
 #end

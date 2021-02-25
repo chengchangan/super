@@ -1,9 +1,12 @@
 package com.cca.core.generator.supperClass.controller;
 
+import com.cca.core.generator.supperClass.entity.BaseDO;
 import com.cca.core.generator.supperClass.entity.Query;
 import com.cca.core.generator.supperClass.service.BaseService;
-import com.cca.core.generator.supperClass.entity.BaseDO;
+import com.cca.mode.response.Result;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author cca
@@ -14,23 +17,25 @@ public abstract class BaseController<T extends BaseDO, Q extends Query> {
 
 
     @PostMapping("/saveOrUpdate")
-    public void saveOrUpdate(T entity) {
-        this.getService().insertOrUpdate(entity);
+    public Result<Boolean> saveOrUpdate(@RequestBody T entity) {
+        int row = this.getService().insertOrUpdate(entity);
+        return row == 1 ? Result.success() : Result.failure();
     }
 
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        this.getService().deleteByPk(id);
+    public Result<Boolean> delete(@PathVariable("id") Long id) {
+        int row = this.getService().deleteByPk(id);
+        return row == 1 ? Result.success() : Result.failure();
     }
 
     @GetMapping("/getById/{id}")
-    public void getById(@PathVariable("id") Long id) {
-        this.getService().getByKey(id);
+    public Result<T> getById(@PathVariable("id") Long id) {
+        return Result.success(this.getService().getByKey(id));
     }
 
     @PostMapping("/list")
-    public void list(@RequestBody Q query) {
-        this.getService().listExample(query);
+    public Result<List<T>> list(@RequestBody Q query) {
+        return Result.success(this.getService().listExample(query));
     }
 
     @PostMapping("/pageList")

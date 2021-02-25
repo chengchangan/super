@@ -57,7 +57,7 @@ public class MssqlCommentHandler implements CommentHandler {
     }
 
     private List<Column> getColumnInfo(Connection connection, String database, Table table) {
-        ResultSet rs = runSql(connection, "select DISTINCT column_name,data_type,column_key,column_comment from information_schema.columns where TABLE_SCHEMA='" + database + "' AND TABLE_NAME='" + table.getTableName() + "' order By ORDINAL_POSITION");
+        ResultSet rs = runSql(connection, "select DISTINCT column_name,data_type,column_key,column_comment,ORDINAL_POSITION from information_schema.columns where TABLE_SCHEMA='" + database + "' AND TABLE_NAME='" + table.getTableName() + "' order By ORDINAL_POSITION");
         return buildColumn(rs);
     }
 

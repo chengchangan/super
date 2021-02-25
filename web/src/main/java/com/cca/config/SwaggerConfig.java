@@ -31,7 +31,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public Docket createUserRestApi() {
+    public Docket createGeneratorRestApi() {
         Parameter param1 = SwaggerUtil.createHeadParam("token", "令牌", "");
         ApiInfo apiInfo = SwaggerUtil.createApiInfo("标题", "代码生成器", "1.0.0");
         return SwaggerUtil.docket("代码生成器", apiInfo, "com.cca.web.generator", Collections.singletonList(param1));

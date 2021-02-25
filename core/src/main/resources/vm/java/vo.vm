@@ -1,6 +1,9 @@
-package ${context.basePackage}.mode.vo #if(${table.module}) .${table.module} #end;
+package ${context.basePackage}.mode.vo #if(${table.module}) .${table.module}#end;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 #foreach($import in ${table.domainImports})
 import $import;
@@ -17,12 +20,8 @@ import $import;
 public class ${table.className}VO {
 
 #foreach($column in ${table.columnList})
-#if(!$column.javaIgnore)
-    /**
-     * ${column.comment}
-     */
+    @ApiModelProperty(value = "${column.comment}")
     private ${column.javaType} ${column.fieldName};
-#end
 
 #end
 

@@ -1,7 +1,11 @@
-package ${context.basePackage}.mode.query #if(${table.module}) .${table.module} #end;
+package ${context.basePackage}.mode.query #if(${table.module}) .${table.module}#end;
 
 import com.cca.core.generator.supperClass.entity.Query;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 #foreach($import in ${table.domainImports})
 import $import;
@@ -15,15 +19,12 @@ import $import;
  * @date ${date}
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ${table.className}Query extends Query {
 
 #foreach($column in ${table.columnList})
-#if(!$column.javaIgnore)
-    /**
-     * ${column.comment}
-     */
+    @ApiModelProperty(value = "${column.comment}")
     private ${column.javaType} ${column.fieldName};
-#end
 
 #end
 

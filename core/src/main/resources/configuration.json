@@ -29,7 +29,7 @@
     },
     {
       "templatePath": "/vm/java/mapper.vm",
-      "filePath": "resources.mappers.${moduleName}.${fileName}Mapper",
+      "filePath": "resources.mapper.${moduleName}.${fileName}Mapper",
       "fileType": "xml"
     },
     {

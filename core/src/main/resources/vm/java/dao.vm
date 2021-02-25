@@ -7,7 +7,7 @@ package ${context.basePackage}.dao${moduleName};
 import com.cca.core.generator.supperClass.dao.BaseMapper;
 import ${context.basePackage}.mode.domain${moduleName}.${table.className};
 import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
-
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * ${table.comment} dao
@@ -16,6 +16,7 @@ import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
  * @version 1.0
  * @date ${date}
  */
+@Mapper
 public interface ${table.className}Mapper extends BaseMapper<${table.className}, ${table.className}Query> {
 
 

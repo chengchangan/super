@@ -1,6 +1,6 @@
 package com.cca.core.generator.supperClass.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -27,7 +27,7 @@ public abstract class BaseDO implements Serializable, Cloneable {
      *
      * @return 表的主键
      */
-    @JSONField(serialize = false)
+    @JsonIgnore
     public abstract Long getPrimaryKey();
 
 

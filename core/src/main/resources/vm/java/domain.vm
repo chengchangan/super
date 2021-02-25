@@ -1,7 +1,9 @@
-package ${context.basePackage}.mode.domain #if(${table.module}) .${table.module} #end;
+package ${context.basePackage}.mode.domain #if(${table.module}) .${table.module}#end;
 
 import com.cca.core.generator.supperClass.entity.BaseDO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 #foreach($import in ${table.domainImports})
 import $import;
@@ -15,23 +17,19 @@ import $import;
  * @date ${date}
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ${table.className} extends BaseDO {
 
 #foreach($column in ${table.columnList})
 #if(!$column.javaIgnore)
-    /**
-     * ${column.comment}
-     */
+    @ApiModelProperty(value = "${column.comment}")
     private ${column.javaType} ${column.fieldName};
 
-#end
-#if($column.pkColumn)
-    #set($pkField="${column.fieldName}")
 #end
 #end
 
     @Override
     public Long getPrimaryKey() {
-        return ${pkField};
+        return ${table.getPkColumn().fieldName};
     }
 }
