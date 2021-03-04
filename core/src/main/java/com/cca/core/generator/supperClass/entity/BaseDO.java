@@ -1,8 +1,8 @@
 package com.cca.core.generator.supperClass.entity;
 
+import com.cca.core.util.BeanUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -41,9 +41,7 @@ public abstract class BaseDO implements Serializable, Cloneable {
     }
 
     public <T> T convert(Class<T> clazz) {
-        T obj = BeanUtils.instantiateClass(clazz);
-        BeanUtils.copyProperties(this, obj);
-        return obj;
+        return BeanUtil.convert(this, clazz);
     }
 
 }

@@ -7,8 +7,11 @@ package com.cca.mode.response;
  */
 public enum MessageState {
 
-    SUCCESS(200, "成功"),
-    FAILURE(102, "失败");
+    FUSING(100, "熔断失败"),
+    FAILURE(101, "失败"),
+    SUCCESS(200, "成功");
+
+
 
     private final int code;
     private final String msg;

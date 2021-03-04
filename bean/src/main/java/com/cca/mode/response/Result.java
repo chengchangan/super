@@ -45,11 +45,21 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> failure() {
-        return new Result<>(null, true, MessageState.FAILURE.getMsg(), MessageState.FAILURE.getCode());
+        return new Result<>(null, false, MessageState.FAILURE.getMsg(), MessageState.FAILURE.getCode());
+    }
+
+    /**
+     * 熔断失败
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> Result<T> fusingFailure() {
+        return new Result<>(null, false, MessageState.FUSING.getMsg(), MessageState.FUSING.getCode());
     }
 
     public static <T> Result<T> failure(MessageState messageState) {
-        return new Result<>(null, true, messageState.getMsg(), messageState.getCode());
+        return new Result<>(null, false, messageState.getMsg(), messageState.getCode());
     }
 
     public static <T> Result<T> failure(Integer code, String msg) {
