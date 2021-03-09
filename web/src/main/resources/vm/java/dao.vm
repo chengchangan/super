@@ -1,0 +1,23 @@
+#set($moduleName="")
+#if(${table.module})
+ ${moduleName}=.${table.module}
+#end
+package ${context.basePackage}.dao${moduleName};
+
+import com.cca.web.generator.supperClass.dao.BaseMapper;
+import ${context.basePackage}.mode.domain${moduleName}.${table.className};
+import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * ${table.comment} dao
+ *
+ * @author code-generator
+ * @version 1.0
+ * @date ${date}
+ */
+@Mapper
+public interface ${table.className}Mapper extends BaseMapper<${table.className}, ${table.className}Query> {
+
+
+}

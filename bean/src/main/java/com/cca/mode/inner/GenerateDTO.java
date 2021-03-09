@@ -28,4 +28,10 @@ public class GenerateDTO {
     @ApiModelProperty("是否忽略生成service代码【true：是，false：否】")
     private String ignoreServiceCode;
 
+    @ApiModelProperty("是否忽略生成controller代码【true：是，false：否】")
+    private String ignoreControllerCode;
+
+    @ApiModelProperty("是否忽略生成mapper代码【true：是，false：否】")
+    private String ignoreMapperCode;
+
 }

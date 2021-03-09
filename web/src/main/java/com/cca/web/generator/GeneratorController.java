@@ -1,7 +1,7 @@
 package com.cca.web.generator;
 
-import com.cca.core.generator.GeneratorApplication;
 import com.cca.mode.inner.GenerateDTO;
+import com.cca.web.generator.GeneratorApplication;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

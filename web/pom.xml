@@ -17,6 +17,12 @@
             <artifactId>core</artifactId>
         </dependency>
 
+        <!-- web 支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>

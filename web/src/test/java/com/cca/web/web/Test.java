@@ -1,7 +1,7 @@
 package com.cca.web.web;
 
-import com.cca.core.generator.GeneratorApplication;
 import com.cca.web.BaseTest;
+import com.cca.web.generator.GeneratorApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
