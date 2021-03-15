@@ -23,7 +23,7 @@
         <spring.cloud.alibaba.version>2.2.3.RELEASE</spring.cloud.alibaba.version>
         <spring.cloud.version>Hoxton.SR3</spring.cloud.version>
         <junit.version>4.13.1</junit.version>
-        <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <lombok.version>1.18.0</lombok.version>
         <mysql.version>8.0.18</mysql.version>
         <druid.version>1.2.1</druid.version>
@@ -112,11 +112,16 @@
                 <version>${junit.version}</version>
             </dependency>
 
-            <!-- log4j -->
+            <!--log-->
             <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
             </dependency>
 
             <!-- lombok -->
