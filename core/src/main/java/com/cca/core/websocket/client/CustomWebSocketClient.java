@@ -59,7 +59,7 @@ public class CustomWebSocketClient extends WebSocketClient {
     @Override
     public void onError(Exception exception) {
         String host = super.getURI().getHost();
-        LOGGER.info("WebSocket onError，目标服务器：{}，异常：{}", host, exception.getMessage());
+        LOGGER.info("WebSocket onError，目标服务器：{}，异常：", host, exception);
         if (onErrorRetryConnect()) {
             clientManager.waitRetryConnect(host);
         }

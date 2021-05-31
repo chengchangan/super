@@ -5,6 +5,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.CollectionUtils;
 
 import javax.net.ssl.KeyManagerFactory;
@@ -25,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @date 2021/5/22 10:26
  */
-public class WebSocketClientManager {
+public class WebSocketClientManager implements ApplicationContextAware {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketClientManager.class);
 
@@ -43,9 +46,8 @@ public class WebSocketClientManager {
 
     protected MessageHandler handler;
 
-    public WebSocketClientManager(WebSocketConfig config, MessageHandler handler) {
+    public WebSocketClientManager(WebSocketConfig config) {
         this.config = config;
-        this.handler = handler;
         RETRY_CONNECT_EXECUTOR.scheduleWithFixedDelay(new RetryConnector(), 10, config.getConnectErrorRetryInterval(), TimeUnit.MINUTES);
     }
 
@@ -141,6 +143,11 @@ public class WebSocketClientManager {
             sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
             webSocketClient.setSocket(sslContext.getSocketFactory().createSocket());
         }
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.handler = applicationContext.getBean(MessageHandler.class);
     }
 
 

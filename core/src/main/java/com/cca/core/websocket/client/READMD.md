@@ -4,9 +4,6 @@
 @Configuration
 public class WebSocketConfiguration {
 
-    @Autowired
-    private MessageHandler handler;
-
     @Bean
     public WebSocketClientManager webSocketClientManager() {
         WebSocketConfig config = new WebSocketConfig();
@@ -14,9 +11,10 @@ public class WebSocketConfiguration {
         WebSocketConfig.ClientConfig clientConfig = getClientConfig();
         map.put(clientConfig.getIp(), clientConfig);
         config.setClientConfigMap(map);
-        return new WebSocketClientManager(config, handler);
+        return new WebSocketClientManager(config);
     }
 
+    // 示例值，可从配置文件中取
     private WebSocketConfig.ClientConfig getClientConfig() {
         WebSocketConfig.ClientConfig config = new WebSocketConfig.ClientConfig();
         config.setIp("127.0.0.1");
