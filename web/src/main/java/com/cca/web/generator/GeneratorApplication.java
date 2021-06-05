@@ -125,7 +125,9 @@ public class GeneratorApplication implements ApplicationContextAware {
             dataBase.setUrl(url);
             dataBase.setDriverClass(driver);
         } else {
-            throw new IllegalArgumentException("暂无发现数据源配置，请配置数据源相关信息重试！");
+            config.setDatabase(config.getDatabase());
+            return;
+//            throw new IllegalArgumentException("暂无发现数据源配置，请配置数据源相关信息重试！");
         }
         config.setDatabase(dataBase);
     }

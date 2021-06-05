@@ -1,10 +1,10 @@
 {
   "basePackage": "com.cca",
   "database": {
-    "url": "jdbc:mysql://172.30.9.159:3306/scce-cos-cmc?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2b8&useSSL=false&verifyServerCertificate=true&requireSSL=false&useOldAliasMetadataBehavior=true&allowMultiQueries=true&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useAffectedRows=true",
+    "url": "jdbc:mysql://120.79.136.105:3306/cloud2020?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2b8&useSSL=false&verifyServerCertificate=true&requireSSL=false&useOldAliasMetadataBehavior=true&allowMultiQueries=true&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useAffectedRows=true",
     "driverClass": "com.mysql.cj.jdbc.Driver",
     "user": "root",
-    "password": "m159s*388^k#dg"
+    "password": "root"
   },
   "templateList": [
     {

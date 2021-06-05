@@ -35,6 +35,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <swagger.bootstrap.ui.version>1.9.6</swagger.bootstrap.ui.version>
         <velocity.version>1.7</velocity.version>
+        <commons-io.version>2.8.0</commons-io.version>
     </properties>
 
     <dependencyManagement>
@@ -147,6 +148,11 @@
                 <groupId>org.java-websocket</groupId>
                 <artifactId>Java-WebSocket</artifactId>
                 <version>${websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
             <!--oshi 监控-->
             <dependency>

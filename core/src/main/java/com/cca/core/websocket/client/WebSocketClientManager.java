@@ -1,7 +1,7 @@
 package com.cca.core.websocket.client;
 
 import com.cca.core.util.KeyStoreLoader;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
