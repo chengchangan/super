@@ -8,6 +8,7 @@ package com.cca.core.proxy.test;
 
 public class UserImpl implements User {
 
+    @Override
     public void save() {
         int a = 1/0;
         System.out.println("save ...");

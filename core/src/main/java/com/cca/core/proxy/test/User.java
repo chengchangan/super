@@ -8,5 +8,5 @@ package com.cca.core.proxy.test;
 public interface User {
 
 
-//    void save();
+    void save();
 }

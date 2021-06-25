@@ -6,7 +6,6 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -42,7 +41,7 @@ public class RetryProxyFactory<T> {
 
     public RetryProxyFactory(T target, int intervalSecond, int times) {
         this.target = target;
-        this.intervalSecond = intervalSecond;
+        this.intervalSecond = intervalSecond * 1000;
         this.times = times;
     }
 
@@ -80,13 +79,14 @@ public class RetryProxyFactory<T> {
             return en.create();
         }
 
-        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws InterruptedException {
+        @Override
+        public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
             // 执行目标对象的方法
             Throwable exception = null;
             for (int i = 0; i < times; i++) {
                 try {
                     return method.invoke(target, args);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     Thread.sleep(intervalSecond);
                     logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
                     if (e instanceof InvocationTargetException) {
@@ -96,8 +96,11 @@ public class RetryProxyFactory<T> {
                     }
                 }
             }
-            throw new RuntimeException("服务调用失败，方法：" + method.getName() + "，参数：" + Arrays.toString(args) + "，重试次数：" + times + "，cause:" + exception);
-
+            if (exception == null) {
+                exception = new RuntimeException("未知异常");
+            }
+            logger.error("服务调用失败，方法：{}，参数：{}，重试次数：{}，cause：{}", method.getName(), Arrays.toString(args), times, exception.getMessage());
+            throw exception;
         }
 
     }
@@ -105,7 +108,7 @@ public class RetryProxyFactory<T> {
 
     class JdkProxy {
 
-        private final Object target;// 维护一个目标对象
+        private final Object target;
 
         public JdkProxy(Object target) {
             this.target = target;
@@ -114,25 +117,26 @@ public class RetryProxyFactory<T> {
         // 为目标对象生成代理对象
         public Object getProxyInstance() {
             return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(),
-                    new InvocationHandler() {
-                        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                            Throwable exception = null;
-                            for (int i = 0; i < times; i++) {
-                                try {
-                                    return method.invoke(target, args);
-                                } catch (Exception e) {
-                                    Thread.sleep(intervalSecond);
-                                    logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
-                                    if (e instanceof InvocationTargetException) {
-                                        exception = ((InvocationTargetException) e).getTargetException();
-                                    } else {
-                                        exception = e;
-                                    }
-
+                    (proxy, method, args) -> {
+                        Throwable exception = null;
+                        for (int i = 0; i < times; i++) {
+                            try {
+                                return method.invoke(target, args);
+                            } catch (Exception e) {
+                                Thread.sleep(intervalSecond);
+                                logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
+                                if (e instanceof InvocationTargetException) {
+                                    exception = ((InvocationTargetException) e).getTargetException();
+                                } else {
+                                    exception = e;
                                 }
                             }
-                            throw new RuntimeException("服务调用失败，方法：" + method.getName() + "，参数：" + Arrays.toString(args) + "，重试次数：" + times + "，cause:" + exception);
                         }
+                        if (exception == null) {
+                            exception = new RuntimeException("未知异常");
+                        }
+                        logger.error("服务调用失败，方法：{}，参数：{}，重试次数：{}，cause：{}", method.getName(), Arrays.toString(args), times, exception.getMessage());
+                        throw exception;
                     });
         }
 
