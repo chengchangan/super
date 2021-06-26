@@ -16,14 +16,10 @@ import java.util.Arrays;
  * @version 1.0
  * @date 2021/6/23 19:56
  */
-public class RetryProxyFactory<T> {
+public class RetryProxyFactory {
 
     private static Logger logger = LoggerFactory.getLogger(RetryProxyFactory.class);
 
-    /**
-     * 目标对象
-     */
-    private final T target;
     /**
      * 重试间隔的时间
      */
@@ -35,19 +31,18 @@ public class RetryProxyFactory<T> {
     int times;
 
 
-    public RetryProxyFactory(T target) {
-        this(target, 3, 3);
+    public RetryProxyFactory() {
+        this(3, 3);
     }
 
-    public RetryProxyFactory(T target, int intervalSecond, int times) {
-        this.target = target;
+    public RetryProxyFactory(int intervalSecond, int times) {
         this.intervalSecond = intervalSecond * 1000;
         this.times = times;
     }
 
 
-    public T getInstance() {
-        Class<?>[] interfaces = target.getClass().getInterfaces();
+    public <T> T getProxy(Object target, Class<T> targetClazz) {
+        Class<?>[] interfaces = targetClazz.getInterfaces();
         if (interfaces.length == 0) {
             // cglib
             return (T) new CglibProxy(target).getProxyInstance();
