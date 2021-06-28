@@ -23,16 +23,16 @@ public class RetryProxyFactory {
     /**
      * 重试间隔的时间
      */
-    int intervalSecond;
+    private final int intervalSecond;
 
     /**
      * 重试的次数
      */
-    int times;
+    private final int times;
 
 
     public RetryProxyFactory() {
-        this(3, 3);
+        this(2, 2);
     }
 
     public RetryProxyFactory(int intervalSecond, int times) {
@@ -41,24 +41,36 @@ public class RetryProxyFactory {
     }
 
 
-    public <T> T getProxy(Object target, Class<T> targetClazz) {
+    /**
+     * 默认间隔时间和秒数
+     */
+    public <T> T createProxy(Object target, Class<T> targetClazz) {
+        return this.createProxy(target, targetClazz, this.times, this.intervalSecond);
+    }
+
+
+    public <T> T createProxy(Object target, Class<T> targetClazz, int times, int intervalSecond) {
         Class<?>[] interfaces = targetClazz.getInterfaces();
         if (interfaces.length == 0) {
             // cglib
-            return (T) new CglibProxy(target).getProxyInstance();
+            return (T) new CglibProxy(target, times, intervalSecond * 1000).getProxyInstance();
         } else {
             // jdk
-            return (T) new JdkProxy(target).getProxyInstance();
+            return (T) new JdkProxy(target, times, intervalSecond * 1000).getProxyInstance();
         }
 
     }
 
 
-    class CglibProxy implements MethodInterceptor {
+    static class CglibProxy implements MethodInterceptor {
 
         private final Object target;
+        int intervalSecond;
+        int times;
 
-        public CglibProxy(Object target) {
+        public CglibProxy(Object target, int times, int intervalSecond) {
+            this.intervalSecond = intervalSecond;
+            this.times = times;
             this.target = target;
         }
 
@@ -101,12 +113,15 @@ public class RetryProxyFactory {
     }
 
 
-    class JdkProxy {
-
+    static class JdkProxy {
         private final Object target;
+        int intervalSecond;
+        int times;
 
-        public JdkProxy(Object target) {
+        public JdkProxy(Object target, int times, int intervalSecond) {
             this.target = target;
+            this.intervalSecond = intervalSecond;
+            this.times = times;
         }
 
         // 为目标对象生成代理对象

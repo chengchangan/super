@@ -2,6 +2,7 @@ package com.cca.core.proxy.test;
 
 
 import com.cca.core.proxy.RetryProxyFactory;
+import com.cca.core.util.ProxyUtil;
 
 /**
  * @author cca
@@ -10,7 +11,6 @@ import com.cca.core.proxy.RetryProxyFactory;
  */
 public class Test {
 
-    private static final RetryProxyFactory PROXY_FACTORY = new RetryProxyFactory(3, 2);
 
 
     public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class Test {
 
 
         // 获取代理对象
-        User instance = PROXY_FACTORY.getProxy(user, User.class);
+        User instance = ProxyUtil.getRetryProxy(user, User.class,5,2);
 
         // 使用代理对象调用方法
         System.out.println("开始调用");
