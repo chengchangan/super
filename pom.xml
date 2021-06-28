@@ -11,6 +11,7 @@
         <module>core</module>
         <module>web</module>
         <module>bean</module>
+        <module>example</module>
     </modules>
     <packaging>pom</packaging>
 

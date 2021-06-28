@@ -29,6 +29,7 @@ public class RetryAspect {
         Retry retry = method.getAnnotation(Retry.class);
         int times = retry.times();
         int intervalSecond = retry.intervalSecond() * 1000;
+        Class<? extends Throwable>[] classes = retry.retryFor();
 
         // 执行目标对象的方法
         Throwable exception = null;
@@ -37,6 +38,12 @@ public class RetryAspect {
             try {
                 return joinPoint.proceed(args);
             } catch (Throwable e) {
+                if (classes.length > 0) {
+                    boolean needRetry = Arrays.stream(classes).anyMatch(clazz -> e.getClass().equals(clazz) || clazz.isAssignableFrom(e.getClass()));
+                    if (!needRetry) {
+                        throw e;
+                    }
+                }
                 Thread.sleep(intervalSecond);
                 logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
                 if (e instanceof InvocationTargetException) {

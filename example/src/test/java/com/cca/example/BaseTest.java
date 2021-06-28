@@ -1,4 +1,4 @@
-package com.cca.web;
+package com.cca.example;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
