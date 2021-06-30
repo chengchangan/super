@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author cca
@@ -53,10 +54,10 @@ public class RetryProxyFactory {
         Class<?>[] interfaces = targetClazz.getInterfaces();
         if (interfaces.length == 0) {
             // cglib
-            return (T) new CglibProxy(target, times, intervalSecond * 1000).getProxyInstance();
+            return (T) new CglibProxy(target, times, intervalSecond).getProxyInstance();
         } else {
             // jdk
-            return (T) new JdkProxy(target, times, intervalSecond * 1000).getProxyInstance();
+            return (T) new JdkProxy(target, times, intervalSecond).getProxyInstance();
         }
 
     }
@@ -94,7 +95,7 @@ public class RetryProxyFactory {
                 try {
                     return method.invoke(target, args);
                 } catch (Throwable e) {
-                    Thread.sleep(intervalSecond);
+                    TimeUnit.SECONDS.sleep(intervalSecond);
                     logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
                     if (e instanceof InvocationTargetException) {
                         exception = ((InvocationTargetException) e).getTargetException();
@@ -133,7 +134,7 @@ public class RetryProxyFactory {
                             try {
                                 return method.invoke(target, args);
                             } catch (Exception e) {
-                                Thread.sleep(intervalSecond);
+                                TimeUnit.SECONDS.sleep(intervalSecond);
                                 logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
                                 if (e instanceof InvocationTargetException) {
                                     exception = ((InvocationTargetException) e).getTargetException();
