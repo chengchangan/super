@@ -1,4 +1,4 @@
-package com.cca.core.websocket.client;
+package com.cca.core.websocket.client.config;
 
 
 import lombok.Data;
@@ -26,7 +26,7 @@ public class WebSocketConfig {
      */
     private Integer connectErrorRetryInterval = 10;
     /**
-     * key：remoteServerIp
+     * key：ip + port
      * value：ssl配置
      */
     private Map<String, ClientConfig> clientConfigMap;
@@ -42,6 +42,10 @@ public class WebSocketConfig {
          */
         private String port;
         /**
+         * 服务地址
+         */
+        private String path;
+        /**
          * 证书地址
          */
         private String certPath;
@@ -49,6 +53,13 @@ public class WebSocketConfig {
          * 证书密码
          */
         private String certPassWord;
+
+        /**
+         * @return ip : port
+         */
+        public String getHost() {
+            return ip + ":" + port;
+        }
     }
 
 }

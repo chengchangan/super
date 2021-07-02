@@ -1,6 +1,5 @@
 package com.cca.core.websocket.client;
 
-import com.alibaba.fastjson.JSON;
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -34,21 +33,20 @@ public class CustomWebSocketClient extends WebSocketClient {
     public CustomWebSocketClient(WebSocketClientManager manager, URI serverUri) {
         super(serverUri);
         this.clientManager = manager;
-        CONNECT_TIME_OUT = manager.config.getConnectTimeout();
-        TIME_OUT_RETRY_TIME = manager.config.getTimeoutRetryTimes();
+        CONNECT_TIME_OUT = manager.globalConfig.getConnectTimeout();
+        TIME_OUT_RETRY_TIME = manager.globalConfig.getTimeoutRetryTimes();
     }
 
     @Override
     public void onOpen(ServerHandshake shake) {
-        LOGGER.info("WebSocket onOpen，{}", JSON.toJSONString(shake));
+        LOGGER.info("url：{}，websocket connect succeed", uri.getAuthority() + uri.getPath());
     }
 
     @Override
     public void onClose(int arg0, String arg1, boolean arg2) {
-        String host = super.getURI().getHost();
-        LOGGER.info("WebSocket onClose ，目标服务器：{}，原因：{}", host, arg1);
+        LOGGER.info("WebSocket onClose ，remote server ip：{}，cause：{}", uri.getAuthority() + uri.getPath(), arg1);
         if (onCloseRetryConnect()) {
-            clientManager.waitRetryConnect(host);
+            clientManager.waitRetryConnect(uri.getAuthority() + uri.getPath());
         }
     }
 
@@ -58,10 +56,9 @@ public class CustomWebSocketClient extends WebSocketClient {
 
     @Override
     public void onError(Exception exception) {
-        String host = super.getURI().getHost();
-        LOGGER.info("WebSocket onError，目标服务器：{}，异常：", host, exception);
+        LOGGER.info("WebSocket onError，remote server ip：{}，exception：", uri.getAuthority() + uri.getPath(), exception);
         if (onErrorRetryConnect()) {
-            clientManager.waitRetryConnect(host);
+            clientManager.waitRetryConnect(uri.getAuthority() + uri.getPath());
         }
     }
 
@@ -71,8 +68,7 @@ public class CustomWebSocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        String host = super.getURI().getHost();
-        LOGGER.info("接收到服务端：{}，数据：{}", host, message);
+        LOGGER.debug("remote server ip：{}，receive data：{}", uri.getAuthority() + uri.getPath(), message);
         clientManager.handler.onMessage(this, message);
     }
 
@@ -80,7 +76,6 @@ public class CustomWebSocketClient extends WebSocketClient {
     @SneakyThrows
     @Override
     public void send(String text) {
-        String host = super.getURI().getHost();
         long startTime = System.currentTimeMillis();
         if (!isOpen()) {
             try {
@@ -89,16 +84,16 @@ public class CustomWebSocketClient extends WebSocketClient {
                         if (checkTimeout(startTime, CONNECT_TIME_OUT, TimeUnit.SECONDS)) {
                             Integer currentRetryTime = Optional.ofNullable(RETRY_TIME_LOCAL.get()).orElse(0);
                             if (currentRetryTime >= TIME_OUT_RETRY_TIME) {
-                                throw new RuntimeException("无法连接目标服务器，ip：" + host);
+                                throw new RuntimeException("can not connect target server，ip：" + uri.getAuthority() + uri.getPath());
                             }
                             // 如果当前socket连接超时，则重置这个连接再次发送，结束当前发送
-                            WebSocketClient client = clientManager.resetClientAndGet(host);
+                            WebSocketClient client = clientManager.resetClientAndGet(uri.getAuthority() + uri.getPath());
                             RETRY_TIME_LOCAL.set(currentRetryTime + 1);
-                            LOGGER.info("连接超时，第：{}次，重置连接", RETRY_TIME_LOCAL.get());
+                            LOGGER.info("connect timeout，retry times：{}", RETRY_TIME_LOCAL.get());
                             client.send(text);
                             return;
                         }
-                        LOGGER.info("等待打开连接，ip：{}", getURI().getHost());
+                        LOGGER.debug("wait open connect，url：{}", uri.getAuthority() + uri.getPath());
                         this.wait(1000);
                     }
                 }
@@ -106,7 +101,7 @@ public class CustomWebSocketClient extends WebSocketClient {
                 RETRY_TIME_LOCAL.remove();
             }
         }
-        LOGGER.info("发送websocket请求，参数：{}", text);
+        LOGGER.debug("send websocket request，param：{}", text);
         super.send(text);
     }
 

@@ -44,6 +44,8 @@ public class ChiaMessageHandler implements MessageHandler {
 
 
     // 获取对应服务器的websocket客户端，发送信息
-    clientManager.getClient(remoteServerIp).send(paramStr);
+    WebSocketClient client = clientManager.getClient("127.0.0.1", "55400","/test",params);
+
+    client.send(paramStr);
 
 ```

@@ -15,8 +15,8 @@ public interface MessageHandler {
     /**
      * 收到服务端的信息
      *
-     * @param client
-     * @param message
+     * @param client  处理此信息的client
+     * @param message 收到来自服务端的信息
      */
     void onMessage(WebSocketClient client, String message);
 
