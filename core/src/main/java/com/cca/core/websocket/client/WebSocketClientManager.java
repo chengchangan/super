@@ -77,8 +77,6 @@ public class WebSocketClientManager implements ApplicationContextAware {
      * @return
      */
     public WebSocketClient getClient(String ip, String port, String path, List<String> params) {
-        // todo 校验
-
         SocketConnectConfig connectConfig = new SocketConnectConfig(ip, port, path, params);
         String fullPath = connectConfig.getFullPath();
         CONNECT_SERVER_CONFIG_MAP.put(fullPath, connectConfig);
