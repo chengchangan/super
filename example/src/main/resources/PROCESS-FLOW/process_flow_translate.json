@@ -1,0 +1,11 @@
+{
+  "bizCode": "translate",
+  "operation": "create",
+  "nodeList": [
+    "initTranslate",
+    "productTranslate",
+    "addressTranslate",
+    "memberTranslate",
+    "finishedTranslate"
+  ]
+}
