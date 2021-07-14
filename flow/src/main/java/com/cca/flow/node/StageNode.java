@@ -1,4 +1,4 @@
-package com.cca.example.flow.node;
+package com.cca.flow.node;
 
 import java.lang.annotation.*;
 
@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface TradeNode {
+public @interface StageNode {
 
     /**
      * @return 节点code

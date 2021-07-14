@@ -22,6 +22,10 @@
             <groupId>com.cca</groupId>
             <artifactId>web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.cca</groupId>
+            <artifactId>flow</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

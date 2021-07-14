@@ -1,8 +1,8 @@
-package com.cca.example.flow.process;
+package com.cca.flow.process;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.cca.example.flow.node.Node;
-import com.cca.example.flow.node.NodeRegistry;
+import com.cca.flow.node.Node;
+import com.cca.flow.node.NodeRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +26,7 @@ public class ProcessRegistry {
     private NodeRegistry nodeRegistry;
 
 
-    public void add(Process process) {
-        // todo check
+    public void registry(Process process) {
         process.check(true);
         if (PROCESS_MAP.containsKey(process)) {
             throw new RuntimeException("流程已存在");
@@ -36,16 +35,16 @@ public class ProcessRegistry {
         PROCESS_MAP.put(process, collect);
     }
 
-    public void addAll(Collection<Process> collection) {
+    public void registryAll(Collection<Process> collection) {
         if (CollectionUtil.isNotEmpty(collection)) {
-            collection.forEach(this::add);
+            collection.forEach(this::registry);
         }
     }
 
-    public List<Node> getProcessNodes(String bizCode, String operationCode) {
+    public List<Node> getProcessNodes(String bizCode, String operation) {
         Process process = new Process();
         process.setBizCode(bizCode);
-        process.setOperationCode(operationCode);
+        process.setOperation(operation);
         process.check(false);
         return PROCESS_MAP.get(process);
     }

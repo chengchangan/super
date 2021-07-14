@@ -1,4 +1,4 @@
-package com.cca.example.flow.process;
+package com.cca.flow.process;
 
 import com.google.common.base.Strings;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2021/7/13 20:13
  */
 @Data
-@EqualsAndHashCode(of = {"bizCode", "operationCode"})
+@EqualsAndHashCode(of = {"bizCode", "operation"})
 @ToString
 public class Process {
 
@@ -26,7 +26,7 @@ public class Process {
     /**
      * 业务场景下对应的业务操作
      */
-    private String operationCode;
+    private String operation;
 
     /**
      * 业务场景下对应的业务操作的执行节点
@@ -38,7 +38,7 @@ public class Process {
         if (Strings.isNullOrEmpty(bizCode)) {
             throw new RuntimeException("process.biz.code.can.not.be.null.or.empty");
         }
-        if (Strings.isNullOrEmpty(operationCode)) {
+        if (Strings.isNullOrEmpty(operation)) {
             throw new RuntimeException("process.operation.can.not.be.null.or.empty");
         }
         if (nodeListCheck && CollectionUtils.isEmpty(nodeList)) {

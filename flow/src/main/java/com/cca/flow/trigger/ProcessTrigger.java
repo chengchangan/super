@@ -1,7 +1,8 @@
-package com.cca.example.flow.trigger;
+package com.cca.flow.trigger;
 
-import com.cca.example.flow.node.Node;
-import com.cca.example.flow.process.ProcessRegistry;
+import com.cca.flow.metric.Profiler;
+import com.cca.flow.node.Node;
+import com.cca.flow.process.ProcessRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,25 +23,25 @@ public class ProcessTrigger {
     @Autowired
     private ProcessRegistry processRegistry;
 
+    @SuppressWarnings("unchecked")
     public void fire(String bizCode, String operation, Object context) {
         List<Node> nodes = processRegistry.getProcessNodes(bizCode, operation);
         if (CollectionUtils.isEmpty(nodes)) {
             log.error("find nodes is null, bizCode = {}, operation = {}", bizCode, operation);
-            throw new RuntimeException(MessageFormat.format("The trade node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
+            throw new RuntimeException(MessageFormat.format("The node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
         }
         try {
             nodes.forEach(node -> {
                 try {
-//                    Profiler.record(node.getNodeCode());
+                    Profiler.record(node.getNodeCode());
                     node.execute(context);
                 } finally {
-//                    Profiler.release();
+                    Profiler.release();
                 }
             });
         } finally {
-//            Profiler.releaseAll();
-//            log.info("{}.{} Profiler dump = {}", operation, bizCode, Profiler.dump(true));
-//            Profiler.reset();
+            log.info("{}.{} Profiler dump = {}", bizCode, operation, Profiler.dump());
+            Profiler.reset();
         }
     }
 }
