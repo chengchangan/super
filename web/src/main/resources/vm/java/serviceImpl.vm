@@ -7,8 +7,8 @@
 package ${context.basePackage}.service.impl${moduleName};
 
 
-import com.cca.web.generator.supperClass.dao.BaseMapper;
-import com.cca.web.generator.supperClass.service.AbstractService;
+import io.boncray.web.generator.supperClass.dao.BaseMapper;
+import io.boncray.web.generator.supperClass.service.AbstractService;
 import ${context.basePackage}.mode.domain${moduleName}.${table.className};
 import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
 import ${context.basePackage}.service${moduleName}.${table.className}Service;

@@ -4,7 +4,7 @@
 #end
 package ${context.basePackage}.service${moduleName};
 
-import com.cca.web.generator.supperClass.service.BaseService;
+import io.boncray.web.generator.supperClass.service.BaseService;
 import ${context.basePackage}.mode.domain${moduleName}.${table.className};
 import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
 

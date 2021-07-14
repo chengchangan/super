@@ -1,6 +1,6 @@
 package ${context.basePackage}.mode.query #if(${table.module}) .${table.module}#end;
 
-import com.cca.web.generator.supperClass.entity.Query;
+import io.boncray.web.generator.supperClass.entity.Query;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

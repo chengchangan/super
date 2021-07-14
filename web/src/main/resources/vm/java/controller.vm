@@ -10,8 +10,8 @@ package ${context.basePackage}.controller${moduleName};
 
 
 import ${context.basePackage}.service${moduleName}.${serviceClass};
-import com.cca.web.generator.supperClass.service.BaseService;
-import com.cca.web.generator.supperClass.controller.BaseController;
+import io.boncray.web.generator.supperClass.service.BaseService;
+import io.boncray.web.generator.supperClass.controller.BaseController;
 import ${context.basePackage}.mode.domain${moduleName}.${table.className};
 import ${context.basePackage}.mode.query${moduleName}.${table.className}Query;
 import org.springframework.beans.factory.annotation.Autowired;
