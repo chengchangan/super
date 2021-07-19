@@ -23,10 +23,9 @@ public class ProcessController {
     public void translateTest() {
         String bizCode = "translate";
         String operation = "create";
-        TranslateContext context = new TranslateContext();
-        context.setBizCode(bizCode);
-        context.setOperation(operation);
-        processTrigger.fire(bizCode, operation, context);
+        TranslateContext context = new TranslateContext(bizCode, operation);
+
+        processTrigger.fire(context);
     }
 
 }

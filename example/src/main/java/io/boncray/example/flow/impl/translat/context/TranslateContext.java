@@ -1,5 +1,6 @@
 package io.boncray.example.flow.impl.translat.context;
 
+import io.boncray.flow.node.BaseContext;
 import lombok.Data;
 
 /**
@@ -8,9 +9,10 @@ import lombok.Data;
  * @date 2021/7/14 13:45
  */
 @Data
-public class TranslateContext {
+public class TranslateContext extends BaseContext {
 
-    protected String bizCode;
 
-    protected String operation;
+    public TranslateContext(String bizCode, String operation) {
+        super(bizCode, operation);
+    }
 }

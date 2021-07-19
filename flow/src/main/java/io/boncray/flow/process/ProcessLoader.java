@@ -1,11 +1,13 @@
 package io.boncray.flow.process;
 
+import cn.hutool.core.util.BooleanUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
+import io.boncray.flow.exception.FlowProcessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -61,10 +63,8 @@ public class ProcessLoader {
             List<Process> customProcess = loadProcessConfig(customPath);
 
             // 校验自定义的与默认的是否冲突
-            if (overrideDefaultNodes) {
-                if (!Collections.disjoint(defaultProcess, customProcess)) {
-                    throw new RuntimeException("trade.duplicate.process.config");
-                }
+            if (BooleanUtil.isTrue(overrideDefaultNodes) && !Collections.disjoint(defaultProcess, customProcess)) {
+                throw new FlowProcessException("trade.duplicate.process.config");
             }
             // default merge custom put all to registry
             Set<Process> processSet = Sets.newHashSet(customProcess);

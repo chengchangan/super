@@ -6,6 +6,8 @@ import io.boncray.flow.node.StageNode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author cca
  * @version 1.0
@@ -18,8 +20,9 @@ public class AddressTranslateNode implements Node<TranslateContext> {
 
 
     @Override
-    public void execute(TranslateContext context) {
+    public void execute(TranslateContext context) throws InterruptedException {
         log.info("地址转化：addressTranslate");
+        TimeUnit.SECONDS.sleep(2);
     }
 
 

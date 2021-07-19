@@ -19,6 +19,9 @@ public class MemberTranslateNode implements Node<TranslateContext> {
 
     @Override
     public void execute(TranslateContext context) {
+        if (true){
+            throw new RuntimeException("会员转化失败");
+        }
         log.info("会员转化：memberTranslate");
     }
 

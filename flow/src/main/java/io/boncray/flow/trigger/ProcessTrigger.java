@@ -1,6 +1,10 @@
 package io.boncray.flow.trigger;
 
+import cn.hutool.json.JSONUtil;
+import io.boncray.core.database.ManualTransaction;
+import io.boncray.flow.exception.FlowProcessException;
 import io.boncray.flow.metric.Profiler;
+import io.boncray.flow.node.BaseContext;
 import io.boncray.flow.node.Node;
 import io.boncray.flow.process.ProcessRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -22,25 +26,45 @@ public class ProcessTrigger {
 
     @Autowired
     private ProcessRegistry processRegistry;
+    @Autowired
+    private ManualTransaction manualTransaction;
 
     @SuppressWarnings("unchecked")
-    public void fire(String bizCode, String operation, Object context) {
+    public void fire(BaseContext context) {
+        context.check();
+        String bizCode = context.getBizCode();
+        String operation = context.getOperation();
+
         List<Node> nodes = processRegistry.getProcessNodes(bizCode, operation);
         if (CollectionUtils.isEmpty(nodes)) {
             log.error("find nodes is null, bizCode = {}, operation = {}", bizCode, operation);
-            throw new RuntimeException(MessageFormat.format("The node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
+            throw new FlowProcessException(MessageFormat.format("The node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
         }
         try {
             nodes.forEach(node -> {
+                // 当前节点执行
                 try {
+                    // 记录节点操作信息
                     Profiler.record(node.getNodeCode());
-                    node.execute(context);
+                    // 是否按照事务的方式执行
+                    if (node.supportTransaction()) {
+                        manualTransaction.execute(() -> node.execute(context));
+                    } else {
+                        node.execute(context);
+                    }
+                } catch (Exception e) {
+                    log.error("node：{},执行失败：参数：{}", node.getNodeCode(), JSONUtil.toJsonStr(context));
+                    throw new FlowProcessException(e);
                 } finally {
+                    // 结束当前节点计时
                     Profiler.release();
                 }
+
             });
         } finally {
+            // 记录日志
             log.info("{}.{} Profiler dump = {}", bizCode, operation, Profiler.dump());
+            // 清空日志信息
             Profiler.reset();
         }
     }

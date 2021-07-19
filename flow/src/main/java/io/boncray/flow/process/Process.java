@@ -1,6 +1,7 @@
 package io.boncray.flow.process;
 
 import com.google.common.base.Strings;
+import io.boncray.flow.exception.FlowProcessException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -36,13 +37,13 @@ public class Process {
 
     public void check(boolean nodeListCheck) {
         if (Strings.isNullOrEmpty(bizCode)) {
-            throw new RuntimeException("process.biz.code.can.not.be.null.or.empty");
+            throw new FlowProcessException("process.biz.code.can.not.be.null.or.empty");
         }
         if (Strings.isNullOrEmpty(operation)) {
-            throw new RuntimeException("process.operation.can.not.be.null.or.empty");
+            throw new FlowProcessException("process.operation.can.not.be.null.or.empty");
         }
         if (nodeListCheck && CollectionUtils.isEmpty(nodeList)) {
-            throw new RuntimeException("process.node.list.can.not.be.null.or.empty");
+            throw new FlowProcessException("process.node.list.can.not.be.null.or.empty");
         }
     }
 

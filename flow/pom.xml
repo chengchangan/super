@@ -12,5 +12,13 @@
     <groupId>io.boncray</groupId>
     <artifactId>flow</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>io.boncray</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+
+    </dependencies>
 
 </project>
