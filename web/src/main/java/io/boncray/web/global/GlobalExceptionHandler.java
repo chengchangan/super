@@ -34,6 +34,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Result<Object> omsExceptionHandler(BizException e) {
+        log.error("业务异常", e);
         return Result.failure(e.getCode(), e.getMessage());
     }
 

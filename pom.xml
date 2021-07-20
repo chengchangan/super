@@ -40,6 +40,7 @@
         <velocity.version>1.7</velocity.version>
         <commons-io.version>2.8.0</commons-io.version>
         <cglib.version>3.3.0</cglib.version>
+        <expiringmap.version>0.5.8</expiringmap.version>
     </properties>
 
     <dependencyManagement>
@@ -176,6 +177,14 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+
+            <!-- 带过期map -->
+            <dependency>
+                <groupId>net.jodah</groupId>
+                <artifactId>expiringmap</artifactId>
+                <version>${expiringmap.version}</version>
+            </dependency>
+
             <!--oshi 监控-->
             <dependency>
                 <groupId>com.github.oshi</groupId>

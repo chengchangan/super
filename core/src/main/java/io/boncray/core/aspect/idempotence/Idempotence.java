@@ -28,4 +28,19 @@ public @interface Idempotence {
      */
     TimeUnit unit() default TimeUnit.SECONDS;
 
+
+    /**
+     * 幂等所在的组
+     *
+     * @return
+     */
+    String group() default "";
+
+    /**
+     * 幂等key, 支持spel 表达式
+     *
+     * @return
+     */
+    String key();
+
 }

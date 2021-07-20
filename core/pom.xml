@@ -53,6 +53,12 @@
             <artifactId>aspectjweaver</artifactId>
         </dependency>
 
+        <!-- 带过期map -->
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>expiringmap</artifactId>
+        </dependency>
+
         <!-- 性能监控，获取硬件和进程运行时信息 -->
         <dependency>
             <groupId>com.github.oshi</groupId>

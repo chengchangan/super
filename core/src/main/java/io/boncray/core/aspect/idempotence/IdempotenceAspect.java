@@ -1,22 +1,31 @@
 package io.boncray.core.aspect.idempotence;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
-import cn.hutool.json.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
+import net.jodah.expiringmap.ExpirationPolicy;
+import net.jodah.expiringmap.ExpiringMap;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,6 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @version 1.0
  * @date 2021/7/19 15:27
  */
+@Slf4j
 @Aspect
 @Component
 @ConditionalOnClass(value = RedisTemplate.class)
@@ -35,8 +45,15 @@ public class IdempotenceAspect {
 
     private static final String CACHE_KEY_PREFIX = "idem";
 
-    // todo 待释放这个锁，增加超时
-    private static final Map<String, ReentrantLock> LOCK_MAP = new ConcurrentHashMap<>();
+    /**
+     * 带超时的map，过期比较老锁
+     */
+    private static final Map<String, ReentrantLock> LOCK_MAP = ExpiringMap.builder()
+            .maxSize(300)
+            .expiration(10, TimeUnit.SECONDS)
+            .variableExpiration()
+            .expirationPolicy(ExpirationPolicy.CREATED)
+            .build();
 
     @Around("@annotation(io.boncray.core.aspect.idempotence.Idempotence)")
     public Object aroundExec(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -46,7 +63,7 @@ public class IdempotenceAspect {
         Idempotence idempotence = method.getAnnotation(Idempotence.class);
 
         // 根据信息生成签名
-        String requestSign = signRequest(method, args);
+        String requestSign = signRequest(method, args, idempotence);
         // 校验幂等性，不过则阻塞
         checkRequestIdem(requestSign, idempotence);
         Object proceed;
@@ -60,8 +77,29 @@ public class IdempotenceAspect {
     }
 
 
-    private String signRequest(Method method, Object[] args) {
-        return MD5.create().digestHex(method.getName() + JSONUtil.toJsonStr(args), Charset.defaultCharset());
+    private String signRequest(Method method, Object[] args, Idempotence idempotence) {
+        ExpressionParser parser = new SpelExpressionParser();
+        LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
+
+        String key;
+        String group = idempotence.group();
+
+        String[] params = discoverer.getParameterNames(method);
+        // 如果有参数，则使用参数生成
+        if (ArrayUtil.isNotEmpty(params) && ArrayUtil.isNotEmpty(args)) {
+            EvaluationContext context = new StandardEvaluationContext();
+            for (int len = 0; len < params.length; len++) {
+                context.setVariable(params[len], args[len]);
+            }
+            String keySpel = idempotence.key();
+            Expression keyExpression = parser.parseExpression(keySpel);
+            key = keyExpression.getValue(context, String.class);
+        } else {
+            // 否则使用方法名作为幂等
+            key = method.toGenericString();
+        }
+        String sign = MD5.create().digestHex(key, Charset.defaultCharset());
+        return StrUtil.isBlank(group) ? sign : group + ":" + sign;
     }
 
     /**
@@ -105,7 +143,7 @@ public class IdempotenceAspect {
      * @return
      */
     private String buildKey(String sign) {
-        return CACHE_KEY_PREFIX + ":" + sign;
+        return CACHE_KEY_PREFIX + "_" + sign;
     }
 
     /**
