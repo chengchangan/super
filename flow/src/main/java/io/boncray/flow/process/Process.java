@@ -2,12 +2,14 @@ package io.boncray.flow.process;
 
 import com.google.common.base.Strings;
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
 
 /**
  * @author cca
@@ -37,13 +39,13 @@ public class Process {
 
     public void check(boolean nodeListCheck) {
         if (Strings.isNullOrEmpty(bizCode)) {
-            throw new FlowProcessException("process.biz.code.can.not.be.null.or.empty");
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_110001);
         }
         if (Strings.isNullOrEmpty(operation)) {
-            throw new FlowProcessException("process.operation.can.not.be.null.or.empty");
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_110002);
         }
         if (nodeListCheck && CollectionUtils.isEmpty(nodeList)) {
-            throw new FlowProcessException("process.node.list.can.not.be.null.or.empty");
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_110003);
         }
     }
 

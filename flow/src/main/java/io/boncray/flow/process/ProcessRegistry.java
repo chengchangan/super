@@ -2,6 +2,7 @@ package io.boncray.flow.process;
 
 import cn.hutool.core.collection.CollectionUtil;
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import io.boncray.flow.node.Node;
 import io.boncray.flow.node.NodeRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ProcessRegistry {
     public void registry(Process process) {
         process.check(true);
         if (PROCESS_MAP.containsKey(process)) {
-            throw new FlowProcessException("流程已存在");
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_110005);
         }
         List<Node> collect = process.getNodeList().stream().map(nodeRegistry::getNode).collect(Collectors.toList());
         PROCESS_MAP.put(process, collect);

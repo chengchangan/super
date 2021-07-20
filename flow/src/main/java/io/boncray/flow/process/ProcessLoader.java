@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -64,7 +65,7 @@ public class ProcessLoader {
 
             // 校验自定义的与默认的是否冲突
             if (BooleanUtil.isTrue(overrideDefaultNodes) && !Collections.disjoint(defaultProcess, customProcess)) {
-                throw new FlowProcessException("trade.duplicate.process.config");
+                throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_110004);
             }
             // default merge custom put all to registry
             Set<Process> processSet = Sets.newHashSet(customProcess);

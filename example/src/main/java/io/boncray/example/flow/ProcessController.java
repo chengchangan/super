@@ -1,5 +1,7 @@
 package io.boncray.example.flow;
 
+import io.boncray.bean.mode.response.Result;
+import io.boncray.core.aspect.idempotence.Idempotence;
 import io.boncray.example.flow.impl.translat.context.TranslateContext;
 import io.boncray.flow.trigger.ProcessTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,14 @@ public class ProcessController {
     private ProcessTrigger processTrigger;
 
     @GetMapping("/translate/create")
-    public void translateTest() {
+    @Idempotence(timeout = 2)
+    public Result<Boolean> translateTest() {
         String bizCode = "translate";
         String operation = "create";
         TranslateContext context = new TranslateContext(bizCode, operation);
 
         processTrigger.fire(context);
+        return Result.success();
     }
 
 }

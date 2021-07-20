@@ -3,6 +3,7 @@ package io.boncray.flow.trigger;
 import cn.hutool.json.JSONUtil;
 import io.boncray.core.database.ManualTransaction;
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import io.boncray.flow.metric.Profiler;
 import io.boncray.flow.node.BaseContext;
 import io.boncray.flow.node.Node;
@@ -38,7 +39,8 @@ public class ProcessTrigger {
         List<Node> nodes = processRegistry.getProcessNodes(bizCode, operation);
         if (CollectionUtils.isEmpty(nodes)) {
             log.error("find nodes is null, bizCode = {}, operation = {}", bizCode, operation);
-            throw new FlowProcessException(MessageFormat.format("The node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_TRIGGER_120001.code(),
+                    MessageFormat.format("The node with bizCode [{0}] and operation [{1}] not exists.", bizCode, operation));
         }
         try {
             nodes.forEach(node -> {
@@ -53,8 +55,8 @@ public class ProcessTrigger {
                         node.execute(context);
                     }
                 } catch (Exception e) {
-                    log.error("node：{},执行失败：参数：{}", node.getNodeCode(), JSONUtil.toJsonStr(context));
-                    throw new FlowProcessException(e);
+                    log.error("node：{},执行失败,原因：{}.参数：{}", node.getNodeCode(), e.getMessage(), JSONUtil.toJsonStr(context));
+                    throw new FlowProcessException(ProcessExceptionEnum.FLOW_TRIGGER_120002, e);
                 } finally {
                     // 结束当前节点计时
                     Profiler.release();

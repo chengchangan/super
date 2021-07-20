@@ -2,6 +2,7 @@ package io.boncray.flow.node;
 
 import cn.hutool.core.util.StrUtil;
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import lombok.Data;
 
 /**
@@ -25,10 +26,9 @@ public abstract class BaseContext {
         this.operation = operation;
     }
 
-
     public void check() {
         if (StrUtil.isBlank(bizCode) || StrUtil.isBlank(operation)) {
-            throw new FlowProcessException("bizCode or operation is blank");
+            throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_100001);
         }
     }
 }

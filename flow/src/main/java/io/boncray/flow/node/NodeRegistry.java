@@ -1,6 +1,7 @@
 package io.boncray.flow.node;
 
 import io.boncray.flow.exception.FlowProcessException;
+import io.boncray.flow.exception.ProcessExceptionEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -41,7 +42,7 @@ public class NodeRegistry implements ApplicationContextAware {
                     Node node = (Node) bean;
                     String nodeCode = node.getNodeCode();
                     if (NODE_MAP.containsKey(nodeCode)) {
-                        throw new FlowProcessException("process.node.code.already.exists:" + nodeCode);
+                        throw new FlowProcessException(ProcessExceptionEnum.FLOW_NODE_100002.code(), ProcessExceptionEnum.FLOW_NODE_100002.msg() + nodeCode);
                     }
                     NODE_MAP.put(nodeCode, node);
                 } else {

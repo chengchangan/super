@@ -8,9 +8,10 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
@@ -25,11 +26,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * @date 2021/7/19 15:27
  */
 @Aspect
-@ConditionalOnBean(RedisTemplate.class)
+@Component
+@ConditionalOnClass(value = RedisTemplate.class)
 public class IdempotenceAspect {
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     private static final String CACHE_KEY_PREFIX = "idem";
 
@@ -113,7 +115,7 @@ public class IdempotenceAspect {
      * @return 是否获取执行权限
      */
     private boolean obtainIdem(String key) {
-        ValueOperations<Object, Object> forValue = redisTemplate.opsForValue();
+        ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
         return BooleanUtil.isTrue(forValue.setIfAbsent(key, System.currentTimeMillis()));
     }
 
@@ -125,7 +127,7 @@ public class IdempotenceAspect {
      */
     private void release(String sign) {
         String key = buildKey(sign);
-        ValueOperations<Object, Object> forValue = redisTemplate.opsForValue();
+        ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
         if (BooleanUtil.isTrue(forValue.getOperations().hasKey(key))) {
             forValue.getOperations().delete(key);
         }
