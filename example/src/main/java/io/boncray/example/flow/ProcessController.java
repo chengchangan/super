@@ -6,7 +6,7 @@ import io.boncray.example.flow.impl.translat.context.TranslateContext;
 import io.boncray.example.flow.param.TranslateParam;
 import io.boncray.flow.trigger.ProcessTrigger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +23,8 @@ public class ProcessController {
     @Autowired
     private ProcessTrigger processTrigger;
 
-    @GetMapping("/translate/create")
-    @Idempotence(timeout = 2, group = "translate", key = "#param.userName + #param.nickName")
+    @PostMapping("/translate/create")
+    @Idempotence(group = "translate", key = "#param.userName + #param.item", timeout = 3)
     public Result<Boolean> translateTest(@RequestBody TranslateParam param) {
         String bizCode = "translate";
         String operation = "create";

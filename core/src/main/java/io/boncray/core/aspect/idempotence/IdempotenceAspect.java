@@ -46,7 +46,7 @@ public class IdempotenceAspect {
     private static final String CACHE_KEY_PREFIX = "idem";
 
     /**
-     * 带超时的map，过期比较老锁
+     * 带超时的map，过期比较老的锁
      */
     private static final Map<String, ReentrantLock> LOCK_MAP = ExpiringMap.builder()
             .maxSize(300)
@@ -82,24 +82,27 @@ public class IdempotenceAspect {
         LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
 
         String key;
+        String keySpel = idempotence.key();
         String group = idempotence.group();
 
         String[] params = discoverer.getParameterNames(method);
         // 如果有参数，则使用参数生成
-        if (ArrayUtil.isNotEmpty(params) && ArrayUtil.isNotEmpty(args)) {
+        if (ArrayUtil.isNotEmpty(params) && ArrayUtil.isNotEmpty(args) && keySpel.contains("#")) {
             EvaluationContext context = new StandardEvaluationContext();
             for (int len = 0; len < params.length; len++) {
                 context.setVariable(params[len], args[len]);
             }
-            String keySpel = idempotence.key();
             Expression keyExpression = parser.parseExpression(keySpel);
             key = keyExpression.getValue(context, String.class);
         } else {
-            // 否则使用方法名作为幂等
-            key = method.toGenericString();
+            if (StrUtil.isNotBlank(keySpel)) {
+                key = keySpel;
+            } else {
+                // 否则使用方法名作为幂等
+                key = method.toGenericString();
+            }
         }
-        String sign = MD5.create().digestHex(key, Charset.defaultCharset());
-        return StrUtil.isBlank(group) ? sign : group + ":" + sign;
+        return group + ":" + MD5.create().digestHex(key, Charset.defaultCharset());
     }
 
     /**
@@ -112,21 +115,17 @@ public class IdempotenceAspect {
      */
     private void checkRequestIdem(String sign, Idempotence idempotence) throws InterruptedException {
         String key = buildKey(sign);
-        long now = System.currentTimeMillis();
-
-        long timeout = idempotence.timeout() > 0 ? idempotence.timeout() : Long.MAX_VALUE;
-        TimeUnit unit = idempotence.unit();
+        long begin = System.currentTimeMillis();
 
         ReentrantLock lock = LOCK_MAP.computeIfAbsent(key, (x) -> new ReentrantLock());
-        if (!lock.tryLock(timeout, unit)) {
+        if (!lock.tryLock(getTimeout(idempotence), idempotence.unit())) {
             throw new IdempotenceTimeOutException("idempotence timeout");
         }
-        long expire = now + TimeUnit.MILLISECONDS.convert(timeout, unit);
-        boolean acquired;
 
+        boolean acquired;
         try {
             // 从redis获得执行权
-            while (!(acquired = obtainIdem(key)) && System.currentTimeMillis() < expire) {
+            while (!(acquired = obtainIdem(key)) && System.currentTimeMillis() < getExpire(idempotence, begin)) {
                 TimeUnit.MILLISECONDS.sleep(100);
             }
             // 如果没有得到锁，说明超时了
@@ -139,8 +138,22 @@ public class IdempotenceAspect {
     }
 
     /**
-     * @param sign
-     * @return
+     * 超时时间
+     */
+    private long getTimeout(Idempotence idempotence) {
+        return idempotence.timeout() > 0 ? idempotence.timeout() : Long.MAX_VALUE;
+    }
+
+    /**
+     * 到期时间
+     */
+    private long getExpire(Idempotence idempotence, long begin) {
+        return idempotence.timeout() < 0 ? Long.MAX_VALUE : begin + idempotence.timeout();
+    }
+
+
+    /**
+     * 签名信息
      */
     private String buildKey(String sign) {
         return CACHE_KEY_PREFIX + "_" + sign;

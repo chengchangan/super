@@ -21,5 +21,6 @@ public class TranslateParam {
 
     private Map<String, String> map;
 
+    private ProductItem item;
 
 }

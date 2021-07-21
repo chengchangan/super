@@ -34,7 +34,7 @@ public @interface Idempotence {
      *
      * @return
      */
-    String group() default "";
+    String group() default "default";
 
     /**
      * 幂等key, 支持spel 表达式

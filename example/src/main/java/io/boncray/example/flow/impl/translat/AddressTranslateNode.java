@@ -24,7 +24,7 @@ public class AddressTranslateNode implements Node<TranslateContext> {
     public void execute(TranslateContext context) {
         log.info("地址转化：addressTranslate");
         try {
-            TimeUnit.SECONDS.sleep(4);
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             throw new TranslateException(123, "我睡眠出错了", e);
         }
