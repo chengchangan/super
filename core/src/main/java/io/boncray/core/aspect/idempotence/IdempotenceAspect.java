@@ -131,7 +131,7 @@ public class IdempotenceAspect {
         boolean acquired;
         try {
             // 从redis获得执行权
-            while (!(acquired = obtainIdem(key)) && System.currentTimeMillis() < getExpire(idempotence, begin)) {
+            while (!(acquired = obtainIdem(key)) && begin < getExpire(idempotence, begin)) {
                 TimeUnit.MILLISECONDS.sleep(100);
             }
             // 如果没有得到锁，说明超时了
@@ -177,7 +177,7 @@ public class IdempotenceAspect {
         } else {
             ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
             // 跟 redisson 保持一直，都是默认30秒
-            return BooleanUtil.isTrue(forValue.setIfAbsent(key, System.currentTimeMillis(), 30L, TimeUnit.SECONDS));
+            return BooleanUtil.isTrue(forValue.setIfAbsent(key, Thread.currentThread().getId(), 30L, TimeUnit.SECONDS));
         }
     }
 
