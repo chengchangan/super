@@ -11,6 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
@@ -42,6 +43,8 @@ public class IdempotenceAspect {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private RedissonClient redissonClient;
 
     private static final String CACHE_KEY_PREFIX = "idem";
 
@@ -77,6 +80,9 @@ public class IdempotenceAspect {
     }
 
 
+    /**
+     * 生成请求幂等性唯一码
+     */
     private String signRequest(Method method, Object[] args, Idempotence idempotence) {
         ExpressionParser parser = new SpelExpressionParser();
         LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
@@ -166,8 +172,13 @@ public class IdempotenceAspect {
      * @return 是否获取执行权限
      */
     private boolean obtainIdem(String key) {
-        ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
-        return BooleanUtil.isTrue(forValue.setIfAbsent(key, System.currentTimeMillis()));
+        if (redissonClient != null) {
+            return redissonClient.getLock(key).tryLock();
+        } else {
+            ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
+            // 跟 redisson 保持一直，都是默认30秒
+            return BooleanUtil.isTrue(forValue.setIfAbsent(key, System.currentTimeMillis(), 30L, TimeUnit.SECONDS));
+        }
     }
 
 

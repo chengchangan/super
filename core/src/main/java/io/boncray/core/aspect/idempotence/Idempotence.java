@@ -13,34 +13,24 @@ import java.util.concurrent.TimeUnit;
 @Documented //文档生成时，该注解将被包含在javadoc中，可去掉
 public @interface Idempotence {
 
-
-    /**
-     * 幂等超时时间，第二个请求将抛出超时异常
-     *
-     * @return
-     */
-    long timeout() default -1L;
-
-    /**
-     * 超时单位，默认秒
-     *
-     * @return 单位
-     */
-    TimeUnit unit() default TimeUnit.SECONDS;
-
-
     /**
      * 幂等所在的组
-     *
-     * @return
      */
     String group() default "default";
 
     /**
      * 幂等key, 支持spel 表达式
-     *
-     * @return
      */
     String key();
+
+    /**
+     * 幂等请求阻塞超时时间，阻塞请求超时报错，默认不限制（一直阻塞）
+     */
+    long timeout() default -1L;
+
+    /**
+     * 超时单位，默认秒
+     */
+    TimeUnit unit() default TimeUnit.SECONDS;
 
 }
