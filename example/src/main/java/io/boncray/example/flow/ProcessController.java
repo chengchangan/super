@@ -24,7 +24,7 @@ public class ProcessController {
     private ProcessTrigger processTrigger;
 
     @PostMapping("/translate/create")
-    @Idempotence(group = "translate", key = "#param.userName + #param.item", timeout = 3)
+    @Idempotence(group = "translate", key = "#param.userName + #param.nickName", timeout = 3)
     public Result<Boolean> translateTest(@RequestBody TranslateParam param) {
         String bizCode = "translate";
         String operation = "create";

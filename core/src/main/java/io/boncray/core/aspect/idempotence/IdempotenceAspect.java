@@ -129,9 +129,10 @@ public class IdempotenceAspect {
         }
 
         boolean acquired;
+        long expireTime = getExpire(idempotence, begin);
         try {
             // 从redis获得执行权
-            while (!(acquired = obtainIdem(key)) && begin < getExpire(idempotence, begin)) {
+            while (!(acquired = obtainIdem(key)) && begin < expireTime) {
                 TimeUnit.MILLISECONDS.sleep(100);
             }
             // 如果没有得到锁，说明超时了
