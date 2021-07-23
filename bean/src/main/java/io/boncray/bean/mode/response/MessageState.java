@@ -9,9 +9,8 @@ public enum MessageState {
 
     FUSING(100, "熔断失败"),
     FAILURE(101, "失败"),
-    SUCCESS(200, "成功");
-
-
+    SUCCESS(200, "成功"),
+    UNKNOWN_ERROR(500, "内部未知错误");
 
     private final int code;
     private final String msg;
@@ -21,11 +20,11 @@ public enum MessageState {
         this.msg = msg;
     }
 
-    public int getCode(){
+    public int getCode() {
         return this.code;
     }
 
-    public String getMsg(){
+    public String getMsg() {
         return this.msg;
     }
 

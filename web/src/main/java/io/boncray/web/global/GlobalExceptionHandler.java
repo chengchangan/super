@@ -1,6 +1,7 @@
 package io.boncray.web.global;
 
 import io.boncray.bean.exception.BizException;
+import io.boncray.bean.mode.response.MessageState;
 import io.boncray.bean.mode.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
             log.error("异常URL:{}", request.getRequestURI());
         }
         log.error("系统异常", e);
-        return Result.failure(500, e.getMessage());
+        return Result.failure(MessageState.UNKNOWN_ERROR);
     }
 
     @ExceptionHandler(value = BizException.class)
