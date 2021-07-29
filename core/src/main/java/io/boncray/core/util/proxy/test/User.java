@@ -1,4 +1,4 @@
-package io.boncray.core.proxy.test;
+package io.boncray.core.util.proxy.test;
 
 /**
  * @author cca

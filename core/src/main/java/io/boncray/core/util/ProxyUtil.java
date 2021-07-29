@@ -1,6 +1,6 @@
 package io.boncray.core.util;
 
-import io.boncray.core.proxy.RetryProxyFactory;
+import io.boncray.core.util.proxy.RetryProxyFactory;
 
 import java.util.concurrent.ConcurrentHashMap;
 

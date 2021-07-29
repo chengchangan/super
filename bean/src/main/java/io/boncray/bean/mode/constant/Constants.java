@@ -1,4 +1,4 @@
-package io.boncray.core.constant;
+package io.boncray.bean.mode.constant;
 
 /**
  * @author cca

@@ -1,4 +1,4 @@
-package io.boncray.core.proxy;
+package io.boncray.core.util.proxy;
 
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RetryProxyFactory {
 
-    private static Logger logger = LoggerFactory.getLogger(RetryProxyFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(RetryProxyFactory.class);
 
     /**
      * 重试间隔的时间

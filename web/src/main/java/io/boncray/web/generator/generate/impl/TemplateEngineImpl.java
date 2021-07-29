@@ -1,7 +1,7 @@
 package io.boncray.web.generator.generate.impl;
 
 
-import io.boncray.core.constant.Constants;
+import io.boncray.bean.mode.constant.Constants;
 import io.boncray.web.generator.domain.Configuration;
 import io.boncray.web.generator.domain.Table;
 import io.boncray.web.generator.domain.TemplateConfig;

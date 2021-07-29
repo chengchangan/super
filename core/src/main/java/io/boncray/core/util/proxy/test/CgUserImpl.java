@@ -1,4 +1,4 @@
-package io.boncray.core.proxy.test;
+package io.boncray.core.util.proxy.test;
 
 /**
  * @author cca
@@ -14,7 +14,7 @@ public class CgUserImpl {
         System.out.println("save ...");
     }
 
-    public void create(){
+    public void create() {
         String s = null;
         s.getBytes();
 

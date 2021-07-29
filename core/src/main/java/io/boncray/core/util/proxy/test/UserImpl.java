@@ -1,4 +1,4 @@
-package io.boncray.core.proxy.test;
+package io.boncray.core.util.proxy.test;
 
 /**
  * @author cca
@@ -10,7 +10,7 @@ public class UserImpl implements User {
 
     @Override
     public void save() {
-        int a = 1/0;
+        int a = 1 / 0;
         System.out.println("save ...");
     }
 }
