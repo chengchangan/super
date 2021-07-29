@@ -284,6 +284,20 @@
 
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>release repository</name>
+            <url>http://101.34.35.72:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>snapshot repository</name>
+            <url>http://101.34.35.72:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
     <build>
         <pluginManagement>
             <plugins>
