@@ -91,7 +91,7 @@ public class SystemMonitor {
                 ProcessInfo.SingleProcessInfo info = new ProcessInfo.SingleProcessInfo();
                 info.setPid(process.getProcessID());
                 info.setProcessName(process.getName());
-                info.setCpuUsageRate(new DecimalFormat("#.##%").format(100d * (process.getKernelTime() + process.getUserTime()) / process.getUpTime()));
+                info.setCpuUsageRate(new DecimalFormat("#.##%").format(100d * process.getProcessCpuLoadCumulative()));
                 info.setMemUsageRate(new DecimalFormat("#.##%").format(100d * process.getResidentSetSize() / hardware.getMemory().getTotal()));
                 //所有的虚拟内存
                 info.setVsz(FormatUtil.formatBytes(process.getVirtualSize()));
