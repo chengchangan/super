@@ -13,6 +13,7 @@
         <module>bean</module>
         <module>example</module>
         <module>flow</module>
+        <module>logback-starter</module>
     </modules>
     <packaging>pom</packaging>
 
