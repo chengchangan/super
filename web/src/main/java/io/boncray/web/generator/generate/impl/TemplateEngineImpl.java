@@ -1,7 +1,7 @@
 package io.boncray.web.generator.generate.impl;
 
 
-import io.boncray.bean.mode.constant.Constants;
+import io.boncray.bean.constants.CommonConstant;
 import io.boncray.web.generator.domain.Configuration;
 import io.boncray.web.generator.domain.Table;
 import io.boncray.web.generator.domain.TemplateConfig;
@@ -32,8 +32,8 @@ public class TemplateEngineImpl implements TemplateParse {
             // 加载classpath目录下的vm文件
             p.setProperty("file.resource.loader.class", ClasspathResourceLoader.class.getName());
             // 定义字符集
-            p.setProperty(Velocity.ENCODING_DEFAULT, Constants.UTF8);
-            p.setProperty(Velocity.OUTPUT_ENCODING, Constants.UTF8);
+            p.setProperty(Velocity.ENCODING_DEFAULT, CommonConstant.UTF8);
+            p.setProperty(Velocity.OUTPUT_ENCODING, CommonConstant.UTF8);
             // 初始化Velocity引擎，指定配置Properties
 
             Velocity.init(p);
@@ -44,7 +44,7 @@ public class TemplateEngineImpl implements TemplateParse {
 
     @Override
     public String parseTemplate(Configuration config, String templatePath, Table table) {
-        Template template = Velocity.getTemplate(templatePath, Constants.UTF8);
+        Template template = Velocity.getTemplate(templatePath, CommonConstant.UTF8);
         VelocityContext context = createContext();
         context.put("table", table);
         context.put("context", config);

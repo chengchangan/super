@@ -25,6 +25,9 @@ public class Result<T> implements Serializable {
     @ApiModelProperty(value = "状态码", required = true)
     private Integer status;
 
+    @ApiModelProperty(value = "请求Id", required = true)
+    private Long requestId;
+
     public Result() {
 
     }
