@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.response.Result;
 import io.boncray.core.sequence.IdGenerator;
+import io.boncray.logback.wapper.HttpCommonUtil;
 import io.boncray.logback.wapper.request.CustomHttpServletRequest;
 import io.boncray.logback.wapper.request.CustomHttpServletRequestWrapper;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
@@ -24,6 +25,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -50,15 +54,29 @@ public class LogbackFilter extends OncePerRequestFilter {
 
         // 增加请求头，trackId
         this.putTrackId(customRequest);
+        // 接口访问日志记录
+        this.log(customRequest);
         try {
             filterChain.doFilter(customRequest, customResponse);
-
             // 改写response，增加返回trackId
             this.overwriteResponse(customRequest, customResponse, response);
         } finally {
             MDC.remove(LogConstant.TRACK_ID);
         }
     }
+
+    private void log(CustomHttpServletRequest customRequest) throws IOException {
+        String body = HttpCommonUtil.getRequestPostStr(customRequest);
+
+        Map<String, String> headerMap = new HashMap<>();
+        Enumeration<String> headerNames = customRequest.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            headerMap.put(headerName, customRequest.getHeader(headerName));
+        }
+        log.info("request body：{}，header：{}", body, JSONUtil.toJsonStr(headerMap));
+    }
+
 
     /**
      * 请求头、MDC ，

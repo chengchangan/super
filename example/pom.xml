@@ -30,7 +30,6 @@
         <dependency>
             <groupId>io.boncray.logback</groupId>
             <artifactId>logback-starter</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

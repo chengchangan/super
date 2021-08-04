@@ -25,6 +25,14 @@
         <spring.boot.version>2.3.2.RELEASE</spring.boot.version>
         <spring.cloud.alibaba.version>2.2.6.RELEASE</spring.cloud.alibaba.version>
         <spring.cloud.version>Hoxton.SR9</spring.cloud.version>
+
+        <!-- module version -->
+        <core.version>1.0-SNAPSHOT</core.version>
+        <bean.version>1.0-SNAPSHOT</bean.version>
+        <web.version>1.0-SNAPSHOT</web.version>
+        <flow.version>1.0-SNAPSHOT</flow.version>
+        <logback.version>1.0-SNAPSHOT</logback.version>
+        <!-- -->
         <junit.version>4.13.1</junit.version>
         <slf4j.version>1.7.25</slf4j.version>
         <lombok.version>1.18.0</lombok.version>
@@ -43,6 +51,7 @@
         <cglib.version>3.3.0</cglib.version>
         <expiringmap.version>0.5.8</expiringmap.version>
         <ttl-thread-local.version>2.12.1</ttl-thread-local.version>
+
     </properties>
 
     <dependencyManagement>
@@ -76,22 +85,28 @@
             <dependency>
                 <groupId>io.boncray</groupId>
                 <artifactId>core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${core.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.boncray</groupId>
                 <artifactId>bean</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${bean.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.boncray</groupId>
                 <artifactId>web</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${web.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.boncray</groupId>
                 <artifactId>flow</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${flow.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.boncray.logback</groupId>
+                <artifactId>logback-starter</artifactId>
+                <version>${logback.version}</version>
             </dependency>
 
             <!-- mysql connect -->
