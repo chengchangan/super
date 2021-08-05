@@ -36,7 +36,7 @@ public class TrackLogger extends AbstractLogger {
 
     @Override
     protected void cleanMDC() {
-        MDC.remove(LogConstant.TRACK_ID);
+        MDC.remove(LogConstant.TRACK_METRIC);
     }
 
 

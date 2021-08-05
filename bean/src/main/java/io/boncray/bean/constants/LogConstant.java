@@ -7,5 +7,20 @@ package io.boncray.bean.constants;
  */
 public class LogConstant {
 
-    public static final String TRACK_ID = "trackId";
+    /**
+     * 请求头日志信息 ，json
+     */
+    public static final String TRACK_METRIC = "trackMetric";
+
+    /**
+     * MDC key
+     */
+    public static final String CURRENT_TRACK_ID = "currentTrackId";
+
+
+    /**
+     * MDC key
+     */
+    public static final String PARENT_TRACK_ID = "parentTrackId";
+
 }

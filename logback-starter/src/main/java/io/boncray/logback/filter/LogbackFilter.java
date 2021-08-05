@@ -4,37 +4,37 @@ package io.boncray.logback.filter;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
-import io.boncray.bean.mode.response.Result;
+import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.core.sequence.IdGenerator;
 import io.boncray.logback.wapper.HttpCommonUtil;
 import io.boncray.logback.wapper.request.CustomHttpServletRequest;
-import io.boncray.logback.wapper.request.CustomHttpServletRequestWrapper;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
+ * 请求头 trackMetric 及 日志打印
+ *
  * @author cca
  * @version 1.0
  * @date 2021/8/4 15:00
  */
+@Order(1)
 @Slf4j
 @Component
 public class LogbackFilter extends OncePerRequestFilter {
@@ -46,26 +46,29 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("==========================LogbackFilter============================");
+        CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
+        CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
 
-        // 使用包装创建自定义 request
-        CustomHttpServletRequest customRequest = new CustomHttpServletRequest(new CustomHttpServletRequestWrapper(request));
-        // 使用包装创建自定义 response
-        CustomHttpServletResponse customResponse = new CustomHttpServletResponse(response);
+        // 增加请求头，处理trackMetric 信息
+        this.parseTrack(customRequest);
 
-        // 增加请求头，trackId
-        this.putTrackId(customRequest);
+        // 设置MDC
+        this.parseMDC(customRequest);
+
         // 接口访问日志记录
-        this.log(customRequest);
+        this.writeLog(customRequest);
         try {
             filterChain.doFilter(customRequest, customResponse);
-            // 改写response，增加返回trackId
-            this.overwriteResponse(customRequest, customResponse, response);
         } finally {
-            MDC.remove(LogConstant.TRACK_ID);
+            this.cleanMDC();
         }
     }
 
-    private void log(CustomHttpServletRequest customRequest) throws IOException {
+    /**
+     * 请求日志记录
+     */
+    private void writeLog(CustomHttpServletRequest customRequest) throws IOException {
         String body = HttpCommonUtil.getRequestPostStr(customRequest);
 
         Map<String, String> headerMap = new HashMap<>();
@@ -78,38 +81,49 @@ public class LogbackFilter extends OncePerRequestFilter {
     }
 
 
+    private void parseTrack(CustomHttpServletRequest request) {
+        // todo 根据配置选择日志的输出形式
+//        parseTrackMetric(request);
+        parseTrackMetricTree(request);
+    }
+
     /**
      * 请求头、MDC ，
      * 增加 trackId 处理
      */
-    private void putTrackId(CustomHttpServletRequest request) {
-        String trackId = request.getHeader(LogConstant.TRACK_ID);
-        if (StrUtil.isBlank(trackId)) {
-            trackId = String.valueOf(idGenerator.next());
-            request.putHeader(LogConstant.TRACK_ID, trackId);
+    private void parseTrackMetricTree(CustomHttpServletRequest request) {
+        String parentMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
+
+        TrackMetric currentMetric = new TrackMetric();
+        currentMetric.setCurrentTrackId(idGenerator.next());
+        // 父级调用
+        if (StrUtil.isNotBlank(parentMetricStr)) {
+            TrackMetric parentMetric = JSONUtil.toBean(parentMetricStr, TrackMetric.class);
+            currentMetric.setParentTrackId(parentMetric.getCurrentTrackId());
         }
-        MDC.put(LogConstant.TRACK_ID, trackId);
+        request.putHeader(LogConstant.TRACK_METRIC, JSONUtil.toJsonStr(currentMetric));
     }
 
-    /**
-     * 改写响应结果
-     */
-    private void overwriteResponse(CustomHttpServletRequest customRequest, CustomHttpServletResponse customResponse, HttpServletResponse response) throws IOException {
-        String contentType = customResponse.getContentType();
 
-        if (StringUtils.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
-            String responseData = new String(customResponse.getResponseData());
-            Result<?> result = JSONUtil.toBean(responseData, Result.class);
-            result.setRequestId(Long.valueOf(customRequest.getHeader(LogConstant.TRACK_ID)));
-            this.writeResponse(response, JSONUtil.toJsonStr(result));
+    private void parseTrackMetric(CustomHttpServletRequest request) {
+        String parentMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
+        if (StrUtil.isBlank(parentMetricStr)) {
+            TrackMetric currentMetric = new TrackMetric();
+            currentMetric.setCurrentTrackId(idGenerator.next());
+            request.putHeader(LogConstant.TRACK_METRIC, JSONUtil.toJsonStr(currentMetric));
         }
     }
 
-    private void writeResponse(ServletResponse servletResponse, String responseData) throws IOException {
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.reset();
-        response.setContentType(ContentType.APPLICATION_JSON.getMimeType());
-        response.setCharacterEncoding(ContentType.APPLICATION_JSON.getCharset().name());
-        response.getWriter().write(responseData);
+    private void parseMDC(CustomHttpServletRequest request) {
+        TrackMetric currentMetric = JSONUtil.toBean(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
+        MDC.put(LogConstant.CURRENT_TRACK_ID, String.valueOf(currentMetric.getCurrentTrackId()));
+        MDC.put(LogConstant.CURRENT_TRACK_ID, String.valueOf(Optional.ofNullable(currentMetric.getParentTrackId()).orElse(0L)));
     }
+
+    private void cleanMDC() {
+        MDC.remove(LogConstant.PARENT_TRACK_ID);
+        MDC.remove(LogConstant.CURRENT_TRACK_ID);
+    }
+
+
 }
