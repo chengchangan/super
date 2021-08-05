@@ -8,15 +8,21 @@
     <!--日志文件夹的名称 这里即为项目的name-->
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
-    <!-- 文件输出格式  可以使用 [%X{Key}] 进行输出的自定义 然后使用MDC.set(Key,"value") 设置对应的值-->
-    <property name="PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} --- [%X{trackId}] [%thread] [%X{ThreadId}] %-5level %logger{36} - %msg%n"/>
+    <!-- 彩色日志 -->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
+    <property name="LOG_PATTERN"
+              value="${LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} - %clr([%X{parentTrackId}])-%clr([%X{currentTrackId}])　%clr(%-5level) [%thread] [%X{ThreadId}] %logger{36} - %msg%n}"/>
+
     <!-- 输出文件路径 -->
     <!--<property name="OPEN_FILE_PATH" value="/logs"/>-->encoder
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
@@ -39,7 +45,7 @@
         </rollingPolicy>
 
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </layout>
     </appender>
 
@@ -55,7 +61,7 @@
         </rollingPolicy>
         <append>true</append>
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印DEBUG日志 -->
@@ -77,7 +83,7 @@
         </rollingPolicy>
         <append>true</append>
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印INFO日志 -->
@@ -99,7 +105,7 @@
         </rollingPolicy>
         <append>true</append>
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印ERROR日志 -->
@@ -121,7 +127,7 @@
         </rollingPolicy>
         <append>true</append>
         <encoder>
-            <pattern>${PATTERN}</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
             <charset>utf-8</charset>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印WARN日志 -->
