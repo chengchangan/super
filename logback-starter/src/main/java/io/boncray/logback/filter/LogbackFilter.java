@@ -16,6 +16,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -40,8 +41,8 @@ import java.util.Optional;
 public class LogbackFilter extends OncePerRequestFilter {
 
 
-    @Autowired
-    private IdGenerator idGenerator;
+    @Resource
+    private IdGenerator normalIdGenerator;
 
 
     @Override
@@ -95,7 +96,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         String parentMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
 
         TrackMetric currentMetric = new TrackMetric();
-        currentMetric.setCurrentTrackId(idGenerator.next());
+        currentMetric.setCurrentTrackId(normalIdGenerator.next());
         // 父级调用
         if (StrUtil.isNotBlank(parentMetricStr)) {
             TrackMetric parentMetric = JSONUtil.toBean(parentMetricStr, TrackMetric.class);
@@ -109,7 +110,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         String parentMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
         if (StrUtil.isBlank(parentMetricStr)) {
             TrackMetric currentMetric = new TrackMetric();
-            currentMetric.setCurrentTrackId(idGenerator.next());
+            currentMetric.setCurrentTrackId(normalIdGenerator.next());
             request.putHeader(LogConstant.TRACK_METRIC, JSONUtil.toJsonStr(currentMetric));
         }
     }

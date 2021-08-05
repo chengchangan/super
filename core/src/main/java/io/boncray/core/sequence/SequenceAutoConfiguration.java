@@ -13,9 +13,15 @@ import org.springframework.context.annotation.Configuration;
 public class SequenceAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(name = "idGenerator")
     public IdGenerator idGenerator() throws Exception {
         return new DefaultIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "normalIdGenerator")
+    public IdGenerator normalIdGenerator() {
+        return new NormalIdGenerator();
     }
 
 }
