@@ -116,8 +116,8 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     private void parseMDC(CustomHttpServletRequest request) {
         TrackMetric currentMetric = JSONUtil.toBean(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
+        MDC.put(LogConstant.PARENT_TRACK_ID, String.valueOf(Optional.ofNullable(currentMetric.getParentTrackId()).orElse(0L)));
         MDC.put(LogConstant.CURRENT_TRACK_ID, String.valueOf(currentMetric.getCurrentTrackId()));
-        MDC.put(LogConstant.CURRENT_TRACK_ID, String.valueOf(Optional.ofNullable(currentMetric.getParentTrackId()).orElse(0L)));
     }
 
     private void cleanMDC() {
