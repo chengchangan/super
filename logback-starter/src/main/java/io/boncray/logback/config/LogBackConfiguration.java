@@ -1,5 +1,12 @@
 package io.boncray.logback.config;
 
+import lombok.Data;
+import org.springframework.context.annotation.Configuration;
+
+@Data
+//@EnableConfigurationProperties({LogBackConfiguration.class})
+//@ConfigurationProperties(prefix = "jiuxian")
+@Configuration
 public class LogBackConfiguration {
 
     /**
@@ -8,15 +15,9 @@ public class LogBackConfiguration {
     private boolean collectEnabled;
 
     /**
-     * 传输的方式
+     * 传输的方式, todo 先默认写死，后续读取配置
      */
-    private TransferChannel transferChannel;
+    private TransferChannel transferChannel = TransferChannel.NONE;
 
 
-
-
-
-    enum TransferChannel {
-        MYSQL, ES
-    }
 }

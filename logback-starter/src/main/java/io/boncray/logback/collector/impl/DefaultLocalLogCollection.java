@@ -4,11 +4,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LocalLogItem;
 import io.boncray.logback.collector.CollectionAble;
+import io.boncray.logback.config.LogType;
 import io.boncray.logback.filter.LogbackFilter;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Map;
@@ -18,9 +19,15 @@ import java.util.Map;
  * @version 1.0
  * @date 2021/8/6 16:47
  */
+@Component
 public class DefaultLocalLogCollection implements CollectionAble<LocalLogItem> {
 
     private static final String SERVICE_NAME_KEY = "APP_NAME";
+
+    @Override
+    public LogType supportType() {
+        return LogType.LOCAL_LOG;
+    }
 
     @Override
     public boolean isNeedCollect(ILoggingEvent iLoggingEvent) {
@@ -53,8 +60,4 @@ public class DefaultLocalLogCollection implements CollectionAble<LocalLogItem> {
         return item;
     }
 
-    @Override
-    public void transfer(LocalLogItem data) {
-        System.err.println("local 传输数据：" + JSONUtil.toJsonStr(data));
-    }
 }

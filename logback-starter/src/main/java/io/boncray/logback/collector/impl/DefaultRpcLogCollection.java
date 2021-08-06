@@ -4,11 +4,12 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.RpcLogItem;
 import io.boncray.logback.collector.CollectionAble;
+import io.boncray.logback.config.LogType;
 import io.boncray.logback.filter.LogbackFilter;
+import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,7 +20,8 @@ import java.util.Map;
  * @version 1.0
  * @date 2021/8/6 16:47
  */
-public class RpcLogCollection implements CollectionAble<RpcLogItem> {
+@Component
+public class DefaultRpcLogCollection implements CollectionAble<RpcLogItem> {
 
     private static final String SERVICE_NAME_KEY = "APP_NAME";
     /**
@@ -31,6 +33,11 @@ public class RpcLogCollection implements CollectionAble<RpcLogItem> {
      */
     private static final int REQUEST_END_ARG_SIZE = 2;
 
+
+    @Override
+    public LogType supportType() {
+        return LogType.RPC_LOG;
+    }
 
     @Override
     public boolean isNeedCollect(ILoggingEvent iLoggingEvent) {
@@ -79,8 +86,4 @@ public class RpcLogCollection implements CollectionAble<RpcLogItem> {
         }
     }
 
-    @Override
-    public void transfer(RpcLogItem data) {
-        System.err.println("rpc 传输数据：" + JSONUtil.toJsonStr(data));
-    }
 }

@@ -2,7 +2,7 @@ package io.boncray.logback.collector;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import io.boncray.bean.mode.log.Log;
-import io.boncray.logback.transfer.TransferAble;
+import io.boncray.logback.config.LogType;
 
 /**
  * 数据收集接口
@@ -11,8 +11,14 @@ import io.boncray.logback.transfer.TransferAble;
  * @version 1.0
  * @date 2021/8/6 16:30
  */
-public interface CollectionAble<T extends Log> extends TransferAble<T> {
+public interface CollectionAble<T extends Log> {
 
+    /**
+     * 处理日志的类型
+     *
+     * @return 处理日志的类型
+     */
+    LogType supportType();
 
     /**
      * 是否需要收集
