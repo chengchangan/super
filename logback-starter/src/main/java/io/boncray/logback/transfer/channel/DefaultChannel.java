@@ -14,7 +14,7 @@ public class DefaultChannel implements TransferAble {
     @Override
     public void transfer(Object data) {
         // todo 日志持久化
-        System.err.println(JSONUtil.toJsonStr(data));
+        System.err.println(data.getClass().getName() + "_" + JSONUtil.toJsonStr(data));
     }
 
 }
