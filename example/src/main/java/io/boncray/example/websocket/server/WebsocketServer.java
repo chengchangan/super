@@ -28,7 +28,7 @@ public class WebsocketServer {
     @OnOpen
     public void onOpen(@PathParam("userId") String userId, Session session) throws IOException {
         this.userId = userId;
-        logger.info("新连接：{}", userId);
+        logger.info("新连接:{}", userId);
     }
 
     /**
@@ -36,7 +36,7 @@ public class WebsocketServer {
      */
     @OnClose
     public void onClose() {
-        logger.info("连接：{} 关闭", this.userId);
+        logger.info("连接:{} 关闭", this.userId);
     }
 
     /**
@@ -44,7 +44,7 @@ public class WebsocketServer {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
-        logger.info("收到用户{}的消息：{}", this.userId, message);
+        logger.info("收到用户{}的消息:{}", this.userId, message);
         //回复客户端
         session.getBasicRemote().sendText("收到 " + this.userId + " 的消息 ");
     }
@@ -54,7 +54,7 @@ public class WebsocketServer {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-        logger.info("用户id为：{}的连接发送错误", this.userId);
+        logger.info("用户id为:{}的连接发送错误", this.userId);
         error.printStackTrace();
     }
 

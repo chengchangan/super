@@ -1,8 +1,7 @@
-package io.boncray.logback.collection;
+package io.boncray.logback.collector;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import io.boncray.bean.mode.log.Log;
-import io.boncray.bean.mode.log.RpcLogItem;
 
 /**
  * 数据收集接口

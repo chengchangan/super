@@ -47,7 +47,7 @@ public class RetryAspect {
                     }
                 }
                 TimeUnit.SECONDS.sleep(intervalSecond);
-                logger.error("方法调用失败：{}，参数：{}，重试次数：{}", method.getName(), args, i + 1);
+                logger.error("方法调用失败:{}，参数:{}，重试次数:{}", method.getName(), args, i + 1);
                 if (e instanceof InvocationTargetException) {
                     exception = ((InvocationTargetException) e).getTargetException();
                 } else {
@@ -58,7 +58,7 @@ public class RetryAspect {
         if (exception == null) {
             exception = new RuntimeException("未知异常");
         }
-        logger.error("服务调用失败，方法：{}，参数：{}，重试次数：{}，cause：{}", method.getName(), Arrays.toString(joinPoint.getArgs()), times, exception.getMessage());
+        logger.error("服务调用失败，方法:{}，参数:{}，重试次数:{}，cause:{}", method.getName(), Arrays.toString(joinPoint.getArgs()), times, exception.getMessage());
         throw exception;
     }
 

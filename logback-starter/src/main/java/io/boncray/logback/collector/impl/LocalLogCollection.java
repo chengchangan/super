@@ -1,4 +1,4 @@
-package io.boncray.logback.collection.impl;
+package io.boncray.logback.collector.impl;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
@@ -7,7 +7,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LocalLogItem;
-import io.boncray.logback.collection.CollectionAble;
+import io.boncray.logback.collector.CollectionAble;
+import io.boncray.logback.filter.LogbackFilter;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -26,8 +27,11 @@ public class LocalLogCollection implements CollectionAble<LocalLogItem> {
     @Override
     public boolean isNeedCollection(ILoggingEvent iLoggingEvent) {
         Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
-        return StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
-                && StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID));
+        if (!LogbackFilter.class.getName().equals(iLoggingEvent.getLoggerName())) {
+            return StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
+                    && StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID));
+        }
+        return false;
     }
 
     @Override

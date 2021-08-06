@@ -47,7 +47,7 @@ public class Profiler {
         Stage stage = stages.getLast();
         // 如果阶段已经被释放了，则不处理
         if (stage.isReleased()) {
-            log.warn("阶段重复释放：{}", JSONUtil.toJsonStr(stage));
+            log.warn("阶段重复释放:{}", JSONUtil.toJsonStr(stage));
             return;
         }
         stage.release();

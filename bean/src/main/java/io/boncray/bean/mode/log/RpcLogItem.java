@@ -3,6 +3,7 @@ package io.boncray.bean.mode.log;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * @author cca
@@ -27,6 +28,10 @@ public class RpcLogItem extends Log {
      */
     private String serviceName;
 
+    /**
+     * 请求方式
+     */
+    private String method;
 
     /**
      * 请求的路径
@@ -36,8 +41,7 @@ public class RpcLogItem extends Log {
     /**
      * 请求参数（header和body）
      */
-    private String requestParam;
-
+    private Map<String, Object> requestParam;
 
     /**
      * 响应结果

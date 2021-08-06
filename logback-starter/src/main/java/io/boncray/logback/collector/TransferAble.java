@@ -1,4 +1,4 @@
-package io.boncray.logback.collection;
+package io.boncray.logback.collector;
 
 /**
  * 数据传输接口

@@ -39,12 +39,12 @@ public class CustomWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake shake) {
-        LOGGER.info("url：{}，websocket connect succeed", uri.getAuthority() + uri.getPath());
+        LOGGER.info("url:{}，websocket connect succeed", uri.getAuthority() + uri.getPath());
     }
 
     @Override
     public void onClose(int arg0, String arg1, boolean arg2) {
-        LOGGER.info("WebSocket onClose ，remote server ip：{}，cause：{}", uri.getAuthority() + uri.getPath(), arg1);
+        LOGGER.info("WebSocket onClose ，remote server ip:{}，cause:{}", uri.getAuthority() + uri.getPath(), arg1);
         if (onCloseRetryConnect()) {
             clientManager.waitRetryConnect(uri.getAuthority() + uri.getPath());
         }
@@ -56,7 +56,7 @@ public class CustomWebSocketClient extends WebSocketClient {
 
     @Override
     public void onError(Exception exception) {
-        LOGGER.info("WebSocket onError，remote server ip：{}，exception：", uri.getAuthority() + uri.getPath(), exception);
+        LOGGER.info("WebSocket onError，remote server ip:{}，exception：", uri.getAuthority() + uri.getPath(), exception);
         if (onErrorRetryConnect()) {
             clientManager.waitRetryConnect(uri.getAuthority() + uri.getPath());
         }
@@ -68,7 +68,7 @@ public class CustomWebSocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        LOGGER.debug("remote server ip：{}，receive data：{}", uri.getAuthority() + uri.getPath(), message);
+        LOGGER.debug("remote server ip:{}，receive data:{}", uri.getAuthority() + uri.getPath(), message);
         clientManager.handler.onMessage(this, message);
     }
 
@@ -89,11 +89,11 @@ public class CustomWebSocketClient extends WebSocketClient {
                             // 如果当前socket连接超时，则重置这个连接再次发送，结束当前发送
                             WebSocketClient client = clientManager.resetClientAndGet(uri.getAuthority() + uri.getPath());
                             RETRY_TIME_LOCAL.set(currentRetryTime + 1);
-                            LOGGER.info("connect timeout，retry times：{}", RETRY_TIME_LOCAL.get());
+                            LOGGER.info("connect timeout，retry times:{}", RETRY_TIME_LOCAL.get());
                             client.send(text);
                             return;
                         }
-                        LOGGER.debug("wait open connect，url：{}", uri.getAuthority() + uri.getPath());
+                        LOGGER.debug("wait open connect，url:{}", uri.getAuthority() + uri.getPath());
                         this.wait(1000);
                     }
                 }
@@ -101,7 +101,7 @@ public class CustomWebSocketClient extends WebSocketClient {
                 RETRY_TIME_LOCAL.remove();
             }
         }
-        LOGGER.debug("send websocket request，param：{}", text);
+        LOGGER.debug("send websocket request，param:{}", text);
         super.send(text);
     }
 

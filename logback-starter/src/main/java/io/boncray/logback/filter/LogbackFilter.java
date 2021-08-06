@@ -51,7 +51,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
         CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
 
-        // 增加请求头，处理trackMetric 信息
+        // 增加请求头,处理trackMetric 信息
         this.parseTrack(customRequest);
 
         // 设置MDC
@@ -80,11 +80,12 @@ public class LogbackFilter extends OncePerRequestFilter {
             String headerName = headerNames.nextElement();
             headerMap.put(headerName, customRequest.getHeader(headerName));
         }
-        log.info("request path：{}，body：{}，header：{}", customRequest.getPathInfo(), body, JSONUtil.toJsonStr(headerMap));
+        log.info("request method:{},path:{},body:{},header:{}",
+                customRequest.getMethod(), customRequest.getRequestURI(), body, JSONUtil.toJsonStr(headerMap));
     }
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
-        log.info("response elapsedTime：{}，data：{}", System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+        log.info("response elapsedTime:{},data:{}", System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
     }
 
 
@@ -95,7 +96,7 @@ public class LogbackFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 请求头、MDC ，
+     * 请求头、MDC ,
      * 增加 trackId 处理
      */
     private void parseTrackMetricTree(CustomHttpServletRequest request) {

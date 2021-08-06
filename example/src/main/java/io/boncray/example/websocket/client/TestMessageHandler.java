@@ -17,7 +17,7 @@ public class TestMessageHandler implements MessageHandler {
 
     @Override
     public void onMessage(WebSocketClient client, String message) {
-        log.info("收到websocket server的信息：{}", message);
+        log.info("收到websocket server的信息:{}", message);
     }
 
 

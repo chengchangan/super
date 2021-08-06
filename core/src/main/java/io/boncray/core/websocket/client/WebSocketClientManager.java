@@ -199,7 +199,7 @@ public class WebSocketClientManager implements ApplicationContextAware {
             while (iterator.hasNext()) {
                 String fullPath = iterator.next();
                 iterator.remove();
-                LOGGER.info("remote server broken connect ，retry connect now ，url：{}，", fullPath);
+                LOGGER.info("remote server broken connect ，retry connect now ，url:{}，", fullPath);
                 resetClientAndGet(fullPath);
             }
         }

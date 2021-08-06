@@ -55,7 +55,7 @@ public class ProcessTrigger {
                         node.execute(context);
                     }
                 } catch (Exception e) {
-                    log.error("node：{},执行失败,原因：{}.参数：{}", node.getNodeCode(), e.getMessage(), JSONUtil.toJsonStr(context));
+                    log.error("node:{},执行失败,原因:{}.参数:{}", node.getNodeCode(), e.getMessage(), JSONUtil.toJsonStr(context));
                     throw new FlowProcessException(ProcessExceptionEnum.FLOW_TRIGGER_120002, e);
                 } finally {
                     // 结束当前节点计时

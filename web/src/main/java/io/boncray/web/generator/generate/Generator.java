@@ -58,15 +58,15 @@ public class Generator {
             for (TemplateConfig templateConfig : config.getTemplateList()) {
 
                 if (Assert.isTrue(config.isIgnoreControllerCode()) && templateConfig.getTemplatePath().contains("controller")) {
-                    log.info("忽略生成 controller：{}", tableName);
+                    log.info("忽略生成 controller:{}", tableName);
                     continue;
                 }
                 if (Assert.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("serviceImpl")) {
-                    log.info("忽略生成 service：{}", tableName);
+                    log.info("忽略生成 service:{}", tableName);
                     continue;
                 }
                 if (Assert.isTrue(config.isIgnoreMapperCode()) && templateConfig.getTemplatePath().contains("mapper")) {
-                    log.info("忽略生成 mapper：{}", tableName);
+                    log.info("忽略生成 mapper:{}", tableName);
                     continue;
                 }
                 nameHandler.processTableToClass(config, table);

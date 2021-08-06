@@ -1,4 +1,4 @@
-package io.boncray.logback.collection.impl;
+package io.boncray.logback.collector.impl;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
@@ -7,7 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.RpcLogItem;
-import io.boncray.logback.collection.CollectionAble;
+import io.boncray.logback.collector.CollectionAble;
 import io.boncray.logback.filter.LogbackFilter;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +27,7 @@ public class RpcLogCollection implements CollectionAble<RpcLogItem> {
     /**
      * rpc 请求日志开始记录
      */
-    private static final int REQUEST_START_ARG_SIZE = 3;
+    private static final int REQUEST_START_ARG_SIZE = 4;
     /**
      * rpc 请求日志结束更新
      */
@@ -66,11 +66,11 @@ public class RpcLogCollection implements CollectionAble<RpcLogItem> {
     private void parseLogArg(Object[] logArgs, RpcLogItem item) {
         if (logArgs.length == REQUEST_START_ARG_SIZE) {
             Map<String, Object> requestParam = new HashMap<>(4);
-            requestParam.put("body", logArgs[1]);
-            requestParam.put("header", logArgs[2]);
-            item.setRequestPath(logArgs[0].toString());
-            item.setRequestParam(JSONUtil.toJsonStr(requestParam));
-
+            requestParam.put("body", logArgs[2]);
+            requestParam.put("header", logArgs[3]);
+            item.setMethod(logArgs[0].toString());
+            item.setRequestPath(logArgs[1].toString());
+            item.setRequestParam(requestParam);
         } else if (logArgs.length == REQUEST_END_ARG_SIZE) {
             item.setElapsedTime(Long.valueOf(logArgs[0].toString()));
             item.setResponseData(logArgs[1].toString());

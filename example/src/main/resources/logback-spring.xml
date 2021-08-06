@@ -23,8 +23,7 @@
 
 
     <!-- 输出文件路径 -->
-    <!--<property name="OPEN_FILE_PATH" value="/logs"/>-->encoder
-
+    <!--<property name="LOG_PATTERN" value="/logs"/>-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>${LOG_PATTERN}</pattern>

@@ -5,12 +5,11 @@ import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import cn.hutool.core.collection.CollectionUtil;
 import io.boncray.bean.mode.log.Log;
-import io.boncray.logback.collection.CollectionAble;
-import io.boncray.logback.logger.SpringContext;
+import io.boncray.bean.utils.SpringContext;
+import io.boncray.logback.collector.CollectionAble;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author cca
@@ -24,9 +23,8 @@ public class CollectionLogFilter extends Filter<ILoggingEvent> {
     @Override
     public FilterReply decide(ILoggingEvent iLoggingEvent) {
         if (CollectionUtil.isEmpty(collectionList)) {
-            Map<String, CollectionAble> beans = SpringContext.getApplicationContext().getBeansOfType(CollectionAble.class);
-            if (CollectionUtil.isNotEmpty(beans)){
-                collectionList.addAll(beans.values());
+            if (SpringContext.getApplicationContext() != null) {
+                collectionList.addAll(SpringContext.getApplicationContext().getBeansOfType(CollectionAble.class).values());
             }
         }
         if (CollectionUtil.isNotEmpty(collectionList)) {
