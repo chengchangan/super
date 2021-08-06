@@ -28,7 +28,7 @@ public class RpcLogAnalyser extends AbstractLogAnalyser {
             LogTempStore.put(getCacheKey(rpcLogItem), rpcLogItem);
             return null;
         } else {
-            RpcLogItem startRpcLog = LogTempStore.get(getCacheKey(rpcLogItem));
+            RpcLogItem startRpcLog = LogTempStore.getAndRemove(getCacheKey(rpcLogItem));
             rpcLogItem.setMethod(startRpcLog.getMethod());
             rpcLogItem.setRequestPath(startRpcLog.getRequestPath());
             rpcLogItem.setRequestParam(startRpcLog.getRequestParam());

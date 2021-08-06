@@ -16,8 +16,8 @@ public class LogTempStore {
         }
     }
 
-    public static RpcLogItem get(String key) {
-        return logMap.get(key);
+    public static RpcLogItem getAndRemove(String key) {
+        return logMap.remove(key);
     }
 
 }
