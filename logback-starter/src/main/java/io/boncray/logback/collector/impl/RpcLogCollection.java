@@ -9,7 +9,6 @@ import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.RpcLogItem;
 import io.boncray.logback.collector.CollectionAble;
 import io.boncray.logback.filter.LogbackFilter;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import java.util.Map;
  * @version 1.0
  * @date 2021/8/6 16:47
  */
-@Component
 public class RpcLogCollection implements CollectionAble<RpcLogItem> {
 
     private static final String SERVICE_NAME_KEY = "APP_NAME";
@@ -35,18 +33,22 @@ public class RpcLogCollection implements CollectionAble<RpcLogItem> {
 
 
     @Override
-    public boolean isNeedCollection(ILoggingEvent iLoggingEvent) {
+    public boolean isNeedCollect(ILoggingEvent iLoggingEvent) {
         Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
-
+        boolean isNeed = false;
         if (LogbackFilter.class.getName().equals(iLoggingEvent.getLoggerName())) {
-            return StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
+            isNeed = StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
                     && StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID));
         }
-        return false;
+        return isNeed ? isNeed(iLoggingEvent) : isNeed;
+    }
+
+    public boolean isNeed(ILoggingEvent iLoggingEvent) {
+        return true;
     }
 
     @Override
-    public RpcLogItem getCollectionData(ILoggingEvent iLoggingEvent) {
+    public RpcLogItem collectData(ILoggingEvent iLoggingEvent) {
         Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
         LoggerContextVO contextVO = iLoggingEvent.getLoggerContextVO();
         Object[] logArgs = iLoggingEvent.getArgumentArray();

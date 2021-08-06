@@ -4,7 +4,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.filter.Filter;
 import ch.qos.logback.core.spi.FilterReply;
 import cn.hutool.core.collection.CollectionUtil;
-import io.boncray.bean.mode.log.Log;
 import io.boncray.bean.utils.SpringContext;
 import io.boncray.logback.collector.CollectionAble;
 
@@ -29,9 +28,8 @@ public class CollectionLogFilter extends Filter<ILoggingEvent> {
         }
         if (CollectionUtil.isNotEmpty(collectionList)) {
             for (CollectionAble collection : collectionList) {
-                if (collection.isNeedCollection(iLoggingEvent)) {
-                    Log data = collection.getCollectionData(iLoggingEvent);
-                    collection.transfer(data);
+                if (collection.isNeedCollect(iLoggingEvent)) {
+                    collection.transfer(collection.collectData(iLoggingEvent));
                 }
             }
         }
