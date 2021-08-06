@@ -11,7 +11,6 @@ import io.boncray.logback.wapper.request.CustomHttpServletRequest;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -61,6 +60,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         this.writeLog(customRequest);
         try {
             filterChain.doFilter(customRequest, customResponse);
+            // todo 可增加接口调用耗时记录
         } finally {
             this.cleanMDC();
         }
