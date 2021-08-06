@@ -14,8 +14,13 @@
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
 
+<!--    <property name="LOG_PATTERN"-->
+<!--              value="${LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} - %clr([%X{parentTrackId}])-%clr([%X{currentTrackId}])　%clr(%-5level) [%thread] [%X{ThreadId}] %logger{36} : %msg%n}"/>-->
+
     <property name="LOG_PATTERN"
-              value="${LOG_PATTERN:-%d{yyyy-MM-dd HH:mm:ss.SSS} - %clr([%X{parentTrackId}])-%clr([%X{currentTrackId}])　%clr(%-5level) [%thread] [%X{ThreadId}] %logger{36} - %msg%n}"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} - %highlight([%X{parentTrackId}])-[%X{currentTrackId}]　%-5level [%thread] [%X{ThreadId}] %logger{36} : %msg%n"/>
+
+
 
     <!-- 输出文件路径 -->
     <!--<property name="OPEN_FILE_PATH" value="/logs"/>-->encoder
@@ -25,6 +30,8 @@
             <pattern>${LOG_PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
+
+        <filter class="io.boncray.logback.logger.filter.CollectionLogFilter"><!-- 测试日志过滤器 --></filter>
     </appender>
 
     <!-- ch.qos.logback.core.rolling.RollingFileAppender 文件日志输出 -->

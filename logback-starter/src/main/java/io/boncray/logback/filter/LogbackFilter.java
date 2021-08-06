@@ -46,6 +46,7 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        long start = System.currentTimeMillis();
         log.info("==========================LogbackFilter============================");
         CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
         CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
@@ -57,10 +58,11 @@ public class LogbackFilter extends OncePerRequestFilter {
         this.parseMDC(customRequest);
 
         // 接口访问日志记录
-        this.writeLog(customRequest);
+        this.startWriteLog(customRequest);
         try {
             filterChain.doFilter(customRequest, customResponse);
-            // todo 可增加接口调用耗时记录
+            // 响应结果日志记录（更新）
+            this.endWriteLog(customResponse, start);
         } finally {
             this.cleanMDC();
         }
@@ -69,7 +71,7 @@ public class LogbackFilter extends OncePerRequestFilter {
     /**
      * 请求日志记录
      */
-    private void writeLog(CustomHttpServletRequest customRequest) throws IOException {
+    private void startWriteLog(CustomHttpServletRequest customRequest) throws IOException {
         String body = HttpCommonUtil.getRequestPostStr(customRequest);
 
         Map<String, String> headerMap = new HashMap<>();
@@ -78,7 +80,11 @@ public class LogbackFilter extends OncePerRequestFilter {
             String headerName = headerNames.nextElement();
             headerMap.put(headerName, customRequest.getHeader(headerName));
         }
-        log.info("request body：{}，header：{}", body, JSONUtil.toJsonStr(headerMap));
+        log.info("request path：{}，body：{}，header：{}", customRequest.getPathInfo(), body, JSONUtil.toJsonStr(headerMap));
+    }
+
+    private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
+        log.info("response elapsedTime：{}，data：{}", System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
     }
 
 

@@ -13,13 +13,13 @@ import lombok.Data;
 public class TrackMetric {
 
     /**
-     * 当前 TrackId
-     */
-    private Long currentTrackId;
-
-    /**
      * 父级　TrackId
      */
     private Long parentTrackId;
+
+    /**
+     * 当前 TrackId
+     */
+    private Long currentTrackId;
 
 }
