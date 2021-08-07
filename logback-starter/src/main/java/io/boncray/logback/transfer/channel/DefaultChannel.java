@@ -1,14 +1,14 @@
 package io.boncray.logback.transfer.channel;
 
 import cn.hutool.json.JSONUtil;
-import io.boncray.logback.transfer.TransferAble;
+import io.boncray.logback.transfer.Transferable;
 
 /**
  * @author cca
  * @version 1.0
  * @date 2021/8/7 00:43
  */
-public class DefaultChannel implements TransferAble {
+public class DefaultChannel implements Transferable {
 
 
     @Override

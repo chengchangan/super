@@ -5,7 +5,7 @@ import io.boncray.bean.utils.SpringContext;
 import io.boncray.logback.analysis.Analysis;
 import io.boncray.logback.config.LogBackConfiguration;
 import io.boncray.logback.config.TransferChannel;
-import io.boncray.logback.transfer.TransferAble;
+import io.boncray.logback.transfer.Transferable;
 import io.boncray.logback.transfer.TransferFactory;
 import org.springframework.context.ApplicationContext;
 
@@ -25,7 +25,7 @@ public abstract class AbstractLogAnalyser implements Analysis {
             return;
         }
         loadFromSpringContext();
-        TransferAble transferor = TransferFactory.getTransferor(transferChannel);
+        Transferable transferor = TransferFactory.getTransferor(transferChannel);
         transferor.transfer(targetLog);
     }
 

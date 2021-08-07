@@ -19,5 +19,10 @@ public class LogBackConfiguration {
      */
     private TransferChannel transferChannel = TransferChannel.NONE;
 
+    /**
+     * mysql数据源
+     */
+    private DataSourceProperties dataSourceProperties;
+
 
 }

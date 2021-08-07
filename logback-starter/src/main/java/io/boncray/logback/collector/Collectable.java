@@ -11,7 +11,7 @@ import io.boncray.logback.config.LogType;
  * @version 1.0
  * @date 2021/8/6 16:30
  */
-public interface CollectionAble<T extends Log> {
+public interface Collectable<T extends Log> {
 
     /**
      * 处理日志的类型

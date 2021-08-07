@@ -7,7 +7,7 @@ package io.boncray.logback.transfer;
  * @version 1.0
  * @date 2021/8/6 16:39
  */
-public interface TransferAble {
+public interface Transferable {
 
     /**
      * 数据传输
