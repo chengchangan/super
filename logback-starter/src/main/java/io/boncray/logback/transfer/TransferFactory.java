@@ -1,5 +1,6 @@
 package io.boncray.logback.transfer;
 
+import io.boncray.bean.utils.SpringContext;
 import io.boncray.logback.config.TransferChannel;
 import io.boncray.logback.transfer.channel.DefaultChannel;
 import io.boncray.logback.transfer.channel.es.EsTransfer;
@@ -20,9 +21,9 @@ public class TransferFactory {
     public static Transferable getTransferor(TransferChannel channel) {
         switch (channel) {
             case ES:
-                return transferChannelMap.computeIfAbsent(channel, (x) -> new EsTransfer());
+                return transferChannelMap.computeIfAbsent(channel, (x) -> SpringContext.getBean(EsTransfer.class));
             case MYSQL:
-                return transferChannelMap.computeIfAbsent(channel, (x) -> new MysqlTransfer());
+                return transferChannelMap.computeIfAbsent(channel, (x) -> SpringContext.getBean(MysqlTransfer.class));
             default:
                 return new DefaultChannel();
         }

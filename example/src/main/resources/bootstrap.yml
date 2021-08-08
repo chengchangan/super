@@ -1,6 +1,3 @@
-server:
-  port: 9999
-
 spring:
   application:
     name: oms-example
@@ -10,11 +7,10 @@ spring:
     nacos:
       discovery:
         register-enabled: false
-
       config:
         server-addr: 101.34.35.72:8848 #服务配置中心地址
         namespace: 907b6e96-4668-4d6f-8f26-eeda563d7616
-        group: PRODUCT_GROUP
+        group: DEFAULT_GROUP
         file-extension: yaml
         extension-configs:
           - data-id: common.yaml

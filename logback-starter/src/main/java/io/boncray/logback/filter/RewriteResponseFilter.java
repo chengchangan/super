@@ -53,7 +53,10 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
                 Result<?> result = JSONUtil.toBean(responseData, Result.class);
                 TrackMetric trackMetric = JSONUtil.toBean(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
                 result.setRequestId(trackMetric.getCurrentTrackId());
+                // 写入请求的response
                 this.writeResponse(customResponse.getResponse(), JSONUtil.toJsonStr(result));
+                // 写入自定义的response
+                this.writeResponse(customResponse, JSONUtil.toJsonStr(result));
             }
         }
     }

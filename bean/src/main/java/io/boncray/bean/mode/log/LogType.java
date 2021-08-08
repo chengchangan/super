@@ -1,4 +1,4 @@
-package io.boncray.logback.config;
+package io.boncray.bean.mode.log;
 
 /**
  * @author cca

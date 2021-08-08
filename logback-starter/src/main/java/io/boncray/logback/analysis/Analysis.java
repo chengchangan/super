@@ -1,7 +1,7 @@
 package io.boncray.logback.analysis;
 
 import io.boncray.bean.mode.log.Log;
-import io.boncray.logback.config.LogType;
+import io.boncray.bean.mode.log.LogType;
 
 /**
  * @author cca

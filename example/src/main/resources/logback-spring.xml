@@ -75,6 +75,7 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
+<!--        <filter class="io.boncray.logback.logger.filter.CollectionLogFilter">&lt;!&ndash; 测试日志过滤器 &ndash;&gt;</filter>-->
     </appender>
 
     <!--输出到info-->

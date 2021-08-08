@@ -25,6 +25,8 @@ public class LogTransferStation {
 
 
     /**
+     * 传输层入口
+     * <p>
      * 加载策略配置，
      * 传递传输日志
      *

@@ -21,6 +21,7 @@ public class TestLogController {
     @GetMapping("/test")
     public Result<String> test(){
         log.info("hahah");
+        log.debug("heihei");
         return Result.success();
     }
 

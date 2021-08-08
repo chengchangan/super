@@ -37,10 +37,11 @@ public class LogBackConfiguration {
         transferDataSource = new DataSourceProperties();
         transferDataSource.setUsername("root");
         transferDataSource.setPassword("root");
-        transferDataSource.setUrl("jdbc:mysql://101.34.35.72:3306/oms_product?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false");
-        transferDataSource.setDriverClassName(DruidDataSource.class.getName());
+        transferDataSource.setUrl("jdbc:mysql://101.34.35.72:3306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false");
+        transferDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         transferStrategy = new TransferStrategy();
-        transferStrategy.setAlways(true);
+        transferStrategy.setAlways(false);
+        transferStrategy.setBatchMaxSize(1000);
     }
 }

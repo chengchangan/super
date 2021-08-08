@@ -3,15 +3,19 @@ package io.boncray.bean.mode.log;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * @author cca
  * @version 1.0
- * @date 2021/8/6 15:07
+ * @date 2021/8/6 14:49
  */
 @Data
-public class RpcLogItem extends Log {
+public class LocalLog extends Log {
+
+    /**
+     * 主键
+     */
+    private Long id;
 
     /**
      * 父级　TrackId
@@ -29,33 +33,28 @@ public class RpcLogItem extends Log {
     private String serviceName;
 
     /**
-     * 请求方式
+     * 日志名称（所属类）
      */
-    private String method;
+    private String loggerName;
 
     /**
-     * 请求的路径
+     * 日志级别
      */
-    private String requestPath;
+    private String level;
 
     /**
-     * 请求参数（header和body）
+     * 日志信息
      */
-    private Map<String, Object> requestParam;
-
-    /**
-     * 响应结果
-     */
-    private String responseData;
-
-    /**
-     * 耗时
-     */
-    private Long elapsedTime;
-
+    private String message;
 
     /**
      * 日志产生时间
      */
     private LocalDateTime logTime;
+
+
+    @Override
+    public LogType logType() {
+        return LogType.LOCAL_LOG;
+    }
 }

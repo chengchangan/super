@@ -1,5 +1,6 @@
 package io.boncray.logback.transfer.channel.mysql;
 
+import io.boncray.bean.mode.log.LogType;
 import io.boncray.core.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.config.DataSourceProperties;
 import io.boncray.logback.config.LogBackConfiguration;
@@ -15,6 +16,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author cca
@@ -27,6 +30,16 @@ public class MybatisConfig {
 
     @Autowired
     private LogBackConfiguration configuration;
+
+    /**
+     * 根据日志的类型,决定存放的表
+     */
+    protected static final Map<LogType, String> mapperMethodMapping = new HashMap<>();
+
+    static {
+        mapperMethodMapping.put(LogType.LOCAL_LOG, "io.boncray.logback.localLogMapper.insert");
+        mapperMethodMapping.put(LogType.RPC_LOG, "io.boncray.logback.rpcLogMapper.insert");
+    }
 
 
     @Bean

@@ -1,24 +1,29 @@
 package io.boncray.logback.transfer.station;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.BooleanUtil;
 import io.boncray.bean.mode.log.Log;
+import io.boncray.bean.mode.log.LogType;
 import io.boncray.logback.config.LogBackConfiguration;
 import io.boncray.logback.config.TransferStrategy;
 import io.boncray.logback.transfer.station.execute.TransferExecutor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author cca
  * @version 1.0
  * @date 2021/8/8 02:23
  */
+@Slf4j
 public class LogCacheStore {
 
     private static final Queue<Log> cacheLogQueue = new ConcurrentLinkedQueue<>();
@@ -33,18 +38,16 @@ public class LogCacheStore {
      */
     private final TransferExecutor transferExecutor;
 
-    /**
-     * 定时传输线程池
-     */
-    private static final ScheduledExecutorService TIMING_TRANSFER_EXECUTOR = Executors.newScheduledThreadPool(1,
-            x -> new Thread(x, LogCacheStore.class.getName()));
-
 
     public LogCacheStore(LogBackConfiguration configuration, TransferExecutor transferExecutor) {
         this.transferStrategy = configuration.getTransferStrategy();
         this.transferExecutor = transferExecutor;
-        // 定时传输日志
-        TIMING_TRANSFER_EXECUTOR.scheduleWithFixedDelay(new TransferRunnable(), 10, Math.max(transferStrategy.getOnceOfSecond(), 10), TimeUnit.SECONDS);
+        if (BooleanUtil.isFalse(transferStrategy.getAlways())) {
+            // 定时传输线程池,定时传输日志
+            Executors.newScheduledThreadPool(1, x -> new Thread(x, LogCacheStore.class.getName()))
+                    .scheduleWithFixedDelay(new TransferRunnable(), 10, Math.max(transferStrategy.getOnceOfSecond(), 10), TimeUnit.SECONDS);
+        }
+
     }
 
 
@@ -68,6 +71,7 @@ public class LogCacheStore {
             if (batchTransferSize > transferStrategy.getBatchMaxSize()) {
                 batchTransferSize = transferStrategy.getBatchMaxSize();
             }
+            log.debug("定时传输，传输{}条", batchTransferSize);
             if (batchTransferSize <= 0) {
                 return;
             }
@@ -78,7 +82,8 @@ public class LogCacheStore {
             }
 
             if (CollectionUtil.isNotEmpty(batchList)) {
-                transferExecutor.doTransfer(batchList);
+                Map<LogType, List<Log>> collect = batchList.stream().collect(Collectors.groupingBy(Log::logType));
+                collect.forEach((k, v) -> transferExecutor.doTransfer(v));
             }
         }
 

@@ -7,18 +7,20 @@ import io.boncray.logback.config.TransferStrategy;
 import io.boncray.logback.transfer.TransferFactory;
 import io.boncray.logback.transfer.Transferable;
 import io.boncray.logback.transfer.station.LogCacheStore;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author cca
  * @version 1.0
  * @date 2021/8/8 17:23
  */
+@Slf4j
 public class TransferExecutor {
 
     private final LogBackConfiguration configuration;
     private final TransferStrategy transferStrategy;
 
-    private LogCacheStore logCacheStore;
+    private final LogCacheStore logCacheStore;
 
     /**
      * 构建传输器，需要传输配置信息
@@ -46,7 +48,12 @@ public class TransferExecutor {
      */
     public void doTransfer(Object targetLog) {
         Transferable transferor = TransferFactory.getTransferor(configuration.getTransferChannel());
-        transferor.transfer(targetLog);
+        try {
+            transferor.transfer(targetLog);
+        } catch (Exception e) {
+            log.warn("日志传输失败:", e);
+        }
+
     }
 
 }

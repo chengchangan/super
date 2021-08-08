@@ -36,13 +36,18 @@ public class CollectionLogFilter extends Filter<ILoggingEvent> {
             if (CollectionUtil.isNotEmpty(collectionList)) {
                 for (Collectable<?> collection : collectionList) {
                     if (collection.isNeedCollect(iLoggingEvent)) {
-                        Log log = collection.collectData(iLoggingEvent);
-                        AnalysisFactory.getAnalyser(collection.supportType()).analyse(log);
+                        Log logInfo = collection.collectData(iLoggingEvent);
+                        try {
+                            AnalysisFactory.getAnalyser(logInfo.logType()).analyse(logInfo);
+                        } catch (Exception e) {
+                            log.warn("日志分析失败:", e);
+                        }
+
                     }
                 }
             }
         } catch (Exception e) {
-            log.warn("日志采集失败：", e);
+            log.warn("日志采集失败:", e);
         }
         return FilterReply.NEUTRAL;
     }

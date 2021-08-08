@@ -2,9 +2,9 @@ package io.boncray.logback.analysis.analysor;
 
 import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.mode.log.Log;
-import io.boncray.bean.mode.log.RpcLogItem;
+import io.boncray.bean.mode.log.LogType;
+import io.boncray.bean.mode.log.RpcLog;
 import io.boncray.logback.analysis.component.LogTempStore;
-import io.boncray.logback.config.LogType;
 import org.springframework.stereotype.Component;
 
 /**
@@ -22,13 +22,13 @@ public class RpcLogAnalyser extends AbstractLogAnalyser {
 
     @Override
     protected Log doAnalyse(Log source) {
-        RpcLogItem rpcLogItem = (RpcLogItem) source;
+        RpcLog rpcLogItem = (RpcLog) source;
         if (StrUtil.isBlank(rpcLogItem.getResponseData()) && StrUtil.isNotBlank(rpcLogItem.getRequestPath())) {
             // 半成品日志，不输送
             LogTempStore.put(getCacheKey(rpcLogItem), rpcLogItem);
             return null;
         } else {
-            RpcLogItem startRpcLog = LogTempStore.getAndRemove(getCacheKey(rpcLogItem));
+            RpcLog startRpcLog = LogTempStore.getAndRemove(getCacheKey(rpcLogItem));
             rpcLogItem.setMethod(startRpcLog.getMethod());
             rpcLogItem.setRequestPath(startRpcLog.getRequestPath());
             rpcLogItem.setRequestParam(startRpcLog.getRequestParam());
@@ -37,7 +37,7 @@ public class RpcLogAnalyser extends AbstractLogAnalyser {
         }
     }
 
-    private String getCacheKey(RpcLogItem rpcLogItem) {
+    private String getCacheKey(RpcLog rpcLogItem) {
         return rpcLogItem.getParentTrackId() + "_" + rpcLogItem.getCurrentTrackId();
     }
 }

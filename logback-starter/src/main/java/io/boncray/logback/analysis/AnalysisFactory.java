@@ -1,8 +1,8 @@
 package io.boncray.logback.analysis;
 
+import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.utils.SpringContext;
 import io.boncray.logback.analysis.analysor.DefaultLogAnalyser;
-import io.boncray.logback.config.LogType;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
