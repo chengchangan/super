@@ -2,6 +2,8 @@ package io.boncray.logback.transfer;
 
 import io.boncray.logback.config.TransferChannel;
 import io.boncray.logback.transfer.channel.DefaultChannel;
+import io.boncray.logback.transfer.channel.es.EsTransfer;
+import io.boncray.logback.transfer.channel.mysql.MysqlTransfer;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,13 +17,12 @@ public class TransferFactory {
 
     private static final Map<TransferChannel, Transferable> transferChannelMap = new ConcurrentHashMap<>(10);
 
-    // todo
     public static Transferable getTransferor(TransferChannel channel) {
         switch (channel) {
             case ES:
-                System.out.println("es");
+                return transferChannelMap.computeIfAbsent(channel, (x) -> new EsTransfer());
             case MYSQL:
-                System.out.println("mysql");
+                return transferChannelMap.computeIfAbsent(channel, (x) -> new MysqlTransfer());
             default:
                 return new DefaultChannel();
         }

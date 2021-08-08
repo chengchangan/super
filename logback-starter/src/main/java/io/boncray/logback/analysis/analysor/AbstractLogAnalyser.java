@@ -3,10 +3,7 @@ package io.boncray.logback.analysis.analysor;
 import io.boncray.bean.mode.log.Log;
 import io.boncray.bean.utils.SpringContext;
 import io.boncray.logback.analysis.Analysis;
-import io.boncray.logback.config.LogBackConfiguration;
-import io.boncray.logback.config.TransferChannel;
-import io.boncray.logback.transfer.Transferable;
-import io.boncray.logback.transfer.TransferFactory;
+import io.boncray.logback.transfer.station.LogTransferStation;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -16,7 +13,7 @@ import org.springframework.context.ApplicationContext;
  */
 public abstract class AbstractLogAnalyser implements Analysis {
 
-    private TransferChannel transferChannel;
+    private LogTransferStation logTransferStation;
 
     @Override
     public void analyse(Log log) {
@@ -24,15 +21,17 @@ public abstract class AbstractLogAnalyser implements Analysis {
         if (targetLog == null) {
             return;
         }
-        loadFromSpringContext();
-        Transferable transferor = TransferFactory.getTransferor(transferChannel);
-        transferor.transfer(targetLog);
+        this.loadFromSpringContext();
+        logTransferStation.transfer(targetLog);
     }
 
+    /**
+     * 从上下文中加载传输执行器
+     */
     private void loadFromSpringContext() {
         ApplicationContext applicationContext = SpringContext.getApplicationContext();
-        if (applicationContext != null && transferChannel == null) {
-            transferChannel = applicationContext.getBean(LogBackConfiguration.class).getTransferChannel();
+        if (applicationContext != null && logTransferStation == null) {
+            logTransferStation = applicationContext.getBean(LogTransferStation.class);
         }
     }
 
