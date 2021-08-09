@@ -18,7 +18,7 @@ public class LogBackConfiguration {
     private boolean collectEnabled;
 
     /**
-     * 传输的方式, todo 先默认写死，后续读取配置
+     * 传输的方式
      */
     private TransferChannel transferChannel = TransferChannel.NONE;
 

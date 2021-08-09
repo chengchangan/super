@@ -1,6 +1,5 @@
 package io.boncray.logback.transfer.channel;
 
-import cn.hutool.json.JSONUtil;
 import io.boncray.logback.transfer.Transferable;
 
 /**
@@ -13,8 +12,8 @@ public class DefaultChannel implements Transferable {
 
     @Override
     public void transfer(Object data) {
-        // todo 日志持久化
-        System.err.println(data.getClass().getName() + "_" + JSONUtil.toJsonStr(data));
+        // 如果不配传输方式,默认不传输
+
     }
 
 }

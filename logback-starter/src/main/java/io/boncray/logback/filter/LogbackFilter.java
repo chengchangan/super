@@ -91,7 +91,6 @@ public class LogbackFilter extends OncePerRequestFilter {
 
 
     private void parseTrack(CustomHttpServletRequest request) {
-        // todo 根据配置选择日志的输出形式
 //        parseTrackMetric(request);
         parseTrackMetricTree(request);
     }
