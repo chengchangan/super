@@ -15,3 +15,16 @@ spring:
         extension-configs:
           - data-id: common.yaml
             group: DEFAULT_GROUP
+log:
+  manager:
+    collectEnabled: true
+    transferChannel: MYSQL
+    transferDataSource:
+      username: root
+      password: root
+      url: jdbc:mysql://101.34.35.72:3306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false
+      driverClassName: com.mysql.cj.jdbc.Driver
+    transferStrategy:
+      always: false
+      onceOfSecond: 5
+      batchMaxSize: 999

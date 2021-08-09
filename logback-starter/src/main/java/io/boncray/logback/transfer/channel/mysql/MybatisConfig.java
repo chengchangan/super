@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @date 2021/8/8 02:13
  */
 @Configuration
-//@ConditionalOnProperty() // todo 如果是 mysql 则装载此bean
+@ConditionalOnProperty(prefix = "log.manager",value = "transferChannel",havingValue = "MYSQL")
 public class MybatisConfig {
 
     @Autowired

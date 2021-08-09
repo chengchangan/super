@@ -25,7 +25,7 @@ public class TransferStrategy {
     /**
      * 每次最大多少条
      */
-    private int batchMaxSize;
+    private int batchMaxSize = 1000;
 
 
 }

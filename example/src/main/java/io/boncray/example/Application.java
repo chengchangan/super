@@ -1,7 +1,7 @@
 package io.boncray.example;
 
 import io.boncray.core.annotation.BaseApplication;
-import io.boncray.example.log.LogBackConfiguration;
+import io.boncray.logback.config.LogBackConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
@@ -13,7 +13,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @version 1.0
  * @date 2021/6/28 11:11
  */
-@EnableConfigurationProperties({LogBackConfiguration.class})
 @BaseApplication
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,
         JpaRepositoriesAutoConfiguration.class}, scanBasePackages = "io.boncray")

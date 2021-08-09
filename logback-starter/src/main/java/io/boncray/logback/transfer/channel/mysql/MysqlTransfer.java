@@ -5,6 +5,7 @@ import io.boncray.core.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.transfer.channel.AbstractTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.Collection;
  * @date 2021/8/7 00:43
  */
 @Component
-//@ConditionalOnProperty() // todo 如果是 mysql 则装载此bean
+@ConditionalOnProperty(prefix = "log.manager", value = "transferChannel", havingValue = "MYSQL")
 public class MysqlTransfer extends AbstractTransfer {
 
     @Autowired(required = false)
