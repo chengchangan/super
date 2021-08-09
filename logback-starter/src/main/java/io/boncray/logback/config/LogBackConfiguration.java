@@ -30,6 +30,6 @@ public class LogBackConfiguration {
     /**
      * 传输策略
      */
-    private TransferStrategy transferStrategy;
+    private TransferStrategy transferStrategy = new TransferStrategy();
 
 }

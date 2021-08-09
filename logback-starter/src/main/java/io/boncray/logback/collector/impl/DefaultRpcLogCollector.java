@@ -1,7 +1,9 @@
 package io.boncray.logback.collector.impl;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.LoggerContextVO;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.constants.LogConstant;
@@ -9,8 +11,12 @@ import io.boncray.bean.mode.log.RpcLog;
 import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.collector.Collectable;
 import io.boncray.logback.filter.LogbackFilter;
+import io.boncray.logback.wapper.request.CustomHttpServletRequest;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +50,30 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
         }
         return isNeed ? isNeed(iLoggingEvent) : isNeed;
     }
+
+
+    private boolean normalCall(ILoggingEvent iLoggingEvent) {
+        Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
+        if (LogbackFilter.class.getName().equals(iLoggingEvent.getLoggerName())) {
+            return StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
+                    && StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID));
+        }
+        return false;
+    }
+
+    private boolean exceptionCall(ILoggingEvent iLoggingEvent) {
+
+        CustomHttpServletRequest request = (CustomHttpServletRequest)((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String header = request.getHeader(LogConstant.TRACK_METRIC);
+
+
+        ThrowableProxy throwableProxy = (ThrowableProxy)iLoggingEvent.getThrowableProxy();
+        if (throwableProxy.getThrowable() != null){
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean isNeed(ILoggingEvent iLoggingEvent) {
         return true;

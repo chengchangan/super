@@ -20,7 +20,7 @@ public class TransferStrategy {
     /**
      * 多久传输一次
      */
-    private int onceOfSecond;
+    private int onceOfSecond = 1;
 
     /**
      * 每次最大多少条
