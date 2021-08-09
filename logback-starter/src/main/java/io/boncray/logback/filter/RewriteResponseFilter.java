@@ -1,9 +1,9 @@
 package io.boncray.logback.filter;
 
-import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.bean.mode.response.Result;
+import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -50,13 +50,13 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
             String contentType = customResponse.getContentType();
             if (StringUtils.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
                 String responseData = new String(customResponse.getResponseData());
-                Result<?> result = JSONUtil.toBean(responseData, Result.class);
-                TrackMetric trackMetric = JSONUtil.toBean(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
+                Result<?> result = JacksonUtil.toObj(responseData, Result.class);
+                TrackMetric trackMetric = JacksonUtil.toObj(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
                 result.setRequestId(trackMetric.getCurrentTrackId());
                 // 写入请求的response
-                this.writeResponse(customResponse.getResponse(), JSONUtil.toJsonStr(result));
+                this.writeResponse(customResponse.getResponse(), JacksonUtil.toJson(result));
                 // 写入自定义的response
-                this.writeResponse(customResponse, JSONUtil.toJsonStr(result));
+                this.writeResponse(customResponse, JacksonUtil.toJson(result));
             }
         }
     }

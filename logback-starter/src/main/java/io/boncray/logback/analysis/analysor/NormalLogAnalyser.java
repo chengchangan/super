@@ -8,7 +8,7 @@ import io.boncray.bean.mode.log.LogType;
  * @version 1.0
  * @date 2021/8/7 01:54
  */
-public class DefaultLogAnalyser extends AbstractLogAnalyser {
+public class NormalLogAnalyser extends AbstractLogAnalyser {
 
     @Override
     public LogType supportType() {

@@ -7,5 +7,5 @@ package io.boncray.bean.mode.log;
  */
 public enum LogType {
     RPC_LOG,
-    LOCAL_LOG
+    NORMAL_LOG
 }

@@ -2,7 +2,7 @@ package io.boncray.logback.analysis;
 
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.utils.SpringContext;
-import io.boncray.logback.analysis.analysor.DefaultLogAnalyser;
+import io.boncray.logback.analysis.analysor.NormalLogAnalyser;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class AnalysisFactory {
         loadFromSpringContext();
         Analysis analysis = analysisMap.get(logType);
         if (analysis == null) {
-            analysis = new DefaultLogAnalyser();
+            analysis = new NormalLogAnalyser();
         }
         return analysis;
     }

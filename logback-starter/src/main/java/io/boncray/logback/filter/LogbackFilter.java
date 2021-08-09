@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.core.sequence.IdGenerator;
+import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.wapper.HttpCommonUtil;
 import io.boncray.logback.wapper.request.CustomHttpServletRequest;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
@@ -81,7 +82,7 @@ public class LogbackFilter extends OncePerRequestFilter {
             headerMap.put(headerName, customRequest.getHeader(headerName));
         }
         log.info("request method:{},path:{},body:{},header:{}",
-                customRequest.getMethod(), customRequest.getRequestURI(), body, JSONUtil.toJsonStr(headerMap));
+                customRequest.getMethod(), customRequest.getRequestURI(), body, JacksonUtil.toJson(headerMap));
     }
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
@@ -109,7 +110,7 @@ public class LogbackFilter extends OncePerRequestFilter {
             TrackMetric parentMetric = JSONUtil.toBean(parentMetricStr, TrackMetric.class);
             currentMetric.setParentTrackId(parentMetric.getCurrentTrackId());
         }
-        request.putHeader(LogConstant.TRACK_METRIC, JSONUtil.toJsonStr(currentMetric));
+        request.putHeader(LogConstant.TRACK_METRIC, JacksonUtil.toJson(currentMetric));
     }
 
 
@@ -118,7 +119,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         if (StrUtil.isBlank(parentMetricStr)) {
             TrackMetric currentMetric = new TrackMetric();
             currentMetric.setCurrentTrackId(normalIdGenerator.next());
-            request.putHeader(LogConstant.TRACK_METRIC, JSONUtil.toJsonStr(currentMetric));
+            request.putHeader(LogConstant.TRACK_METRIC, JacksonUtil.toJson(currentMetric));
         }
     }
 

@@ -2,14 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="io.boncray.logback.localLogMapper">
+<mapper namespace="io.boncray.logback.normalLogMapper">
 
 
-    <insert id="insert" parameterType="io.boncray.bean.mode.log.LocalLog">
-        INSERT INTO local_log(id,parent_track_id,current_track_id,service_name,logger_name,level,message,log_time)
+    <insert id="insert" parameterType="io.boncray.bean.mode.log.NormalLog">
+        INSERT INTO
+        local_log(id,log_type,parent_track_id,current_track_id,service_name,logger_name,level,message,log_time)
         VALUES(
         <trim suffixOverrides=",">
             #{id},
+            #{logType},
             #{parentTrackId},
             #{currentTrackId},
             #{serviceName},

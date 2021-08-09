@@ -8,7 +8,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,12 +36,10 @@ public class MybatisConfig {
     protected static final Map<LogType, String> mapperMethodMapping = new HashMap<>();
 
     static {
-        mapperMethodMapping.put(LogType.LOCAL_LOG, "io.boncray.logback.localLogMapper.insert");
+        mapperMethodMapping.put(LogType.NORMAL_LOG, "io.boncray.logback.normalLogMapper.insert");
         mapperMethodMapping.put(LogType.RPC_LOG, "io.boncray.logback.rpcLogMapper.insert");
     }
 
-
-    @Bean
     public DataSource transferDataSource() {
         DataSourceProperties properties = configuration.getTransferDataSource();
         return DataSourceBuilder.create()
@@ -54,14 +51,14 @@ public class MybatisConfig {
                 .build();
     }
 
-    @Bean
-    public SqlSessionFactory transferSqlSessionFactory(@Qualifier("transferDataSource") DataSource transferDataSource) throws Exception {
-        return createSqlSessionFactory(transferDataSource);
+    public SqlSessionFactory transferSqlSessionFactory() throws Exception {
+        return createSqlSessionFactory(transferDataSource());
     }
 
     @Bean
-    public SqlSessionDecorator transferSqlSessionDecorator(@Qualifier("transferSqlSessionFactory") SqlSessionFactory transferSqlSessionFactory) {
-        return new SqlSessionDecorator(new SqlSessionTemplate(transferSqlSessionFactory));
+    public SqlSessionDecorator transferSqlSessionDecorator() throws Exception {
+        SqlSessionFactory sqlSessionFactory = transferSqlSessionFactory();
+        return new SqlSessionDecorator(new SqlSessionTemplate(sqlSessionFactory));
     }
 
 

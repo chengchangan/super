@@ -10,12 +10,17 @@ import java.time.LocalDateTime;
  * @date 2021/8/6 14:49
  */
 @Data
-public class LocalLog extends Log {
+public class NormalLog extends Log {
 
     /**
      * 主键
      */
     private Long id;
+
+    /**
+     * 日志类型
+     */
+    private String logType;
 
     /**
      * 父级　TrackId
@@ -55,6 +60,6 @@ public class LocalLog extends Log {
 
     @Override
     public LogType logType() {
-        return LogType.LOCAL_LOG;
+        return LogType.NORMAL_LOG;
     }
 }

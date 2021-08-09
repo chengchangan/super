@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
 import io.boncray.bean.mode.log.Log;
 import io.boncray.bean.mode.log.LogType;
+import io.boncray.core.util.CollectionsUtil;
 import io.boncray.logback.config.LogBackConfiguration;
 import io.boncray.logback.config.TransferStrategy;
 import io.boncray.logback.transfer.station.execute.TransferExecutor;
@@ -16,7 +17,6 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @author cca
@@ -82,8 +82,8 @@ public class LogCacheStore {
             }
 
             if (CollectionUtil.isNotEmpty(batchList)) {
-                Map<LogType, List<Log>> collect = batchList.stream().collect(Collectors.groupingBy(Log::logType));
-                collect.forEach((k, v) -> transferExecutor.doTransfer(v));
+                Map<LogType, List<Log>> map = CollectionsUtil.listToMapList(batchList, Log::logType);
+                map.forEach((k, v) -> transferExecutor.doTransfer(v));
             }
         }
 

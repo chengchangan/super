@@ -4,9 +4,9 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.RpcLog;
+import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.collector.Collectable;
 import io.boncray.logback.filter.LogbackFilter;
 import org.springframework.stereotype.Component;
@@ -74,7 +74,7 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
             requestParam.put("header", logArgs[3]);
             item.setMethod(logArgs[0].toString());
             item.setRequestPath(logArgs[1].toString());
-            item.setRequestParam(JSONUtil.toJsonStr(requestParam));
+            item.setRequestParam(JacksonUtil.toJson(requestParam));
         } else if (logArgs.length == REQUEST_END_ARG_SIZE) {
             item.setElapsedTime(Long.valueOf(logArgs[0].toString()));
             item.setResponseData(logArgs[1].toString());

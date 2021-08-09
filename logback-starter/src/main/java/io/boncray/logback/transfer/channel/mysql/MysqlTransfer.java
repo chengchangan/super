@@ -26,14 +26,10 @@ public class MysqlTransfer extends AbstractTransfer {
     public void transfer(Object data) {
         if (Collection.class.isAssignableFrom(data.getClass())) {
             Collection<?> collection = (Collection<?>) data;
-            try {
-                collection.stream()
-                        .map(x -> (Log) x)
-                        .findFirst()
-                        .ifPresent(log -> sqlSession.insertBatch(MybatisConfig.mapperMethodMapping.get(log.logType()), collection));
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            collection.stream()
+                    .map(x -> (Log) x)
+                    .findFirst()
+                    .ifPresent(log -> sqlSession.insertBatch(MybatisConfig.mapperMethodMapping.get(log.logType()), collection));
 
         } else {
             Log log = (Log) data;
