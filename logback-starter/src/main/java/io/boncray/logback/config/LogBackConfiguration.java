@@ -2,11 +2,13 @@ package io.boncray.logback.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Data
-//@EnableConfigurationProperties({LogBackConfiguration.class})
-//@ConfigurationProperties(prefix = "jiuxian")
+@EnableConfigurationProperties({LogBackConfiguration.class})
+@ConfigurationProperties(prefix = "log.manager")
 @Configuration
 public class LogBackConfiguration {
 
