@@ -7,13 +7,14 @@
 
     <insert id="insert" parameterType="io.boncray.bean.mode.log.RpcLog">
         INSERT INTO
-        rpc_log(id,parent_track_id,current_track_id,service_name,method,request_path,request_param,response_data,elapsed_time,log_time)
+        rpc_log(id,parent_track_id,current_track_id,service_name,level,method,request_path,request_param,response_data,elapsed_time,log_time)
         VALUES(
         <trim suffixOverrides=",">
             #{id},
             #{parentTrackId},
             #{currentTrackId},
             #{serviceName},
+            #{level},
             #{method},
             #{requestPath},
             #{requestParam},

@@ -34,11 +34,13 @@ public class MybatisConfig {
     /**
      * 根据日志的类型,决定存放的表
      */
-    protected static final Map<LogType, String> mapperMethodMapping = new HashMap<>();
+    protected static final Map<String, String> mapperMethodMapping = new HashMap<>();
 
     static {
-        mapperMethodMapping.put(LogType.NORMAL_LOG, "io.boncray.logback.normalLogMapper.insert");
-        mapperMethodMapping.put(LogType.RPC_LOG, "io.boncray.logback.rpcLogMapper.insert");
+        mapperMethodMapping.put(LogType.NORMAL_LOG.name(), "io.boncray.logback.normalLogMapper.insert");
+        mapperMethodMapping.put(LogType.RPC_LOG.name(), "io.boncray.logback.rpcLogMapper.insert");
+        mapperMethodMapping.put("normal_level_update", "io.boncray.logback.normalLogMapper.updateLevel");
+
     }
 
     public DataSource transferDataSource() {

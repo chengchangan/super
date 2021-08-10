@@ -1,10 +1,13 @@
 package io.boncray.logback.filter;
 
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
+import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.TrackMetric;
+import io.boncray.bean.mode.response.Result;
 import io.boncray.core.sequence.IdGenerator;
 import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.wapper.HttpCommonUtil;
@@ -48,7 +51,6 @@ public class LogbackFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         long start = System.currentTimeMillis();
-        log.info("==========================LogbackFilter============================");
         CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
         CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
 
@@ -81,12 +83,19 @@ public class LogbackFilter extends OncePerRequestFilter {
             String headerName = headerNames.nextElement();
             headerMap.put(headerName, customRequest.getHeader(headerName));
         }
-        log.info("request method:{},path:{},body:{},header:{}",
+        log.info("request logType:{},{},method:{},path:{},body:{},header:{}", LogType.RPC_LOG, "start",
                 customRequest.getMethod(), customRequest.getRequestURI(), body, JacksonUtil.toJson(headerMap));
     }
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
-        log.info("response elapsedTime:{},data:{}", System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+        Result<?> result = JacksonUtil.toObj(customResponse.getResponseData(), Result.class);
+        if (BooleanUtil.isTrue(result.getSuccess())) {
+            log.info("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
+                    System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+        } else {
+            log.error("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
+                    System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+        }
     }
 
 

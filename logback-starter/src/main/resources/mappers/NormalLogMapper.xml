@@ -22,5 +22,14 @@
         </trim>)
     </insert>
 
+    <update id="updateLevel" parameterType="Map">
+        UPDATE local_log
+            SET level =#{level}
+        WHERE
+            log_type = "RPC_LOG"
+            AND parent_track_id = #{parentTrackId}
+            AND current_track_id = #{currentTrackId}
+    </update>
+
 
 </mapper>

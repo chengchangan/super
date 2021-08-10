@@ -55,7 +55,7 @@ public class RpcLogAnalyser extends AbstractLogAnalyser {
         normalLog.setCurrentTrackId(rpcLogItem.getCurrentTrackId());
         normalLog.setServiceName(rpcLogItem.getServiceName());
         normalLog.setLoggerName(LogbackFilter.class.getName());
-        normalLog.setLevel("INFO");
+        normalLog.setLevel(rpcLogItem.getLevel());
         normalLog.setMessage("");
         normalLog.setLogTime(rpcLogItem.getLogTime());
         return normalLog;

@@ -33,6 +33,11 @@ public class RpcLog extends Log {
     private String serviceName;
 
     /**
+     * 日志级别
+     */
+    private String level;
+
+    /**
      * 请求方式
      */
     private String method;

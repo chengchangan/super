@@ -3,15 +3,16 @@ package io.boncray.logback.collector.impl;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.NormalLog;
 import io.boncray.logback.collector.Collectable;
-import io.boncray.logback.filter.LogbackFilter;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -26,13 +27,27 @@ public class DefaultNormalLogCollector implements Collectable<NormalLog> {
 
     @Override
     public boolean isNeedCollect(ILoggingEvent iLoggingEvent) {
-        Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
-        boolean isNeed = false;
-        if (!LogbackFilter.class.getName().equals(iLoggingEvent.getLoggerName())) {
-            isNeed = StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
-                    && StrUtil.isNotBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID));
+        Object[] argumentArray = iLoggingEvent.getArgumentArray();
+
+        if (firstArgIsRpc(argumentArray)) {
+            // rpc日志
+            return false;
         }
-        return isNeed ? isNeed(iLoggingEvent) : isNeed;
+
+        return isNeed(iLoggingEvent);
+    }
+
+    /**
+     * rpc日志
+     */
+    private boolean firstArgIsRpc(Object[] argumentArray) {
+        if (argumentArray == null) {
+            return false;
+        }
+        if (argumentArray.length > 1 && LogType.RPC_LOG.name().equals(argumentArray[0].toString())) {
+            return true;
+        }
+        return false;
     }
 
     public boolean isNeed(ILoggingEvent iLoggingEvent) {
@@ -51,9 +66,21 @@ public class DefaultNormalLogCollector implements Collectable<NormalLog> {
         item.setServiceName(contextVO.getPropertyMap().get(SERVICE_NAME_KEY));
         item.setLoggerName(iLoggingEvent.getLoggerName());
         item.setLevel(iLoggingEvent.getLevel().toString());
-        item.setMessage(iLoggingEvent.getFormattedMessage());
+        this.parseExceptionMsg(iLoggingEvent, item);
         item.setLogTime(DateUtil.toLocalDateTime(Instant.ofEpochMilli(iLoggingEvent.getTimeStamp())));
         return item;
+    }
+
+    private void parseExceptionMsg(ILoggingEvent iLoggingEvent, NormalLog item) {
+        if (iLoggingEvent.getThrowableProxy() == null) {
+            item.setMessage(iLoggingEvent.getFormattedMessage());
+            return;
+        }
+        Map<String, Object> messageMap = new LinkedHashMap<>();
+        messageMap.put("messageInfo", iLoggingEvent.getFormattedMessage());
+        JSONObject node = JSONUtil.parseObj(iLoggingEvent.getThrowableProxy());
+        node.forEach(messageMap::put);
+        item.setMessage(JSONUtil.toJsonPrettyStr(messageMap));
     }
 
 }

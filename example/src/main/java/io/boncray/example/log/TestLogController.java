@@ -26,6 +26,7 @@ public class TestLogController {
     public Result<String> test() {
         log.info("hahah");
         log.debug("heihei");
+        int a = 1/0;
         log.info("装载的配置:{}", JacksonUtil.toJson(configuration));
         return Result.success();
     }

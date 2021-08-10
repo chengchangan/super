@@ -1,6 +1,8 @@
 package io.boncray.logback.transfer.channel.mysql;
 
 import io.boncray.bean.mode.log.Log;
+import io.boncray.bean.mode.log.LogType;
+import io.boncray.bean.mode.log.RpcLog;
 import io.boncray.core.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.transfer.channel.AbstractTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author cca
@@ -30,12 +35,35 @@ public class MysqlTransfer extends AbstractTransfer {
             collection.stream()
                     .map(x -> (Log) x)
                     .findFirst()
-                    .ifPresent(log -> sqlSession.insertBatch(MybatisConfig.mapperMethodMapping.get(log.logType()), collection));
+                    .ifPresent(log -> {
+                        sqlSession.insertBatch(MybatisConfig.mapperMethodMapping.get(log.logType().name()), collection);
+                        if (log.logType() == LogType.RPC_LOG) {
+                            updateNormalLog((Collection<RpcLog>) collection);
+                        }
+                    });
 
         } else {
             Log log = (Log) data;
-            sqlSession.insert(MybatisConfig.mapperMethodMapping.get(log.logType()), log);
+            if (log.logType() == LogType.RPC_LOG) {
+                updateNormalLog(Collections.singletonList((RpcLog) log));
+            }
+            sqlSession.insert(MybatisConfig.mapperMethodMapping.get(log.logType().name()), log);
         }
+    }
+
+    /**
+     * 将ERROR级别的rpc日志，更新到Normal里面去
+     */
+    private void updateNormalLog(Collection<RpcLog> logs) {
+        logs.stream()
+                .filter(log -> "ERROR".equals(log.getLevel()))
+                .forEach(log -> {
+                    Map<String, Object> map = new HashMap<>(5);
+                    map.put("level", log.getLevel());
+                    map.put("parentTrackId", log.getParentTrackId());
+                    map.put("currentTrackId", log.getCurrentTrackId());
+                    sqlSession.update(MybatisConfig.mapperMethodMapping.get("normal_level_update"), map);
+                });
     }
 
 

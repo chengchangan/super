@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
         if (request != null) {
             log.error("异常URL:{}", request.getRequestURI());
         }
-        log.error("系统异常", e);
-        Result<Object> result = Result.failure(MessageState.UNKNOWN_ERROR);
+        log.error("系统异常,原因:{}", e.getMessage(), e);
+        Result<Object> result = Result.failure(MessageState.UNKNOWN_ERROR.getCode(), MessageState.UNKNOWN_ERROR.getMsg() + "," + e.getMessage());
 
         String trackMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
         if (StrUtil.isNotBlank(trackMetricStr)) {
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public Result<Object> omsExceptionHandler(BizException e, HttpServletRequest request) {
-        log.error("业务异常", e);
+        log.error("业务异常,原因:{}", e.getMessage(), e);
         Result<Object> result = Result.failure(e.getCode(), e.getMessage());
         String trackMetricStr = request.getHeader(LogConstant.TRACK_METRIC);
         if (StrUtil.isNotBlank(trackMetricStr)) {
