@@ -2,6 +2,7 @@ package io.boncray.logback.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 /**
  * @author cca
@@ -25,11 +26,13 @@ public class LogBackConfiguration {
     /**
      * mysql数据源
      */
+    @NestedConfigurationProperty
     private DataSourceProperties transferDataSource;
 
     /**
      * 传输策略
      */
+    @NestedConfigurationProperty
     private TransferStrategy transferStrategy = new TransferStrategy();
 
 }
