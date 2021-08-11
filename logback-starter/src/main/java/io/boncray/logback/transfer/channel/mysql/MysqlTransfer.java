@@ -3,7 +3,7 @@ package io.boncray.logback.transfer.channel.mysql;
 import io.boncray.bean.mode.log.Log;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.RpcLog;
-import io.boncray.core.database.mybatis.SqlSessionDecorator;
+import io.boncray.cmdb.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.transfer.channel.AbstractTransfer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,9 +1,9 @@
 package io.boncray.core.websocket.client;
 
+import cn.hutool.core.util.StrUtil;
 import io.boncray.core.util.KeyStoreLoader;
 import io.boncray.core.websocket.client.config.SocketConnectConfig;
 import io.boncray.core.websocket.client.config.WebSocketConfig;
-import org.apache.commons.lang.StringUtils;
 import org.java_websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -146,7 +146,7 @@ public class WebSocketClientManager implements ApplicationContextAware {
         WebSocketConfig.ClientConfig clientConfig = configMap.get(connectConfig.getHost());
 
         StringBuilder url = new StringBuilder();
-        if (StringUtils.isBlank(clientConfig.getCertPath())) {
+        if (StrUtil.isBlank(clientConfig.getCertPath())) {
             url.append("ws://");
         } else {
             url.append("wss://");

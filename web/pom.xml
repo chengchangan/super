@@ -17,6 +17,34 @@
             <artifactId>core</artifactId>
         </dependency>
 
+        <!-- 持久化相关-->
+        <dependency>
+            <groupId>io.boncray</groupId>
+            <artifactId>cmdb</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.boncray</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <!-- 服务注册和发现-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- 配置中心-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!-- 健康检查-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+
         <!-- web 支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -29,6 +57,16 @@
             <artifactId>druid</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--velocity代码生成使用模板 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
 
         <!-- swagger2 -->
         <dependency>

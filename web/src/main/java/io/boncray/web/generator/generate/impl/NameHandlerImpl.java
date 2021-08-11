@@ -1,7 +1,7 @@
 package io.boncray.web.generator.generate.impl;
 
 
-import io.boncray.core.util.StringUtil;
+import io.boncray.common.utils.StringUtil;
 import io.boncray.web.generator.TypeConvert;
 import io.boncray.web.generator.domain.Column;
 import io.boncray.web.generator.domain.Configuration;

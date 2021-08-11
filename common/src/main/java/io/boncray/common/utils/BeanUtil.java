@@ -1,4 +1,4 @@
-package io.boncray.core.util;
+package io.boncray.common.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
 import org.springframework.beans.BeanUtils;

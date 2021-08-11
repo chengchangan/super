@@ -1,4 +1,4 @@
-package io.boncray.logback.wapper.request;
+package io.boncray.common.http.wapper.request;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 

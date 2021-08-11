@@ -1,4 +1,4 @@
-package io.boncray.core.database.mybatis;
+package io.boncray.cmdb.database.mybatis;
 
 import org.apache.ibatis.session.*;
 import org.mybatis.spring.SqlSessionTemplate;

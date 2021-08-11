@@ -1,4 +1,4 @@
-package io.boncray.core.util;
+package io.boncray.common.utils;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;

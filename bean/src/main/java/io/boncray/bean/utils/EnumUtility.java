@@ -1,7 +1,7 @@
 package io.boncray.bean.utils;
 
+import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.mode.base.BaseEnum;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class EnumUtility {
 
     public static <K, T extends BaseEnum<K, ?>> T getEnumValue(Class<T> enumType, String code) {
         try {
-            if (StringUtils.isBlank(code)) {
+            if (StrUtil.isBlank(code)) {
                 return null;
             }
             if (enumType.isEnum()) {

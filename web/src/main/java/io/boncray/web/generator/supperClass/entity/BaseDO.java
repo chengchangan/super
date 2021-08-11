@@ -1,7 +1,7 @@
 package io.boncray.web.generator.supperClass.entity;
 
-import io.boncray.core.util.BeanUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.boncray.common.utils.BeanUtil;
 import lombok.Data;
 
 import java.io.Serializable;

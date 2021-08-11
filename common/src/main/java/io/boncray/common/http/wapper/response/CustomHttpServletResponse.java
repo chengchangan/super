@@ -1,4 +1,4 @@
-package io.boncray.logback.wapper.response;
+package io.boncray.common.http.wapper.response;
 
 
 import javax.servlet.ServletOutputStream;

@@ -20,13 +20,14 @@
         </dependency>
 
         <dependency>
-            <groupId></groupId>
-            <artifactId>commons</artifactId>
+            <groupId>io.boncray</groupId>
+            <artifactId>common</artifactId>
         </dependency>
 
+        <!-- 持久化相关 -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
+            <groupId>io.boncray</groupId>
+            <artifactId>cmdb</artifactId>
         </dependency>
 
         <dependency>

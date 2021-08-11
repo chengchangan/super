@@ -1,4 +1,4 @@
-package io.boncray.core.database;
+package io.boncray.core.transaction;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

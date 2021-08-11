@@ -1,8 +1,8 @@
 package io.boncray.web.generator.generate;
 
-import io.boncray.core.util.Assert;
-import io.boncray.core.util.FileUtil;
-import io.boncray.core.util.StringUtil;
+import cn.hutool.core.util.BooleanUtil;
+import io.boncray.common.utils.FileUtil;
+import io.boncray.common.utils.StringUtil;
 import io.boncray.web.generator.domain.Configuration;
 import io.boncray.web.generator.domain.Table;
 import io.boncray.web.generator.domain.TemplateConfig;
@@ -57,15 +57,15 @@ public class Generator {
         tableMap.forEach((tableName, table) -> {
             for (TemplateConfig templateConfig : config.getTemplateList()) {
 
-                if (Assert.isTrue(config.isIgnoreControllerCode()) && templateConfig.getTemplatePath().contains("controller")) {
+                if (BooleanUtil.isTrue(config.isIgnoreControllerCode()) && templateConfig.getTemplatePath().contains("controller")) {
                     log.info("忽略生成 controller:{}", tableName);
                     continue;
                 }
-                if (Assert.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("serviceImpl")) {
+                if (BooleanUtil.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("serviceImpl")) {
                     log.info("忽略生成 service:{}", tableName);
                     continue;
                 }
-                if (Assert.isTrue(config.isIgnoreMapperCode()) && templateConfig.getTemplatePath().contains("mapper")) {
+                if (BooleanUtil.isTrue(config.isIgnoreMapperCode()) && templateConfig.getTemplatePath().contains("mapper")) {
                     log.info("忽略生成 mapper:{}", tableName);
                     continue;
                 }

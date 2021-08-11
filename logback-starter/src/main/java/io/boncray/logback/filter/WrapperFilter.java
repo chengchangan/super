@@ -1,8 +1,8 @@
 package io.boncray.logback.filter;
 
-import io.boncray.logback.wapper.request.CustomHttpServletRequest;
-import io.boncray.logback.wapper.request.CustomHttpServletRequestWrapper;
-import io.boncray.logback.wapper.response.CustomHttpServletResponse;
+import io.boncray.common.http.wapper.request.CustomHttpServletRequest;
+import io.boncray.common.http.wapper.request.CustomHttpServletRequestWrapper;
+import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;

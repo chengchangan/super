@@ -1,7 +1,7 @@
 package io.boncray.logback.transfer.channel.mysql;
 
 import io.boncray.bean.mode.log.LogType;
-import io.boncray.core.database.mybatis.SqlSessionDecorator;
+import io.boncray.cmdb.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.config.DataSourceProperties;
 import io.boncray.logback.config.LogBackConfiguration;
 import org.apache.ibatis.session.SqlSessionFactory;

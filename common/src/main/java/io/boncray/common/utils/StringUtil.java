@@ -1,4 +1,4 @@
-package io.boncray.core.util;
+package io.boncray.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;

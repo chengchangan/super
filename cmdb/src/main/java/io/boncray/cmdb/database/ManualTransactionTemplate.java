@@ -1,4 +1,4 @@
-package io.boncray.core.database;
+package io.boncray.cmdb.database;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;

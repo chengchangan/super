@@ -6,7 +6,7 @@ import cn.hutool.core.date.DateUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.RpcLog;
-import io.boncray.core.util.JacksonUtil;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.logback.collector.Collectable;
 import org.springframework.stereotype.Component;
 

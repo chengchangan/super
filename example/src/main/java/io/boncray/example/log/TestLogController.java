@@ -1,7 +1,7 @@
 package io.boncray.example.log;
 
 import io.boncray.bean.mode.response.Result;
-import io.boncray.core.util.JacksonUtil;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.logback.config.LogBackConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

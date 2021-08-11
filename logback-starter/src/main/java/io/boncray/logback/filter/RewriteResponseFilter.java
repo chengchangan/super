@@ -1,13 +1,13 @@
 package io.boncray.logback.filter;
 
+import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.constants.CommonConstant;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.bean.mode.response.Result;
-import io.boncray.core.util.JacksonUtil;
-import io.boncray.logback.wapper.response.CustomHttpServletResponse;
+import io.boncray.common.utils.JacksonUtil;
+import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -47,7 +47,7 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
         if (response instanceof CustomHttpServletResponse) {
             CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
             String contentType = customResponse.getContentType();
-            if (StringUtils.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
+            if (StrUtil.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
                 String responseData = new String(customResponse.getResponseData());
                 Result<?> result = JacksonUtil.toObj(responseData, Result.class);
                 TrackMetric trackMetric = JacksonUtil.toObj(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);

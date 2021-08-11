@@ -2,7 +2,7 @@ package io.boncray.logback.transfer.station;
 
 import cn.hutool.core.util.BooleanUtil;
 import io.boncray.bean.mode.log.Log;
-import io.boncray.core.util.JacksonUtil;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.logback.config.LogBackConfiguration;
 import io.boncray.logback.transfer.station.execute.TransferExecutor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package io.boncray.flow.trigger;
 
 import cn.hutool.json.JSONUtil;
-import io.boncray.core.database.ManualTransaction;
+import io.boncray.core.transaction.ManualTransaction;
 import io.boncray.flow.exception.FlowProcessException;
 import io.boncray.flow.exception.ProcessExceptionEnum;
 import io.boncray.flow.metric.Profiler;

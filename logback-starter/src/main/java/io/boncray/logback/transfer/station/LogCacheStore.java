@@ -4,7 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.BooleanUtil;
 import io.boncray.bean.mode.log.Log;
 import io.boncray.bean.mode.log.LogType;
-import io.boncray.core.util.CollectionsUtil;
+import io.boncray.common.utils.CollectionsUtil;
 import io.boncray.logback.config.LogBackConfiguration;
 import io.boncray.logback.config.TransferStrategy;
 import io.boncray.logback.transfer.station.execute.TransferExecutor;

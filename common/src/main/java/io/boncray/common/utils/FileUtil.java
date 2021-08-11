@@ -1,4 +1,4 @@
-package io.boncray.core.util;
+package io.boncray.common.utils;
 
 import java.io.*;
 import java.net.URL;

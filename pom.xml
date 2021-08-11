@@ -14,7 +14,8 @@
         <module>example</module>
         <module>flow</module>
         <module>logback-starter</module>
-        <module>commons</module>
+        <module>common</module>
+        <module>cmdb</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -33,6 +34,8 @@
         <web.version>1.0-SNAPSHOT</web.version>
         <flow.version>1.0-SNAPSHOT</flow.version>
         <logback.version>1.0-SNAPSHOT</logback.version>
+        <commons.version>1.0-SNAPSHOT</commons.version>
+        <cmdb.version>1.0-SNAPSHOT</cmdb.version>
         <!-- -->
         <junit.version>4.13.1</junit.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -57,6 +60,7 @@
         <jackson-databind.version>2.12.2</jackson-databind.version>
         <jackson.annotations.version>2.12.2</jackson.annotations.version>
         <httpcomponents.version>4.1.4</httpcomponents.version>
+        <commons-collections.version>3.2.1</commons-collections.version>
     </properties>
 
     <dependencyManagement>
@@ -116,8 +120,14 @@
 
             <dependency>
                 <groupId>io.boncray</groupId>
-                <artifactId>commons</artifactId>
-                <version>1.</version>
+                <artifactId>common</artifactId>
+                <version>${commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.boncray</groupId>
+                <artifactId>cmdb</artifactId>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <!-- mysql connect -->
@@ -221,6 +231,12 @@
             </dependency>
 
             <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
                 <version>${commons.lang.version}</version>
@@ -278,47 +294,6 @@
     </dependencyManagement>
 
     <dependencies>
-
-
-        <!-- 服务注册和发现-->
-        <!--        <dependency>-->
-        <!--            <groupId>com.alibaba.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>-->
-        <!--        </dependency>-->
-        <!-- 配置中心 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.alibaba.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>-->
-        <!--        </dependency>-->
-        <!--        &lt;!&ndash; 健康检查&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework</groupId>-->
-        <!--            <artifactId>spring-context</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework</groupId>-->
-        <!--            <artifactId>spring-context-support</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework</groupId>-->
-        <!--            <artifactId>spring-tx</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>mysql</groupId>-->
-        <!--            <artifactId>mysql-connector-java</artifactId>-->
-        <!--        </dependency>-->
-        <!--        &lt;!&ndash;mybatis&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.mybatis.spring.boot</groupId>-->
-        <!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
-        <!--        </dependency>-->
-
-
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
