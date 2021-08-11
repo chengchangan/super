@@ -1,5 +1,6 @@
 package io.boncray.logback.filter;
 
+import io.boncray.bean.constants.CommonConstant;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.bean.mode.response.Result;
@@ -7,7 +8,6 @@ import io.boncray.core.util.JacksonUtil;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -63,8 +63,8 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
     private void writeResponse(ServletResponse servletResponse, String responseData) throws IOException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         response.reset();
-        response.setContentType(ContentType.APPLICATION_JSON.getMimeType());
-        response.setCharacterEncoding(ContentType.APPLICATION_JSON.getCharset().name());
+        response.setContentType(CommonConstant.APPLICATION_JSON);
+        response.setCharacterEncoding(CommonConstant.UTF8);
         response.getWriter().write(responseData);
     }
 

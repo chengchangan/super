@@ -1,7 +1,5 @@
 package io.boncray.logback.wapper.request;
 
-import io.boncray.logback.wapper.HttpCommonUtil;
-
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;

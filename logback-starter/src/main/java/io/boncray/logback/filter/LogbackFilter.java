@@ -10,7 +10,6 @@ import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.bean.mode.response.Result;
 import io.boncray.core.sequence.IdGenerator;
 import io.boncray.core.util.JacksonUtil;
-import io.boncray.logback.wapper.HttpCommonUtil;
 import io.boncray.logback.wapper.request.CustomHttpServletRequest;
 import io.boncray.logback.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

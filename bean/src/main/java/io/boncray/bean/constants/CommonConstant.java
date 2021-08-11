@@ -9,4 +9,7 @@ public class CommonConstant {
 
 
     public static final String UTF8 = "UTF-8";
+    public static final String APPLICATION_JSON = "application/json";
+
+
 }
