@@ -1,5 +1,6 @@
 package io.boncray.logback.transfer.channel.mysql;
 
+import com.zaxxer.hikari.HikariDataSource;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.cmdb.database.mybatis.SqlSessionDecorator;
 import io.boncray.logback.config.DataSourceProperties;
@@ -25,7 +26,7 @@ import java.util.Map;
  * @date 2021/8/8 02:13
  */
 @Configuration
-@ConditionalOnProperty(prefix = "log.manager",value = "transferChannel",havingValue = "MYSQL")
+@ConditionalOnProperty(prefix = "log.manager", value = "transferChannel", havingValue = "MYSQL")
 public class MybatisConfig {
 
     @Autowired
@@ -46,7 +47,7 @@ public class MybatisConfig {
     public DataSource transferDataSource() {
         DataSourceProperties properties = configuration.getTransferDataSource();
         return DataSourceBuilder.create()
-                .type(properties.getType())
+                .type(HikariDataSource.class)
                 .driverClassName(properties.getDriverClassName())
                 .url(properties.getUrl())
                 .username(properties.getUsername())

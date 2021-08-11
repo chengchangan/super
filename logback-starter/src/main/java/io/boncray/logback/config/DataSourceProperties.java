@@ -12,7 +12,6 @@ import javax.sql.DataSource;
 @Data
 public class DataSourceProperties {
 
-    private Class<? extends DataSource> type;
     private String driverClassName;
     private String url;
     private String username;

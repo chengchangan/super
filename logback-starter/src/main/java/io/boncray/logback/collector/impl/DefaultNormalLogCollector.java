@@ -3,6 +3,7 @@ package io.boncray.logback.collector.impl;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
@@ -30,10 +31,15 @@ public class DefaultNormalLogCollector implements Collectable<NormalLog> {
         Object[] argumentArray = iLoggingEvent.getArgumentArray();
 
         if (firstArgIsRpc(argumentArray)) {
-            // rpc日志
+            // rpc日志,不采集
             return false;
         }
-
+        Map<String, String> mdcPropertyMap = iLoggingEvent.getMDCPropertyMap();
+        if (StrUtil.isBlank(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID))
+                || StrUtil.isBlank(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID))) {
+            // 没有 trackId的也不采集
+            return false;
+        }
         return isNeed(iLoggingEvent);
     }
 

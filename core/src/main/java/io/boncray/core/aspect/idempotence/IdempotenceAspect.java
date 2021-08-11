@@ -12,8 +12,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -38,13 +37,17 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @Aspect
 @Component
-@ConditionalOnClass(value = RedisTemplate.class)
+@ConditionalOnBean(value = RedisTemplate.class)
 public class IdempotenceAspect {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private RedissonClient redissonClient;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedissonClient redissonClient;
+
+    public IdempotenceAspect(RedisTemplate redisTemplate, RedissonClient redissonClient) {
+        this.redisTemplate = redisTemplate;
+        this.redissonClient = redissonClient;
+    }
+
 
     private static final String CACHE_KEY_PREFIX = "idem";
 

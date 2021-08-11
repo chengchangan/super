@@ -27,8 +27,22 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
     @Override
     public boolean isNeedCollect(ILoggingEvent iLoggingEvent) {
         Object[] argumentArray = iLoggingEvent.getArgumentArray();
-        if (argumentArray.length > 1 && LogType.RPC_LOG.toString().equals(argumentArray[0].toString())) {
+
+        boolean isNeed = firstArgIsRpc(argumentArray);
+        if (isNeed){
             return isNeed(iLoggingEvent);
+        }
+        return false;
+    }
+    /**
+     * rpc日志
+     */
+    private boolean firstArgIsRpc(Object[] argumentArray) {
+        if (argumentArray == null) {
+            return false;
+        }
+        if (argumentArray.length > 1 && LogType.RPC_LOG.name().equals(argumentArray[0].toString())) {
+            return true;
         }
         return false;
     }
