@@ -69,7 +69,11 @@ public class DefaultNormalLogCollector implements Collectable<NormalLog> {
         item.setLogType(LogType.NORMAL_LOG.name());
         item.setParentTrackId(Long.valueOf(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID)));
         item.setCurrentTrackId(Long.valueOf(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID)));
-        item.setServiceName(contextVO.getPropertyMap().get(SERVICE_NAME_KEY));
+        String serviceName = contextVO.getPropertyMap().get(SERVICE_NAME_KEY);
+        if (StrUtil.isBlank(serviceName)) {
+            serviceName = "default";
+        }
+        item.setServiceName(serviceName);
         item.setLoggerName(iLoggingEvent.getLoggerName());
         item.setLevel(iLoggingEvent.getLevel().toString());
         this.parseExceptionMsg(iLoggingEvent, item);

@@ -8,10 +8,10 @@ package io.boncray.core.sequence;
  */
 public interface IdGenerator {
 
-  /**
-   * 下一个唯一id.
-   *
-   * @return long类型id
-   */
-  long next();
+    /**
+     * 下一个唯一id.
+     *
+     * @return long类型id
+     */
+    long next();
 }

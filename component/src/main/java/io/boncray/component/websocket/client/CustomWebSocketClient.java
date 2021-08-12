@@ -1,4 +1,4 @@
-package io.boncray.core.websocket.client;
+package io.boncray.component.websocket.client;
 
 import lombok.SneakyThrows;
 import org.java_websocket.client.WebSocketClient;

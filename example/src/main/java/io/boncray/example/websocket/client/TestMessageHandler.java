@@ -1,6 +1,6 @@
 package io.boncray.example.websocket.client;
 
-import io.boncray.core.websocket.client.MessageHandler;
+import io.boncray.component.websocket.client.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.springframework.stereotype.Component;

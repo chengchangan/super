@@ -1,6 +1,6 @@
 package io.boncray.example.websocket.client;
 
-import io.boncray.core.websocket.client.WebSocketClientManager;
+import io.boncray.component.websocket.client.WebSocketClientManager;
 import org.java_websocket.client.WebSocketClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

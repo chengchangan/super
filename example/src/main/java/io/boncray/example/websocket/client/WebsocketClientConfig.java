@@ -1,7 +1,7 @@
 package io.boncray.example.websocket.client;
 
-import io.boncray.core.websocket.client.WebSocketClientManager;
-import io.boncray.core.websocket.client.config.WebSocketConfig;
+import io.boncray.component.websocket.client.WebSocketClientManager;
+import io.boncray.component.websocket.client.config.WebSocketConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

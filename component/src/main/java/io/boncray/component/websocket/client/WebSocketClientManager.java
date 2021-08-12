@@ -1,9 +1,9 @@
-package io.boncray.core.websocket.client;
+package io.boncray.component.websocket.client;
 
 import cn.hutool.core.util.StrUtil;
-import io.boncray.core.util.KeyStoreLoader;
-import io.boncray.core.websocket.client.config.SocketConnectConfig;
-import io.boncray.core.websocket.client.config.WebSocketConfig;
+import io.boncray.common.utils.KeyStoreLoader;
+import io.boncray.component.websocket.client.config.SocketConnectConfig;
+import io.boncray.component.websocket.client.config.WebSocketConfig;
 import org.java_websocket.client.WebSocketClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

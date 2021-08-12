@@ -3,6 +3,7 @@ package io.boncray.logback.collector.impl;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.RpcLog;
@@ -29,11 +30,12 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
         Object[] argumentArray = iLoggingEvent.getArgumentArray();
 
         boolean isNeed = firstArgIsRpc(argumentArray);
-        if (isNeed){
+        if (isNeed) {
             return isNeed(iLoggingEvent);
         }
         return false;
     }
+
     /**
      * rpc日志
      */
@@ -60,7 +62,11 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
         RpcLog item = new RpcLog();
         item.setParentTrackId(Long.valueOf(mdcPropertyMap.get(LogConstant.PARENT_TRACK_ID)));
         item.setCurrentTrackId(Long.valueOf(mdcPropertyMap.get(LogConstant.CURRENT_TRACK_ID)));
-        item.setServiceName(contextVO.getPropertyMap().get(SERVICE_NAME_KEY));
+        String serviceName = contextVO.getPropertyMap().get(SERVICE_NAME_KEY);
+        if (StrUtil.isBlank(serviceName)) {
+            serviceName = "default";
+        }
+        item.setServiceName(serviceName);
         item.setLevel(iLoggingEvent.getLevel().toString());
         this.parseLogArg(logArgs, item);
         item.setLogTime(DateUtil.toLocalDateTime(Instant.ofEpochMilli(iLoggingEvent.getTimeStamp())));

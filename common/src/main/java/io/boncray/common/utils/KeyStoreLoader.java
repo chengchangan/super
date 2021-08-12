@@ -3,7 +3,7 @@
 // Line separator : LF
 // Tab stop       : 4 spaces
 // IDE            : IntelliJ IDEA community edition
-package io.boncray.core.util;
+package io.boncray.common.utils;
 
 import org.apache.commons.io.FilenameUtils;
 

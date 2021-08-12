@@ -1,7 +1,7 @@
 package io.boncray.example.idempotence;
 
 import io.boncray.bean.mode.response.Result;
-import io.boncray.core.aspect.idempotence.Idempotence;
+import io.boncray.component.idempotence.Idempotence;
 import io.boncray.example.flow.param.TranslateParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

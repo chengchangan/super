@@ -1,4 +1,4 @@
-package io.boncray.core.websocket.client.config;
+package io.boncray.component.websocket.client.config;
 
 
 import lombok.Data;

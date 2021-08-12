@@ -3,20 +3,20 @@ package io.boncray.logback.filter;
 
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.TrackMetric;
-import io.boncray.bean.mode.response.Result;
-import io.boncray.core.sequence.IdGenerator;
-import io.boncray.common.utils.JacksonUtil;
 import io.boncray.common.http.HttpCommonUtil;
 import io.boncray.common.http.wapper.request.CustomHttpServletRequest;
 import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
+import io.boncray.common.utils.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import io.boncray.core.sequence.IdGenerator;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
@@ -88,13 +88,14 @@ public class LogbackFilter extends OncePerRequestFilter {
     }
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
-        Result<?> result = JacksonUtil.toObj(customResponse.getResponseData(), Result.class);
-        if (BooleanUtil.isTrue(result.getSuccess())) {
+        String responseData = new String(customResponse.getResponseData());
+        JSONObject response = JSONUtil.parseObj(responseData);
+        if (BooleanUtil.isTrue(response.getBool("success", false))) {
             log.info("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
-                    System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+                    System.currentTimeMillis() - start, responseData);
         } else {
             log.error("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
-                    System.currentTimeMillis() - start, new String(customResponse.getResponseData()));
+                    System.currentTimeMillis() - start, responseData);
         }
     }
 

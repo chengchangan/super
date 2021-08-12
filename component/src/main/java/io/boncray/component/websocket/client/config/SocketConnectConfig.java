@@ -1,4 +1,4 @@
-package io.boncray.core.websocket.client.config;
+package io.boncray.component.websocket.client.config;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;

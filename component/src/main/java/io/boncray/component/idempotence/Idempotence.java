@@ -1,4 +1,4 @@
-package io.boncray.core.aspect.idempotence;
+package io.boncray.component.idempotence;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;

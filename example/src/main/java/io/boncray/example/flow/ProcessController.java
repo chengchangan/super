@@ -1,7 +1,7 @@
 package io.boncray.example.flow;
 
 import io.boncray.bean.mode.response.Result;
-import io.boncray.core.aspect.idempotence.Idempotence;
+import io.boncray.component.idempotence.Idempotence;
 import io.boncray.example.flow.impl.translat.context.TranslateContext;
 import io.boncray.example.flow.param.TranslateParam;
 import io.boncray.flow.trigger.ProcessTrigger;

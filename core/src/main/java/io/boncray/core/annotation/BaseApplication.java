@@ -1,7 +1,6 @@
 package io.boncray.core.annotation;
 
 import io.boncray.core.config.BaseScanConfig;
-import io.boncray.core.config.RedisConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -15,7 +14,6 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @Import({
-        RedisConfiguration.class,
         BaseScanConfig.class
 })
 //@EnableConfigurationProperties({XxlExecutorConfig.class})

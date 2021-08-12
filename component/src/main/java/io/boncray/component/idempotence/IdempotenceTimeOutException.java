@@ -1,4 +1,4 @@
-package io.boncray.core.aspect.idempotence;
+package io.boncray.component.idempotence;
 
 /**
  * @author cca

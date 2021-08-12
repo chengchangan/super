@@ -1,4 +1,4 @@
-package io.boncray.core.aspect.idempotence;
+package io.boncray.component.idempotence;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.BooleanUtil;
@@ -12,7 +12,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.redisson.api.RedissonClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -37,13 +36,12 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @Aspect
 @Component
-@ConditionalOnBean(value = RedisTemplate.class)
 public class IdempotenceAspect {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final RedissonClient redissonClient;
 
-    public IdempotenceAspect(RedisTemplate redisTemplate, RedissonClient redissonClient) {
+    public IdempotenceAspect(RedisTemplate<String, Object> redisTemplate, RedissonClient redissonClient) {
         this.redisTemplate = redisTemplate;
         this.redissonClient = redissonClient;
     }
@@ -61,7 +59,7 @@ public class IdempotenceAspect {
             .expirationPolicy(ExpirationPolicy.CREATED)
             .build();
 
-    @Around("@annotation(io.boncray.core.aspect.idempotence.Idempotence)")
+    @Around("@annotation(io.boncray.component.idempotence.Idempotence)")
     public Object aroundExec(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取方法名、参数列表
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
