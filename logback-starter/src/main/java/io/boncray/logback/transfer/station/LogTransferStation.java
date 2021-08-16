@@ -41,7 +41,7 @@ public class LogTransferStation {
      * @param targetLog
      */
     public void transfer(Log targetLog) {
-        if (BooleanUtil.isFalse(configuration.isCollectEnabled())) {
+        if (!BooleanUtil.isTrue(configuration.isCollectEnabled())) {
             return;
         }
         transferExecutor.transfer(targetLog);

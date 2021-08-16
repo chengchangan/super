@@ -15,7 +15,7 @@ public class TransferStrategy {
     /**
      * 每次直接传输
      */
-    private Boolean always;
+    private Boolean always = false;
 
     /**
      * 多久传输一次

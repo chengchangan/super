@@ -45,7 +45,7 @@ public class LogCacheStore {
         if (BooleanUtil.isFalse(transferStrategy.getAlways())) {
             // 定时传输线程池,定时传输日志
             Executors.newScheduledThreadPool(1, x -> new Thread(x, LogCacheStore.class.getName()))
-                    .scheduleWithFixedDelay(new TransferRunnable(), 10, Math.max(transferStrategy.getOnceOfSecond(), 10), TimeUnit.SECONDS);
+                    .scheduleWithFixedDelay(new TransferRunnable(), 10, Math.min(transferStrategy.getOnceOfSecond(), 10), TimeUnit.SECONDS);
         }
 
     }

@@ -12,11 +12,11 @@ import io.boncray.common.http.HttpCommonUtil;
 import io.boncray.common.http.wapper.request.CustomHttpServletRequest;
 import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
 import io.boncray.common.utils.JacksonUtil;
+import io.boncray.core.sequence.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import io.boncray.core.sequence.IdGenerator;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
@@ -116,7 +116,7 @@ public class LogbackFilter extends OncePerRequestFilter {
         currentMetric.setCurrentTrackId(normalIdGenerator.next());
         // 父级调用
         if (StrUtil.isNotBlank(parentMetricStr)) {
-            TrackMetric parentMetric = JSONUtil.toBean(parentMetricStr, TrackMetric.class);
+            TrackMetric parentMetric = JacksonUtil.toObj(parentMetricStr, TrackMetric.class);
             currentMetric.setParentTrackId(parentMetric.getCurrentTrackId());
         }
         request.putHeader(LogConstant.TRACK_METRIC, JacksonUtil.toJson(currentMetric));
