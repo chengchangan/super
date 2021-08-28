@@ -50,24 +50,28 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        long start = System.currentTimeMillis();
-        CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
-        CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
+        if (!"application/stream+json".equals(request.getContentType()) && !"text/xml".equals(request.getContentType()) && !"multipart/form-data".equals(request.getContentType())) {
+            long start = System.currentTimeMillis();
+            CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
+            CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
 
-        // 增加请求头,处理trackMetric 信息
-        this.parseTrack(customRequest);
+            // 增加请求头,处理trackMetric 信息
+            this.parseTrack(customRequest);
 
-        // 设置MDC
-        this.parseMDC(customRequest);
+            // 设置MDC
+            this.parseMDC(customRequest);
 
-        // 接口访问日志记录
-        this.startWriteLog(customRequest);
-        try {
-            filterChain.doFilter(customRequest, customResponse);
-            // 响应结果日志记录（更新）
-            this.endWriteLog(customResponse, start);
-        } finally {
-            this.cleanMDC();
+            // 接口访问日志记录
+            this.startWriteLog(customRequest);
+            try {
+                filterChain.doFilter(customRequest, customResponse);
+                // 响应结果日志记录（更新）
+                this.endWriteLog(customResponse, start);
+            } finally {
+                this.cleanMDC();
+            }
+        } else {
+            filterChain.doFilter(request, response);
         }
     }
 
@@ -89,6 +93,9 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
         String responseData = new String(customResponse.getResponseData());
+        if (!JSONUtil.isJson(responseData)) {
+            return;
+        }
         JSONObject response = JSONUtil.parseObj(responseData);
         if (BooleanUtil.isTrue(response.getBool("success", false))) {
             log.info("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
