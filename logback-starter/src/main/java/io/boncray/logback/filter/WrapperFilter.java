@@ -25,12 +25,21 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class WrapperFilter extends OncePerRequestFilter {
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 使用包装创建自定义 request
-        CustomHttpServletRequest customRequest = new CustomHttpServletRequest(new CustomHttpServletRequestWrapper(request));
-        // 使用包装创建自定义 response
-        CustomHttpServletResponse customResponse = new CustomHttpServletResponse(response);
-        filterChain.doFilter(customRequest, customResponse);
+        if (request.getContentType() != null
+                && !"application/stream+json".equals(request.getContentType())
+                && !"text/xml".equals(request.getContentType())
+                && !"multipart/form-data".equals(request.getContentType())) {
+            // 使用包装创建自定义 request
+            CustomHttpServletRequest customRequest = new CustomHttpServletRequest(new CustomHttpServletRequestWrapper(request));
+            // 使用包装创建自定义 response
+            CustomHttpServletResponse customResponse = new CustomHttpServletResponse(response);
+            filterChain.doFilter(customRequest, customResponse);
+        } else {
+            filterChain.doFilter(request, response);
+        }
+
     }
 }

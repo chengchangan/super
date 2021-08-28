@@ -50,7 +50,7 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!"application/stream+json".equals(request.getContentType()) && !"text/xml".equals(request.getContentType()) && !"multipart/form-data".equals(request.getContentType())) {
+        if (request instanceof CustomHttpServletRequest) {
             long start = System.currentTimeMillis();
             CustomHttpServletRequest customRequest = (CustomHttpServletRequest) request;
             CustomHttpServletResponse customResponse = (CustomHttpServletResponse) response;
@@ -93,7 +93,7 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
         String responseData = new String(customResponse.getResponseData());
-        if (!JSONUtil.isJson(responseData)) {
+        if (!JSONUtil.isJsonObj(responseData)) {
             return;
         }
         JSONObject response = JSONUtil.parseObj(responseData);

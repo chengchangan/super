@@ -1,12 +1,13 @@
 package io.boncray.logback.filter;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.CommonConstant;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.TrackMetric;
 import io.boncray.bean.mode.response.Result;
-import io.boncray.common.utils.JacksonUtil;
 import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
+import io.boncray.common.utils.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
@@ -49,13 +50,18 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
             String contentType = customResponse.getContentType();
             if (StrUtil.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
                 String responseData = new String(customResponse.getResponseData());
-                Result<?> result = JacksonUtil.toObj(responseData, Result.class);
-                TrackMetric trackMetric = JacksonUtil.toObj(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
-                result.setRequestId(trackMetric.getCurrentTrackId());
-                // 写入请求的response
-                this.writeResponse(customResponse.getResponse(), JacksonUtil.toJson(result));
-                // 写入自定义的response
-                this.writeResponse(customResponse, JacksonUtil.toJson(result));
+                // 如果是jsonObj 添加链路Id
+                if (JSONUtil.isJsonObj(responseData)) {
+                    Result<?> result = JacksonUtil.toObj(responseData, Result.class);
+                    TrackMetric trackMetric = JacksonUtil.toObj(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
+                    result.setRequestId(trackMetric.getCurrentTrackId());
+                    // 写入请求的response
+                    this.writeResponse(customResponse.getResponse(), JacksonUtil.toJson(result));
+                    // 写入自定义的response
+                    this.writeResponse(customResponse, JacksonUtil.toJson(result));
+                } else {
+                    this.writeResponse(customResponse.getResponse(), responseData);
+                }
             }
         }
     }
