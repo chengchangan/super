@@ -28,8 +28,7 @@ public class WrapperFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getContentType() != null
-                && !"application/stream+json".equals(request.getContentType())
+        if (!"application/stream+json".equals(request.getContentType())
                 && !"text/xml".equals(request.getContentType())
                 && !"multipart/form-data".equals(request.getContentType())) {
             // 使用包装创建自定义 request

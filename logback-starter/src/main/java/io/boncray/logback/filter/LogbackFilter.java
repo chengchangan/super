@@ -1,7 +1,6 @@
 package io.boncray.logback.filter;
 
 
-import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -16,6 +15,7 @@ import io.boncray.core.sequence.IdGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -93,11 +93,14 @@ public class LogbackFilter extends OncePerRequestFilter {
 
     private void endWriteLog(CustomHttpServletResponse customResponse, long start) throws IOException {
         String responseData = new String(customResponse.getResponseData());
-        if (!JSONUtil.isJsonObj(responseData)) {
-            return;
+        boolean success;
+        JSONObject response;
+        if (JSONUtil.isJsonObj(responseData) && (response = JSONUtil.parseObj(responseData)).get("success") != null) {
+            success = response.getBool("success");
+        } else {
+            success = customResponse.getStatus() == HttpStatus.OK.value();
         }
-        JSONObject response = JSONUtil.parseObj(responseData);
-        if (BooleanUtil.isTrue(response.getBool("success", false))) {
+        if (success) {
             log.info("response logType:{},{},elapsedTime:{},data:{}", LogType.RPC_LOG, "end",
                     System.currentTimeMillis() - start, responseData);
         } else {
