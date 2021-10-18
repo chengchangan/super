@@ -51,7 +51,7 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
             if (StrUtil.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
                 String responseData = new String(customResponse.getResponseData());
                 // 如果是jsonObj 添加链路Id
-                if (JSONUtil.isJsonObj(responseData)) {
+                if (JSONUtil.isJsonObj(responseData) && JSONUtil.parseObj(responseData).containsKey("requestId")) {
                     Result<?> result = JacksonUtil.toObj(responseData, Result.class);
                     TrackMetric trackMetric = JacksonUtil.toObj(request.getHeader(LogConstant.TRACK_METRIC), TrackMetric.class);
                     result.setRequestId(trackMetric.getCurrentTrackId());
