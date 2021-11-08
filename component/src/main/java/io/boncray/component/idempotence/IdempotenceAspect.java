@@ -124,6 +124,7 @@ public class IdempotenceAspect {
         String key = buildKey(sign);
         long begin = System.currentTimeMillis();
 
+        // 本地获取锁
         ReentrantLock lock = LOCK_MAP.computeIfAbsent(key, (x) -> new ReentrantLock());
         if (!lock.tryLock(getTimeout(idempotence), idempotence.unit())) {
             throw new IdempotenceTimeOutException("idempotence timeout");
@@ -132,16 +133,18 @@ public class IdempotenceAspect {
         boolean acquired;
         long expireTime = getExpire(idempotence, begin);
         try {
-            // 从redis获得执行权
-            while (!(acquired = obtainIdem(key)) && begin < expireTime) {
+            // 从redis获得执行权（redis获取锁）
+            while (!(acquired = obtainIdem(key)) && System.currentTimeMillis() < expireTime) {
                 TimeUnit.MILLISECONDS.sleep(100);
             }
             // 如果没有得到锁，说明超时了
             if (!acquired) {
                 throw new IdempotenceTimeOutException("idempotence timeout");
             }
-        } finally {
+        } catch (Throwable e) {
+            // redis 获取异常释放本地锁
             lock.unlock();
+            throw e;
         }
     }
 
@@ -156,7 +159,7 @@ public class IdempotenceAspect {
      * 到期时间
      */
     private long getExpire(Idempotence idempotence, long begin) {
-        return idempotence.timeout() < 0 ? Long.MAX_VALUE : begin + idempotence.timeout();
+        return idempotence.timeout() < 0 ? Long.MAX_VALUE : begin + idempotence.unit().toMillis(idempotence.timeout());
     }
 
 
@@ -191,6 +194,12 @@ public class IdempotenceAspect {
      */
     private void release(String sign) {
         String key = buildKey(sign);
+        // 释放本地锁
+        ReentrantLock lock = LOCK_MAP.get(key);
+        if (lock != null && lock.isLocked()) {
+            lock.unlock();
+        }
+        // 释放redis锁
         ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
         if (BooleanUtil.isTrue(forValue.getOperations().hasKey(key))) {
             forValue.getOperations().delete(key);
