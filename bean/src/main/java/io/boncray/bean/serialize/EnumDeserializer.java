@@ -1,7 +1,7 @@
 package io.boncray.bean.serialize;
 
 import io.boncray.bean.mode.base.BaseEnum;
-import io.boncray.bean.utils.EnumUtility;
+import io.boncray.bean.utils.EnumUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonStreamContext;
 import com.fasterxml.jackson.core.json.JsonReadContext;
@@ -44,10 +44,10 @@ public class EnumDeserializer extends JsonDeserializer<BaseEnum> implements Cont
         if (parent.inArray()) {
             currentName = ((JsonReadContext) parent).getParent().getCurrentName();
             BeanUtils.findPropertyType(currentName, new Class[]{parent.getParent().getCurrentValue().getClass()});
-            return EnumUtility.getEnumValue(this.rawClass, node.asText());
+            return EnumUtil.getEnumValue(this.rawClass, node.asText());
         } else {
             Class clazz = BeanUtils.findPropertyType(currentName, new Class[]{currentValueClass});
-            BaseEnum enumValue = EnumUtility.getEnumValue(clazz, node.asText());
+            BaseEnum enumValue = EnumUtil.getEnumValue(clazz, node.asText());
             return enumValue != null ? enumValue : null;
         }
     }

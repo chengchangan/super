@@ -12,10 +12,10 @@ import java.util.Arrays;
  * @version 1.0
  * @date 2021/7/7 10:42
  */
-public class EnumUtility {
-    private static final Logger log = LoggerFactory.getLogger(EnumUtility.class);
+public class EnumUtil {
+    private static final Logger log = LoggerFactory.getLogger(EnumUtil.class);
 
-    public EnumUtility() {
+    public EnumUtil() {
     }
 
     public static <K, T extends BaseEnum<K, ?>> T getEnumValue(Class<T> enumType, String code) {

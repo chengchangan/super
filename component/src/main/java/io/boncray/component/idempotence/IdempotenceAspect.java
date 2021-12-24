@@ -11,6 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -50,14 +52,9 @@ public class IdempotenceAspect {
     private static final String CACHE_KEY_PREFIX = "idem";
 
     /**
-     * 带超时的map，过期比较老的锁
+     * 本地锁管理器
      */
-    private static final Map<String, ReentrantLock> LOCK_MAP = ExpiringMap.builder()
-            .maxSize(300)
-            .expiration(10, TimeUnit.SECONDS)
-            .variableExpiration()
-            .expirationPolicy(ExpirationPolicy.CREATED)
-            .build();
+    private final LocalLockManager LOCK_MANAGER = new LocalLockManager();
 
     @Around("@annotation(io.boncray.component.idempotence.Idempotence)")
     public Object aroundExec(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -109,7 +106,9 @@ public class IdempotenceAspect {
                 key = method.toGenericString();
             }
         }
-        return group + ":" + MD5.create().digestHex(key, Charset.defaultCharset());
+        String sign = group + ":" + MD5.create().digestHex(key, Charset.defaultCharset());
+        log.debug("签名明文，group：{}，key：{}，签名 sign：{}", group, key, sign);
+        return sign;
     }
 
     /**
@@ -125,22 +124,25 @@ public class IdempotenceAspect {
         long begin = System.currentTimeMillis();
 
         // 本地获取锁
-        ReentrantLock lock = LOCK_MAP.computeIfAbsent(key, (x) -> new ReentrantLock());
+        ReentrantLock lock = LOCK_MANAGER.get(key);
         if (!lock.tryLock(getTimeout(idempotence), idempotence.unit())) {
             throw new IdempotenceTimeOutException("idempotence timeout");
         }
+        log.debug("获取本地锁成功");
 
         boolean acquired;
         long expireTime = getExpire(idempotence, begin);
         try {
             // 从redis获得执行权（redis获取锁）
             while (!(acquired = obtainIdem(key)) && System.currentTimeMillis() < expireTime) {
+                log.debug("获取redis锁失败，等待下一次重试");
                 TimeUnit.MILLISECONDS.sleep(100);
             }
             // 如果没有得到锁，说明超时了
             if (!acquired) {
                 throw new IdempotenceTimeOutException("idempotence timeout");
             }
+            log.debug("获取redis锁成功");
         } catch (Throwable e) {
             // redis 获取异常释放本地锁
             lock.unlock();
@@ -195,15 +197,65 @@ public class IdempotenceAspect {
     private void release(String sign) {
         String key = buildKey(sign);
         // 释放本地锁
-        ReentrantLock lock = LOCK_MAP.get(key);
+        ReentrantLock lock = LOCK_MANAGER.get(key);
         if (lock != null && lock.isLocked()) {
+            log.debug("释放本地锁，key：{}", key);
             lock.unlock();
         }
         // 释放redis锁
-        ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
-        if (BooleanUtil.isTrue(forValue.getOperations().hasKey(key))) {
-            forValue.getOperations().delete(key);
+        if (redissonClient != null) {
+            RLock rLock = redissonClient.getLock(key);
+            if (rLock.isLocked()) {
+                log.debug("释放redis锁，key：{}", key);
+                rLock.unlock();
+            }
+        } else {
+            ValueOperations<String, Object> forValue = redisTemplate.opsForValue();
+            if (BooleanUtil.isTrue(forValue.getOperations().hasKey(key))) {
+                log.debug("释放redis锁，key：{}", key);
+                forValue.getOperations().delete(key);
+            }
         }
+    }
+
+    /**
+     * 本地锁过期管理
+     */
+    private static class LocalLockManager {
+
+        private final Object PRESENT = new Object();
+
+        private final Map<String, ReentrantLock> LOCK_MAP = new ConcurrentHashMap<>();
+
+        private final ExpiringMap<String, Object> EXPIRING_MAP = ExpiringMap.builder()
+                .maxSize(300)
+                .expiration(10, TimeUnit.SECONDS)
+                .variableExpiration()
+                .expirationPolicy(ExpirationPolicy.ACCESSED)
+                .build();
+
+        public LocalLockManager() {
+            EXPIRING_MAP.addExpirationListener((key, lock) -> {
+                // 如果过期了，并且这个锁还在被使用，则将这个key放回去
+                if (LOCK_MAP.containsKey(key) && LOCK_MAP.get(key).isLocked()) {
+                    log.debug("锁：{}过期，且在使用中，重新放入", key);
+                    EXPIRING_MAP.put(key, PRESENT);
+                } else {
+                    log.debug("锁已过期：{}", key);
+                    LOCK_MAP.remove(key);
+                }
+            });
+        }
+
+        public ReentrantLock get(String key) {
+            if (EXPIRING_MAP.containsKey(key)) {
+                EXPIRING_MAP.getExpectedExpiration(key);
+            } else {
+                EXPIRING_MAP.put(key, PRESENT);
+            }
+            return LOCK_MAP.computeIfAbsent(key, (x) -> new ReentrantLock());
+        }
+
     }
 
 }
