@@ -5,6 +5,7 @@ import io.boncray.common.http.wapper.request.CustomHttpServletRequestWrapper;
 import io.boncray.common.http.wapper.response.CustomHttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,9 +29,7 @@ public class WrapperFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (!"application/stream+json".equals(request.getContentType())
-                && !"text/xml".equals(request.getContentType())
-                && !"multipart/form-data".equals(request.getContentType())) {
+        if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(request.getContentType())) {
             // 使用包装创建自定义 request
             CustomHttpServletRequest customRequest = new CustomHttpServletRequest(new CustomHttpServletRequestWrapper(request));
             // 使用包装创建自定义 response

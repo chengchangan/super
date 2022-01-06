@@ -1,12 +1,10 @@
 package io.boncray.example;
 
 import io.boncray.core.annotation.BaseApplication;
-import io.boncray.logback.config.LogBackConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * @author cca
