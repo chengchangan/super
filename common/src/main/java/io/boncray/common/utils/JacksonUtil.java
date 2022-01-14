@@ -1,6 +1,7 @@
 package io.boncray.common.utils;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
@@ -13,6 +14,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author cca
@@ -114,6 +119,34 @@ public class JacksonUtil {
         }
     }
 
+    public static <T> List<T> toList(String json, Class<T> cls) {
+        if (json == null || json.equals("")) {
+            return new ArrayList<>();
+        }
+        return toCollection(json, List.class, cls);
+    }
+
+    public static <T> Set<T> toSet(String json, Class<T> cls) {
+        if (json == null || json.equals("")) {
+            return new HashSet<>();
+        }
+        return toCollection(json, Set.class, cls);
+    }
+
+    private static <T> T toCollection(String json, Class<?> collectionClass, Class<?> cls) {
+        JavaType javaType = getCollectionType(collectionClass, cls);
+        try {
+            return mapper.readValue(json, javaType);
+        } catch (IOException exception) {
+            throw new JacksonDeserializationException(exception);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<TestUser> userList = toList("[{\"name\":\"aa\"}]", TestUser.class);
+        System.out.println(userList);
+    }
+
     public static JsonNode toObj(String json) {
         try {
             return mapper.readTree(json);
@@ -142,6 +175,16 @@ public class JacksonUtil {
         return mapper.constructType(type);
     }
 
+    /**
+     * 获取泛型的Collection Type
+     *
+     * @param collectionClass 泛型的Collection
+     * @param elementClasses  元素类
+     * @return JavaType Java类型
+     */
+    private static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+        return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+    }
 
     private static class JacksonSerializationException extends RuntimeException {
         public JacksonSerializationException() {
