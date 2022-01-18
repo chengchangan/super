@@ -57,8 +57,14 @@ public class WebSocketClientManager implements ApplicationContextAware {
     private static final ScheduledExecutorService RETRY_CONNECT_EXECUTOR = Executors.newScheduledThreadPool(1,
             x -> new Thread(x, "baas.chia.remote.webSocket.WebSocketClientManager"));
 
+    /**
+     * 客户端全局配置信息
+     */
     protected final WebSocketConfig globalConfig;
 
+    /**
+     * 收到server端返回的消息后，客户端对应的处理器
+     */
     protected MessageHandler handler;
 
     public WebSocketClientManager(WebSocketConfig config) {
@@ -109,12 +115,17 @@ public class WebSocketClientManager implements ApplicationContextAware {
         return webSocketClient;
     }
 
+    /**
+     * 将失败的连接加入到等待重连队列中
+     */
     protected void waitRetryConnect(String fullPath) {
         WAIT_RETRY_CONNECTION_SERVER_PATH.add(fullPath);
     }
 
 
     /**
+     * 创建websocket 客户端连接
+     *
      * @param fullPath 需要连接的服务器 Ip + port + path + params
      * @return
      */
@@ -132,35 +143,44 @@ public class WebSocketClientManager implements ApplicationContextAware {
     }
 
     /**
+     * 构建连接websocket url 连接
+     *
      * @param fullPath 需要连接的服务器 Ip + port + path + params
      * @return
      * @throws URISyntaxException
      */
     private URI buildUri(String fullPath) throws URISyntaxException {
-        Map<String, WebSocketConfig.ClientConfig> configMap = globalConfig.getClientConfigMap();
         SocketConnectConfig connectConfig = CONNECT_SERVER_CONFIG_MAP.get(fullPath);
-
-        if (CollectionUtils.isEmpty(configMap) || configMap.get(connectConfig.getHost()) == null) {
-            throw new RuntimeException("连接的服务端Ip：" + connectConfig.getHost() + ",配置不存在");
-        }
-        WebSocketConfig.ClientConfig clientConfig = configMap.get(connectConfig.getHost());
+        Map<String, WebSocketConfig.SslConfig> configMap = globalConfig.getSslConfigMap();
 
         StringBuilder url = new StringBuilder();
-        if (StrUtil.isBlank(clientConfig.getCertPath())) {
+        // 不使用ssl 连接websocket
+        if (CollectionUtils.isEmpty(configMap) || configMap.get(connectConfig.getHost()) == null) {
             url.append("ws://");
         } else {
+            WebSocketConfig.SslConfig sslConfig = configMap.get(connectConfig.getHost());
+            if (StrUtil.isBlank(sslConfig.getCertPath())) {
+                throw new IllegalArgumentException("configured SslConfig, but the certPath is empty");
+            }
             url.append("wss://");
         }
         url.append(fullPath);
         return new URI(url.toString());
     }
 
+
+    /**
+     * 配置SSL信息
+     *
+     * @param webSocketClient
+     * @throws Exception
+     */
     private void ssl(WebSocketClient webSocketClient) throws Exception {
         URI uri = webSocketClient.getURI();
         if ("wss".equals(uri.getScheme())) {
-            WebSocketConfig.ClientConfig clientConfig = globalConfig.getClientConfigMap().get(uri.getAuthority());
-            String certPath = clientConfig.getCertPath();
-            String certPassWord = clientConfig.getCertPassWord();
+            WebSocketConfig.SslConfig sslConfig = globalConfig.getSslConfigMap().get(uri.getAuthority());
+            String certPath = sslConfig.getCertPath();
+            String certPassWord = sslConfig.getCertPassWord();
 
             KeyStore keyStore;
             try (InputStream in = WebSocketClientManager.class.getClassLoader().getResourceAsStream(certPath)) {

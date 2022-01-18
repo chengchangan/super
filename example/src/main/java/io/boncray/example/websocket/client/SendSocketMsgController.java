@@ -29,7 +29,7 @@ public class SendSocketMsgController {
         List<String> params = new ArrayList<>();
         params.add("123");
 
-        WebSocketClient client = clientManager.getClient("127.0.0.1", "8080", "/websocketTest", params);
+        WebSocketClient client = clientManager.getClient("127.0.0.1", "1998", "/test", params);
         client.send(msg);
     }
 

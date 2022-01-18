@@ -8,8 +8,8 @@ public class WebSocketConfiguration {
     public WebSocketClientManager webSocketClientManager() {
         WebSocketConfig config = new WebSocketConfig();
         Map<String, WebSocketConfig.ClientConfig> map = new HashMap<>();
-        WebSocketConfig.ClientConfig clientConfig = getClientConfig();
-        map.put(clientConfig.getIp(), clientConfig);
+        WebSocketConfig.ClientConfig sslConfig = getClientConfig();
+        map.put(sslConfig.getIp(), sslConfig);
         config.setClientConfigMap(map);
         return new WebSocketClientManager(config);
     }

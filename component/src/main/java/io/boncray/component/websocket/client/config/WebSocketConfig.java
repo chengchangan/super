@@ -14,7 +14,7 @@ import java.util.Map;
 public class WebSocketConfig {
 
     /**
-     * client 打开连接超市时间（s）
+     * client 打开连接超时时间（s）
      */
     private Integer connectTimeout = 5;
     /**
@@ -29,10 +29,10 @@ public class WebSocketConfig {
      * key：ip + port
      * value：ssl配置
      */
-    private Map<String, ClientConfig> clientConfigMap;
+    private Map<String, SslConfig> sslConfigMap;
 
     @Data
-    public static class ClientConfig {
+    public static class SslConfig {
         /**
          * websocket 服务端IP
          */

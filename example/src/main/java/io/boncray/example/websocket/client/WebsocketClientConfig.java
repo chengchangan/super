@@ -20,23 +20,23 @@ public class WebsocketClientConfig {
     public WebSocketClientManager webSocketClientManager() {
         WebSocketConfig config = new WebSocketConfig();
         config.setConnectErrorRetryInterval(2);
-        config.setClientConfigMap(getClientConfigMap());
+//        config.setSslConfigMap(getSslConfigMap());
         return new WebSocketClientManager(config);
     }
 
-    private Map<String, WebSocketConfig.ClientConfig> getClientConfigMap() {
-        Map<String, WebSocketConfig.ClientConfig> map = new HashMap<>();
-        WebSocketConfig.ClientConfig clientConfig1 = getClientConfig1();
+    private Map<String, WebSocketConfig.SslConfig> getSslConfigMap() {
+        Map<String, WebSocketConfig.SslConfig> map = new HashMap<>();
+        WebSocketConfig.SslConfig sslConfig1 = getClientConfig1();
 
-        map.put(clientConfig1.getHost(), clientConfig1);
+        map.put(sslConfig1.getHost(), sslConfig1);
         return map;
     }
 
     // 示例值，可从配置文件中取
-    private WebSocketConfig.ClientConfig getClientConfig1() {
-        WebSocketConfig.ClientConfig config = new WebSocketConfig.ClientConfig();
+    private WebSocketConfig.SslConfig getClientConfig1() {
+        WebSocketConfig.SslConfig config = new WebSocketConfig.SslConfig();
         config.setIp("127.0.0.1");
-        config.setPort("8080");
+        config.setPort("1998");
         return config;
     }
 }
