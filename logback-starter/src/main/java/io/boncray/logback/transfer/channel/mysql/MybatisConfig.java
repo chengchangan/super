@@ -51,7 +51,7 @@ public class MybatisConfig {
                 .driverClassName(properties.getDriverClassName())
                 .url(properties.getUrl())
                 .username(properties.getUsername())
-                .password(properties.getUsername())
+                .password(properties.getPassword())
                 .build();
     }
 

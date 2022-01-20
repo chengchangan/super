@@ -17,6 +17,8 @@ public class TransferStrategy {
      */
     private Boolean always = false;
 
+
+
     /**
      * 多久传输一次
      */
