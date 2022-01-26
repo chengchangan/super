@@ -17,10 +17,14 @@
             <artifactId>core</artifactId>
         </dependency>
 
-        <!-- 持久化相关-->
         <dependency>
-            <groupId>io.boncray</groupId>
-            <artifactId>cmdb</artifactId>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
 
         <dependency>

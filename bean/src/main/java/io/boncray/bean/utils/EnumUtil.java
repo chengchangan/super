@@ -18,14 +18,17 @@ public class EnumUtil {
     public EnumUtil() {
     }
 
-    public static <K, T extends BaseEnum<K, ?>> T getEnumValue(Class<T> enumType, String code) {
+    public static <K, T extends BaseEnum<K, ?>> T getEnumValue(Class<T> enumType, K code) {
         try {
-            if (StrUtil.isBlank(code)) {
+            if (code == null) {
+                return null;
+            }
+            if (code instanceof String && StrUtil.isBlank((String) code)) {
                 return null;
             }
             if (enumType.isEnum()) {
                 return Arrays.stream(enumType.getEnumConstants())
-                        .filter(x -> x.code().toString().equals(code))
+                        .filter(x -> x.code().equals(code))
                         .findFirst()
                         .orElse(null);
             }

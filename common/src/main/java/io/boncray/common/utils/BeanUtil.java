@@ -21,7 +21,8 @@ public class BeanUtil {
             return null;
         }
         T obj = BeanUtils.instantiateClass(clazz);
-        BeanUtils.copyProperties(object, obj);
+        // 使用糊涂工具包的深拷贝
+        cn.hutool.core.bean.BeanUtil.copyProperties(object, obj);
         return obj;
     }
 

@@ -1,5 +1,7 @@
 package io.boncray.bean.exception;
 
+import io.boncray.bean.mode.base.BaseEnum;
+
 /**
  * @author cca
  * @version 1.0
@@ -7,7 +9,12 @@ package io.boncray.bean.exception;
  */
 public class BizException extends RuntimeException {
 
-    private int code;
+    private final int code;
+
+    public BizException(BaseEnum<Integer, String> baseEnum) {
+        super(baseEnum.msg());
+        this.code = baseEnum.code();
+    }
 
     public BizException(int code, String message) {
         super(message);
