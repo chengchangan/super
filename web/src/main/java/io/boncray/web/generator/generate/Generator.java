@@ -61,8 +61,12 @@ public class Generator {
                     log.info("忽略生成 controller:{}", tableName);
                     continue;
                 }
-                if (BooleanUtil.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("serviceImpl")) {
+                if (BooleanUtil.isTrue(config.isIgnoreServiceCode()) && templateConfig.getTemplatePath().contains("service")) {
                     log.info("忽略生成 service:{}", tableName);
+                    continue;
+                }
+                if (BooleanUtil.isTrue(config.isIgnoreDaoCode()) && templateConfig.getTemplatePath().contains("dao")) {
+                    log.info("忽略生成 dao:{}", tableName);
                     continue;
                 }
                 if (BooleanUtil.isTrue(config.isIgnoreMapperCode()) && templateConfig.getTemplatePath().contains("mapper")) {

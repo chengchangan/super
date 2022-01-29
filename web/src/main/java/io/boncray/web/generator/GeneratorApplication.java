@@ -84,6 +84,7 @@ public class GeneratorApplication implements ApplicationContextAware {
         config.setIgnoreTableFirstWord(Boolean.parseBoolean(generateDTO.getIgnoreTableFirstWord()));
         config.setIgnoreControllerCode(Boolean.parseBoolean(generateDTO.getIgnoreControllerCode()));
         config.setIgnoreServiceCode(Boolean.parseBoolean(generateDTO.getIgnoreServiceCode()));
+        config.setIgnoreDaoCode(Boolean.parseBoolean(generateDTO.getIgnoreDaoCode()));
         config.setIgnoreMapperCode(Boolean.parseBoolean(generateDTO.getIgnoreMapperCode()));
     }
 

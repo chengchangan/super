@@ -54,6 +54,11 @@ public class Configuration {
     private boolean ignoreServiceCode;
 
     /**
+     * 是否忽略生成dao代码
+     */
+    private boolean ignoreDaoCode;
+
+    /**
      * 是否忽略生成mapper代码
      */
     private boolean ignoreMapperCode;
