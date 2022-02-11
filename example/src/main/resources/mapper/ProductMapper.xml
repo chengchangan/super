@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="io.boncray.example.cmdb.ProductMapper">
+
+    <sql id="columns">id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,total_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description</sql>
+
+    <resultMap id="resultMap" type="io.boncray.example.cmdb.Product">
+        <id column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_url" property="itemUrl"/>
+        <result column="title" property="title"/>
+        <result column="short_title" property="shortTitle"/>
+        <result column="main_image" property="mainImage"/>
+        <result column="white_image" property="whiteImage"/>
+        <result column="small_images" property="smallImages"/>
+        <result column="item_share_url" property="itemShareUrl"/>
+        <result column="fixed_price" property="fixedPrice"/>
+        <result column="discount_fixed_price" property="discountFixedPrice"/>
+        <result column="superior_brand" property="superiorBrand"/>
+        <result column="item_location" property="itemLocation"/>
+        <result column="post_fee" property="postFee"/>
+        <result column="commission_rate" property="commissionRate"/>
+        <result column="commission_type" property="commissionType"/>
+        <result column="total_sales" property="totalSales"/>
+        <result column="level_one_category_name" property="levelOneCategoryName"/>
+        <result column="level_one_category_id" property="levelOneCategoryId"/>
+        <result column="level_two_category_name" property="levelTwoCategoryName"/>
+        <result column="level_two_category_id" property="levelTwoCategoryId"/>
+        <result column="item_description" property="itemDescription"/>
+    </resultMap>
+
+    <sql id="columnMapping">
+        id                AS id,
+        item_id                AS itemId,
+        item_url                AS itemUrl,
+        title                AS title,
+        short_title                AS shortTitle,
+        main_image                AS mainImage,
+        white_image                AS whiteImage,
+        small_images                AS smallImages,
+        item_share_url                AS itemShareUrl,
+        fixed_price                AS fixedPrice,
+        discount_fixed_price                AS discountFixedPrice,
+        superior_brand                AS superiorBrand,
+        item_location                AS itemLocation,
+        post_fee                AS postFee,
+        commission_rate                AS commissionRate,
+        commission_type                AS commissionType,
+        total_sales                AS totalSales,
+        level_one_category_name                AS levelOneCategoryName,
+        level_one_category_id                AS levelOneCategoryId,
+        level_two_category_name                AS levelTwoCategoryName,
+        level_two_category_id                AS levelTwoCategoryId,
+        item_description                AS itemDescription
+    </sql>
+
+    <select id="getByKey" resultMap="resultMap">
+        SELECT
+        <choose>
+            <when test="fields!=null and fields!=''">
+                #{fields}
+            </when>
+            <otherwise>
+                <include refid="columns"/>
+            </otherwise>
+        </choose>
+        FROM c_product
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </select>
+
+    <select id="list" resultMap="resultMap">
+        SELECT
+        <choose>
+            <when test="ew.queryFields!=null and ew.queryFields!=''">
+                #{ew.queryFields}
+            </when>
+            <otherwise>
+                <include refid="columns"/>
+            </otherwise>
+        </choose>
+        FROM c_product
+        <include refid="equalWhere"/>
+        ORDER BY id DESC
+    </select>
+
+    <select id="listPage" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM c_product
+        <include refid="equalWhere"/>
+        ORDER BY id DESC
+    </select>
+
+
+    <sql id="equalWhere">
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="ew.id!=null">
+                AND id=#{ew.id}
+            </if>
+            <if test="ew.itemId!=null">
+                AND item_id=#{ew.itemId}
+            </if>
+            <if test="ew.itemUrl!=null and ew.itemUrl!=''">
+                AND item_url=#{ew.itemUrl}
+            </if>
+            <if test="ew.title!=null and ew.title!=''">
+                AND title=#{ew.title}
+            </if>
+            <if test="ew.shortTitle!=null and ew.shortTitle!=''">
+                AND short_title=#{ew.shortTitle}
+            </if>
+            <if test="ew.mainImage!=null and ew.mainImage!=''">
+                AND main_image=#{ew.mainImage}
+            </if>
+            <if test="ew.whiteImage!=null and ew.whiteImage!=''">
+                AND white_image=#{ew.whiteImage}
+            </if>
+            <if test="ew.smallImages!=null and ew.smallImages!=''">
+                AND small_images=#{ew.smallImages}
+            </if>
+            <if test="ew.itemShareUrl!=null and ew.itemShareUrl!=''">
+                AND item_share_url=#{ew.itemShareUrl}
+            </if>
+            <if test="ew.fixedPrice!=null">
+                AND fixed_price=#{ew.fixedPrice}
+            </if>
+            <if test="ew.discountFixedPrice!=null">
+                AND discount_fixed_price=#{ew.discountFixedPrice}
+            </if>
+            <if test="ew.superiorBrand!=null">
+                AND superior_brand=#{ew.superiorBrand}
+            </if>
+            <if test="ew.itemLocation!=null and ew.itemLocation!=''">
+                AND item_location=#{ew.itemLocation}
+            </if>
+            <if test="ew.postFee!=null">
+                AND post_fee=#{ew.postFee}
+            </if>
+            <if test="ew.commissionRate!=null">
+                AND commission_rate=#{ew.commissionRate}
+            </if>
+            <if test="ew.commissionType!=null and ew.commissionType!=''">
+                AND commission_type=#{ew.commissionType}
+            </if>
+            <if test="ew.totalSales!=null">
+                AND total_sales=#{ew.totalSales}
+            </if>
+            <if test="ew.levelOneCategoryName!=null and ew.levelOneCategoryName!=''">
+                AND level_one_category_name=#{ew.levelOneCategoryName}
+            </if>
+            <if test="ew.levelOneCategoryId!=null">
+                AND level_one_category_id=#{ew.levelOneCategoryId}
+            </if>
+            <if test="ew.levelTwoCategoryName!=null and ew.levelTwoCategoryName!=''">
+                AND level_two_category_name=#{ew.levelTwoCategoryName}
+            </if>
+            <if test="ew.levelTwoCategoryId!=null">
+                AND level_two_category_id=#{ew.levelTwoCategoryId}
+            </if>
+            <if test="ew.itemDescription!=null and ew.itemDescription!=''">
+                AND item_description=#{ew.itemDescription}
+            </if>
+        </trim>
+    </sql>
+
+    <sql id="pkWhere">
+        WHERE id=#{pk}
+    </sql>
+
+    <insert id="insert" parameterType="io.boncray.example.cmdb.Product">
+        INSERT INTO c_product(id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,total_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description)
+        VALUES(
+        <trim suffixOverrides=",">
+            #{entity.id},
+            #{entity.itemId},
+            #{entity.itemUrl},
+            #{entity.title},
+            #{entity.shortTitle},
+            #{entity.mainImage},
+            #{entity.whiteImage},
+            #{entity.smallImages},
+            #{entity.itemShareUrl},
+            #{entity.fixedPrice},
+            #{entity.discountFixedPrice},
+            #{entity.superiorBrand},
+            #{entity.itemLocation},
+            #{entity.postFee},
+            #{entity.commissionRate},
+            #{entity.commissionType},
+            #{entity.totalSales},
+            #{entity.levelOneCategoryName},
+            #{entity.levelOneCategoryId},
+            #{entity.levelTwoCategoryName},
+            #{entity.levelTwoCategoryId},
+            #{entity.itemDescription},
+        </trim>)
+    </insert>
+
+    <update id="updateByExample" parameterType="io.boncray.example.cmdb.Product">
+        UPDATE c_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="entity.id!=null">id=#{entity.id},</if>
+            <if test="entity.itemId!=null">item_id=#{entity.itemId},</if>
+            <if test="entity.itemUrl!=null">item_url=#{entity.itemUrl},</if>
+            <if test="entity.title!=null">title=#{entity.title},</if>
+            <if test="entity.shortTitle!=null">short_title=#{entity.shortTitle},</if>
+            <if test="entity.mainImage!=null">main_image=#{entity.mainImage},</if>
+            <if test="entity.whiteImage!=null">white_image=#{entity.whiteImage},</if>
+            <if test="entity.smallImages!=null">small_images=#{entity.smallImages},</if>
+            <if test="entity.itemShareUrl!=null">item_share_url=#{entity.itemShareUrl},</if>
+            <if test="entity.fixedPrice!=null">fixed_price=#{entity.fixedPrice},</if>
+            <if test="entity.discountFixedPrice!=null">discount_fixed_price=#{entity.discountFixedPrice},</if>
+            <if test="entity.superiorBrand!=null">superior_brand=#{entity.superiorBrand},</if>
+            <if test="entity.itemLocation!=null">item_location=#{entity.itemLocation},</if>
+            <if test="entity.postFee!=null">post_fee=#{entity.postFee},</if>
+            <if test="entity.commissionRate!=null">commission_rate=#{entity.commissionRate},</if>
+            <if test="entity.commissionType!=null">commission_type=#{entity.commissionType},</if>
+            <if test="entity.totalSales!=null">total_sales=#{entity.totalSales},</if>
+            <if test="entity.levelOneCategoryName!=null">level_one_category_name=#{entity.levelOneCategoryName},</if>
+            <if test="entity.levelOneCategoryId!=null">level_one_category_id=#{entity.levelOneCategoryId},</if>
+            <if test="entity.levelTwoCategoryName!=null">level_two_category_name=#{entity.levelTwoCategoryName},</if>
+            <if test="entity.levelTwoCategoryId!=null">level_two_category_id=#{entity.levelTwoCategoryId},</if>
+            <if test="entity.itemDescription!=null">item_description=#{entity.itemDescription},</if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="ew.id!=null">
+                AND id=#{ew.id}
+            </if>
+            <if test="ew.itemId!=null">
+                AND item_id=#{ew.itemId}
+            </if>
+            <if test="ew.itemUrl!=null">
+                AND item_url=#{ew.itemUrl}
+            </if>
+            <if test="ew.title!=null">
+                AND title=#{ew.title}
+            </if>
+            <if test="ew.shortTitle!=null">
+                AND short_title=#{ew.shortTitle}
+            </if>
+            <if test="ew.mainImage!=null">
+                AND main_image=#{ew.mainImage}
+            </if>
+            <if test="ew.whiteImage!=null">
+                AND white_image=#{ew.whiteImage}
+            </if>
+            <if test="ew.smallImages!=null">
+                AND small_images=#{ew.smallImages}
+            </if>
+            <if test="ew.itemShareUrl!=null">
+                AND item_share_url=#{ew.itemShareUrl}
+            </if>
+            <if test="ew.fixedPrice!=null">
+                AND fixed_price=#{ew.fixedPrice}
+            </if>
+            <if test="ew.discountFixedPrice!=null">
+                AND discount_fixed_price=#{ew.discountFixedPrice}
+            </if>
+            <if test="ew.superiorBrand!=null">
+                AND superior_brand=#{ew.superiorBrand}
+            </if>
+            <if test="ew.itemLocation!=null">
+                AND item_location=#{ew.itemLocation}
+            </if>
+            <if test="ew.postFee!=null">
+                AND post_fee=#{ew.postFee}
+            </if>
+            <if test="ew.commissionRate!=null">
+                AND commission_rate=#{ew.commissionRate}
+            </if>
+            <if test="ew.commissionType!=null">
+                AND commission_type=#{ew.commissionType}
+            </if>
+            <if test="ew.totalSales!=null">
+                AND total_sales=#{ew.totalSales}
+            </if>
+            <if test="ew.levelOneCategoryName!=null">
+                AND level_one_category_name=#{ew.levelOneCategoryName}
+            </if>
+            <if test="ew.levelOneCategoryId!=null">
+                AND level_one_category_id=#{ew.levelOneCategoryId}
+            </if>
+            <if test="ew.levelTwoCategoryName!=null">
+                AND level_two_category_name=#{ew.levelTwoCategoryName}
+            </if>
+            <if test="ew.levelTwoCategoryId!=null">
+                AND level_two_category_id=#{ew.levelTwoCategoryId}
+            </if>
+            <if test="ew.itemDescription!=null">
+                AND item_description=#{ew.itemDescription}
+            </if>
+        </trim>
+        LIMIT 1
+    </update>
+
+    <update id="updateByPk" parameterType="io.boncray.example.cmdb.Product">
+        UPDATE c_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="entity.id!=null">id=#{entity.id},</if>
+            <if test="entity.itemId!=null">item_id=#{entity.itemId},</if>
+            <if test="entity.itemUrl!=null">item_url=#{entity.itemUrl},</if>
+            <if test="entity.title!=null">title=#{entity.title},</if>
+            <if test="entity.shortTitle!=null">short_title=#{entity.shortTitle},</if>
+            <if test="entity.mainImage!=null">main_image=#{entity.mainImage},</if>
+            <if test="entity.whiteImage!=null">white_image=#{entity.whiteImage},</if>
+            <if test="entity.smallImages!=null">small_images=#{entity.smallImages},</if>
+            <if test="entity.itemShareUrl!=null">item_share_url=#{entity.itemShareUrl},</if>
+            <if test="entity.fixedPrice!=null">fixed_price=#{entity.fixedPrice},</if>
+            <if test="entity.discountFixedPrice!=null">discount_fixed_price=#{entity.discountFixedPrice},</if>
+            <if test="entity.superiorBrand!=null">superior_brand=#{entity.superiorBrand},</if>
+            <if test="entity.itemLocation!=null">item_location=#{entity.itemLocation},</if>
+            <if test="entity.postFee!=null">post_fee=#{entity.postFee},</if>
+            <if test="entity.commissionRate!=null">commission_rate=#{entity.commissionRate},</if>
+            <if test="entity.commissionType!=null">commission_type=#{entity.commissionType},</if>
+            <if test="entity.totalSales!=null">total_sales=#{entity.totalSales},</if>
+            <if test="entity.levelOneCategoryName!=null">level_one_category_name=#{entity.levelOneCategoryName},</if>
+            <if test="entity.levelOneCategoryId!=null">level_one_category_id=#{entity.levelOneCategoryId},</if>
+            <if test="entity.levelTwoCategoryName!=null">level_two_category_name=#{entity.levelTwoCategoryName},</if>
+            <if test="entity.levelTwoCategoryId!=null">level_two_category_id=#{entity.levelTwoCategoryId},</if>
+            <if test="entity.itemDescription!=null">item_description=#{entity.itemDescription},</if>
+        </trim>
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </update>
+
+    <delete id="deleteByPk">
+        DELETE FROM c_product
+        <include refid="pkWhere"/>
+        LIMIT 1
+    </delete>
+
+    <delete id="deleteByExample">
+        DELETE FROM c_product
+        <include refid="equalWhere"/>
+    </delete>
+
+
+</mapper>

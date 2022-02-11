@@ -1,19 +1,21 @@
 package io.boncray.example;
 
-import io.boncray.core.annotation.BaseApplication;
+import io.boncray.web.annotation.WebApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @author cca
  * @version 1.0
  * @date 2021/6/28 11:11
  */
-@BaseApplication
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,
-        JpaRepositoriesAutoConfiguration.class}, scanBasePackages = "io.boncray")
+
+@WebApplication
+@EnableDiscoveryClient
+@SpringBootApplication(scanBasePackages = "io.boncray")
+
 public class Application {
 
     public static void main(String[] args) {

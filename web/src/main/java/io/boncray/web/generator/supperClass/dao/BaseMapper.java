@@ -1,5 +1,7 @@
 package io.boncray.web.generator.supperClass.dao;
 
+import io.boncray.bean.mode.base.PageList;
+import io.boncray.bean.mode.base.PageQuery;
 import io.boncray.web.generator.supperClass.entity.Query;
 import org.apache.ibatis.annotations.Param;
 
@@ -73,7 +75,7 @@ public interface BaseMapper<T, Q extends Query> {
      */
     List<T> list(@Param("ew") Q query);
 
-    Collection<T> listPage(@Param("ew") Q query);
+    PageList<T> listPage(@Param("ew") PageQuery query);
 
 
 }
