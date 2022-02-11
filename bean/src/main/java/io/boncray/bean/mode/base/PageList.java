@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,7 +18,13 @@ public class PageList<E> extends ArrayList<E> implements Serializable {
     private int pageSize;
     private int pageIndex;
     private int total;
+    private int totalPage;
     private List<E> data;
+
+
+    public PageList(Collection<? extends E> c) {
+        super(c);
+    }
 
     /**
      * 构造器.

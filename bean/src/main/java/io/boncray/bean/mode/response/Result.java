@@ -1,5 +1,7 @@
 package io.boncray.bean.mode.response;
 
+import io.boncray.bean.mode.base.PageList;
+import io.boncray.bean.mode.base.PageResult;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -45,6 +47,16 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> success(T data) {
         return new Result<>(data, true, MessageState.SUCCESS.getMsg(), MessageState.SUCCESS.getCode());
+    }
+
+    public static <T> Result<PageResult<T>> pageSuccess(PageList<T> data) {
+        PageResult<T> result = new PageResult<>();
+        result.setPageSize(data.getPageSize());
+        result.setPageIndex(data.getPageIndex());
+        result.setTotal(data.getTotal());
+        result.setTotalPage(data.getTotalPage());
+        result.setList(data);
+        return new Result<>(result, true, MessageState.SUCCESS.getMsg(), MessageState.SUCCESS.getCode());
     }
 
     public static <T> Result<T> failure() {

@@ -4,7 +4,6 @@ import io.boncray.web.annotation.WebApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * @author cca
@@ -14,8 +13,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @WebApplication
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = "io.boncray")
-
+@SpringBootApplication(
+//        exclude = {DataSourceAutoConfiguration.class, JpaRepositoriesAutoConfiguration.class},
+        scanBasePackages = "io.boncray")
 public class Application {
 
     public static void main(String[] args) {

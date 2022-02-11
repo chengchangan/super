@@ -15,6 +15,6 @@ public class PageQuery {
     private Integer pageSize;
 
     @ApiModelProperty(value = "目标页码")
-    private Integer pageIndex;
+    private Integer pageIndex = 1;
 
 }

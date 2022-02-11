@@ -1,7 +1,7 @@
 package io.boncray.example.cmdb;
 
 import io.boncray.bean.mode.base.PageList;
-import io.boncray.cmdb.database.intercetp.PageInterceptor;
+import io.boncray.cmdb.database.intercepter.PageInterceptor;
 import io.boncray.common.utils.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -30,12 +30,17 @@ public class ProductService {
     private ProductMapper productMapper;
 
 
-    public void pageList(){
+    public PageList<Product> pageList(){
         ProductPageQuery query = new ProductPageQuery();
+        query.setTitle("erer");
         query.setPageSize(20);
         query.setPageIndex(1);
         PageList<Product> page = productMapper.listPage(query,"hahahha");
         System.out.println(JacksonUtil.toJson(page));
+        return page;
     }
 
+    public static void main(String[] args) {
+
+    }
 }

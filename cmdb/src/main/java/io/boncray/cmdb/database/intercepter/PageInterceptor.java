@@ -1,10 +1,9 @@
-package io.boncray.cmdb.database.intercetp;
+package io.boncray.cmdb.database.intercepter;
 
 
 import cn.hutool.core.util.StrUtil;
 import io.boncray.bean.mode.base.PageList;
 import io.boncray.bean.mode.base.PageQuery;
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
 import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -26,10 +25,11 @@ import java.util.Properties;
 
 /**
  * mybatis mysql 分页拦截器
- * <p>
  * 利用mysql SQL_CALC_FOUND_ROWS FOUND_ROWS 实现
  *
- * @author wangxiaobo
+ * @author changan
+ * @version 1.0
+ * @date 2022/2/11 17:42
  */
 @Intercepts(@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}))
 public class PageInterceptor implements Interceptor {
@@ -44,20 +44,21 @@ public class PageInterceptor implements Interceptor {
                 break;
             }
         }
+        // 不是分页查询
+        if (pageQuery == null) {
+            return invocation.proceed();
+        }
+
+
+        Integer pageSize = pageQuery.getPageSize();
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = 10;
+        }
 
         int start = 0;
-        Integer limit = pageQuery.getPageSize();
-        if (limit == null || limit <= 0) {
-            limit = 10;
-        }
-
         Integer currentPage = pageQuery.getPageIndex();
-        if (currentPage == null) {
-            currentPage = 1;
-        }
-
         if (currentPage > 1) {
-            start = (currentPage - 1) * limit;
+            start = (currentPage - 1) * pageSize;
         }
 
         String sql = getSqlByInvocation(invocation);
@@ -72,61 +73,41 @@ public class PageInterceptor implements Interceptor {
         }
 
         sql = "select SQL_CALC_FOUND_ROWS" + sql.substring(6);
-
-        sql += " limit " + start + ", " + limit;
+        sql += " limit " + start + ", " + pageSize;
 
         resetSql2Invocation(invocation, sql);
 
         // 数据对象
-        Object obj1 = invocation.proceed();
+        Object proceed = invocation.proceed();
 
-        if (!(obj1 instanceof List)) {
+        if (!(proceed instanceof List)) {
             throw new RuntimeException("分页查询必须返回 List 对象");
         }
 
-        List<?> list = (List<?>) obj1;
+        PageList<?> pageList = new PageList<>((List<?>) proceed);
+        pageList.setPageSize(pageSize);
+        pageList.setPageIndex(currentPage);
+        if (pageList.size() > 0) {
 
-        if (list != null && list.size() > 0) {
-
+            // 获取总数
             Executor ce = (Executor) invocation.getTarget();
-
             Transaction transaction = ce.getTransaction();
             ResultSet rs = transaction.getConnection().createStatement().executeQuery("select FOUND_ROWS()");
-
             int count = 0;
             while (rs.next()) {
                 count = rs.getInt(1);
                 break;
             }
 
-            int pageSize = limit;
-
             int left = count % pageSize;
             int totalPage = left == 0 ? count / pageSize : count / pageSize + 1;
 
-            return new PageList<>(pageSize, currentPage, count, list);
-
-//            pageList.setTotalSize(count);
-//            pageList.setPageIndex(currentPage);
-//
-//            pageList.setHasNext(currentPage < totalPage ? true : false);
-//            pageList.setHasPre(currentPage > 1 ? true : false);
-//            pageList.setPageSize(pageSize);
-//            pageList.setTotalPage(totalPage);
+            pageList.setTotal(count);
+            pageList.setTotalPage(totalPage);
         } else {
-//            PageList<?> pageList = new PageList<>(list);
-//
-//            pageList.setTotalSize(0);
-//            pageList.setPageIndex(currentPage);
-//
-//            pageList.setHasNext(false);
-//            pageList.setHasPre(false);
-//            pageList.setPageSize(limit);
-//            pageList.setTotalPage(0);
-//            return pageList;
-            return new PageList<>(limit, currentPage, 0, list);
+            pageList.setTotal(0);
         }
-
+        return pageList;
     }
 
     @Override

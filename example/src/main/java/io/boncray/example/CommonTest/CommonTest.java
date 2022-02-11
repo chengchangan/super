@@ -2,7 +2,13 @@ package io.boncray.example.CommonTest;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import io.boncray.bean.mode.base.PageList;
+import io.boncray.bean.mode.base.PageResult;
+import io.boncray.bean.mode.response.Result;
+import io.boncray.example.cmdb.Product;
+import io.boncray.example.cmdb.ProductService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class CommonTest {
 
+    @Autowired
+    private ProductService productService;
 
     @PostMapping(value = "/material/list")
     public JSONObject test() {
@@ -24,9 +32,9 @@ public class CommonTest {
      * 如果返回String类型，需要配置 produces = {"application/json"}
      */
     @GetMapping(value = "/test", produces = {"application/json"})
-    public String test1() {
-
-        return "33";
+    public Result<PageResult<Product>> test1() {
+        PageList<Product> products = productService.pageList();
+        return Result.pageSuccess(products);
     }
 
 }
