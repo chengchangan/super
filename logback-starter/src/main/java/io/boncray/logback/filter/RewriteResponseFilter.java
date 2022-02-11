@@ -68,7 +68,7 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
 
     private void writeResponse(ServletResponse servletResponse, String responseData) throws IOException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.reset();
+//        response.reset();
         response.setContentType(CommonConstant.APPLICATION_JSON);
         response.setCharacterEncoding(CommonConstant.UTF8);
         response.getWriter().write(responseData);

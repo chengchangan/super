@@ -89,7 +89,7 @@ public class ProcessLoader {
         Resource[] resources = applicationContext.getResources(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + resourcePath);
         for (Resource resource : resources) {
             String json = CharStreams.toString(new InputStreamReader(resource.getInputStream(), Charsets.UTF_8));
-            processes.add(JSON.parseObject(json, Process.class));
+            processes.addAll(JSON.parseArray(json, Process.class));
         }
         return processes;
     }
