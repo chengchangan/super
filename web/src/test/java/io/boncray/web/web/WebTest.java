@@ -1,9 +1,7 @@
 package io.boncray.web.web;
 
 import io.boncray.web.BaseTest;
-import io.boncray.web.generator.GeneratorApplication;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author cca
@@ -12,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class WebTest extends BaseTest {
 
-    @Autowired
-    private GeneratorApplication generatorApplication;
-
     @Test
     public void test01() {
-        generatorApplication.generate(null);
+
     }
 }

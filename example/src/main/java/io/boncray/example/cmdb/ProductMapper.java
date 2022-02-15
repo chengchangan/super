@@ -2,7 +2,7 @@ package io.boncray.example.cmdb;
 
 import io.boncray.bean.mode.base.PageList;
 import io.boncray.bean.mode.base.PageQuery;
-import io.boncray.web.generator.supperClass.dao.BaseMapper;
+import io.boncray.generate.supperClass.dao.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

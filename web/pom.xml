@@ -18,18 +18,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>io.boncray</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>code-generate</artifactId>
         </dependency>
 
         <!-- 服务注册和发现-->
@@ -48,23 +38,10 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-
         <!-- web 支持-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <!-- druid 数据源-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-        </dependency>
-
-        <!--velocity代码生成使用模板 -->
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
         </dependency>
 
         <!-- knife4j接口文档 start -->

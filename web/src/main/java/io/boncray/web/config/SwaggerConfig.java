@@ -1,15 +1,9 @@
 package io.boncray.web.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Parameter;
-import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Collections;
 
 /**
  * @author cca
@@ -27,11 +21,5 @@ public class SwaggerConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    @Bean
-    public Docket createGeneratorRestApi() {
-        Parameter param1 = SwaggerUtil.createHeadParam("token", "令牌", "");
-        ApiInfo apiInfo = SwaggerUtil.createApiInfo("标题", "代码生成器", "1.0.0");
-        return SwaggerUtil.docket("代码生成器", apiInfo, "io.boncray.web.generator", Collections.singletonList(param1));
-    }
 
 }

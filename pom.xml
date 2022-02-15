@@ -17,6 +17,7 @@
         <module>common</module>
         <module>cmdb</module>
         <module>component</module>
+        <module>code-generate</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -31,6 +32,7 @@
 
         <!-- module version -->
         <core.version>1.0-SNAPSHOT</core.version>
+        <code.generate.version>1.0-SNAPSHOT</code.generate.version>
         <bean.version>1.0-SNAPSHOT</bean.version>
         <web.version>1.0-SNAPSHOT</web.version>
         <flow.version>1.0-SNAPSHOT</flow.version>
@@ -97,6 +99,11 @@
                 <groupId>io.boncray</groupId>
                 <artifactId>core</artifactId>
                 <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.boncray</groupId>
+                <artifactId>code-generate</artifactId>
+                <version>${code.generate.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.boncray</groupId>

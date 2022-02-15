@@ -1,6 +1,6 @@
 package io.boncray.example.cmdb;
 
-import io.boncray.web.generator.supperClass.entity.BaseDO;
+import io.boncray.generate.supperClass.entity.BaseDO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

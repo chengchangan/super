@@ -28,6 +28,11 @@
         </dependency>
 
         <dependency>
+            <groupId>io.boncray</groupId>
+            <artifactId>code-generate</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.boncray.logback</groupId>
             <artifactId>logback-starter</artifactId>
         </dependency>
@@ -48,6 +53,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+
 
     </dependencies>
 

@@ -1,0 +1,31 @@
+package ${context.basePackage}.mode.query #if(${table.module}) .${table.module}#end;
+
+import io.boncray.generate.supperClass.entity.Query;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
+
+#foreach($import in ${table.domainImports})
+import $import;
+#end
+
+/**
+ * ${table.comment} query
+ *
+ * @author code-generator
+ * @version 1.0
+ * @date ${date}
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ${table.className}Query extends Query {
+
+#foreach($column in ${table.columnList})
+    @ApiModelProperty(value = "${column.comment}")
+    private ${column.javaType} ${column.fieldName};
+
+#end
+
+}

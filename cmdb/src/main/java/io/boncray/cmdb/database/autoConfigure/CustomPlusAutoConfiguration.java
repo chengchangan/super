@@ -12,7 +12,7 @@ public class CustomPlusAutoConfiguration {
 
     @Order(20)
     @Bean
-    PageInterceptor pageInterceptor() {
+    public PageInterceptor MyPageInterceptor() {
         return new PageInterceptor();
     }
 

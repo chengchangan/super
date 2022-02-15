@@ -1,0 +1,62 @@
+{
+  "basePackage": "io.boncray",
+  "database": {
+    "url": "jdbc:mysql://101.34.35.72:3306/cloud2020?autoReconnect=true&useUnicode=true&characterEncoding=UTF8&serverTimezone=GMT%2b8&useSSL=false&verifyServerCertificate=true&requireSSL=false&useOldAliasMetadataBehavior=true&allowMultiQueries=true&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&useAffectedRows=true",
+    "driverClass": "com.mysql.cj.jdbc.Driver",
+    "user": "root",
+    "password": "root"
+  },
+  "templateList": [
+    {
+      "templatePath": "/vm/java/domain.vm",
+      "filePath": "java.${basePackage}.mode.domain.${moduleName}.${fileName}",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/query.vm",
+      "filePath": "java.${basePackage}.mode.query.${moduleName}.${fileName}Query",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/pageQuery.vm",
+      "filePath": "java.${basePackage}.mode.query.${moduleName}.${fileName}PageQuery",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/vo.vm",
+      "filePath": "java.${basePackage}.mode.vo.${moduleName}.${fileName}VO",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/dao.vm",
+      "filePath": "java.${basePackage}.dao.${moduleName}.${fileName}Mapper",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/mapper.vm",
+      "filePath": "resources.mapper.${moduleName}.${fileName}Mapper",
+      "fileType": "xml"
+    },
+    {
+      "templatePath": "/vm/java/service.vm",
+      "filePath": "java.${basePackage}.service.${moduleName}.${fileName}Service",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/serviceImpl.vm",
+      "filePath": "java.${basePackage}.service.impl.${moduleName}.${fileName}ServiceImpl",
+      "fileType": "java"
+    },
+    {
+      "templatePath": "/vm/java/controller.vm",
+      "filePath": "java.${basePackage}.controller.${moduleName}.${fileName}Controller",
+      "fileType": "java"
+    }
+  ],
+  "generateTableList": [],
+  "ignoreTableFirstWord": false,
+  "ignoreFields": [
+    "modify_time",
+    "create_time"
+  ]
+}

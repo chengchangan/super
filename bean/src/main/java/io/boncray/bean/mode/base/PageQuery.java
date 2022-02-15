@@ -12,7 +12,7 @@ import lombok.Data;
 public class PageQuery {
 
     @ApiModelProperty(value = "每页数据")
-    private Integer pageSize;
+    private Integer pageSize = 20;
 
     @ApiModelProperty(value = "目标页码")
     private Integer pageIndex = 1;
