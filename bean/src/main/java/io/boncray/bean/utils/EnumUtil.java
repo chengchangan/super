@@ -28,7 +28,7 @@ public class EnumUtil {
             }
             if (enumType.isEnum()) {
                 return Arrays.stream(enumType.getEnumConstants())
-                        .filter(x -> x.code().equals(code))
+                        .filter(x -> x.code().toString().equals(code.toString()))
                         .findFirst()
                         .orElse(null);
             }

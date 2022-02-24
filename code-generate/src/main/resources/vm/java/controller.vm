@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "${table.comment}")
 @RestController
 @RequestMapping("/${baseMapping}")
-public class ${table.className}Controller extends BaseController<${table.className}, ${table.className}Query> {
+public class ${table.className}Controller extends BaseController<${table.className}, ${table.className}Query, ${table.className}PageQuery> {
 
     @Autowired
     private ${serviceClass} ${serviceName};
