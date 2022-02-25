@@ -3,6 +3,7 @@ package io.boncray.flow.metric;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Joiner;
+import io.boncray.common.utils.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.LinkedHashMap;
@@ -47,7 +48,7 @@ public class Profiler {
         Stage stage = stages.getLast();
         // 如果阶段已经被释放了，则不处理
         if (stage.isReleased()) {
-            log.warn("阶段重复释放:{}", JSONUtil.toJsonStr(stage));
+            log.warn("阶段重复释放:{}", JacksonUtil.toJson(stage));
             return;
         }
         stage.release();

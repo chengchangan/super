@@ -1,6 +1,7 @@
 package io.boncray.flow.trigger;
 
 import cn.hutool.json.JSONUtil;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.core.transaction.ManualTransaction;
 import io.boncray.flow.exception.FlowProcessException;
 import io.boncray.flow.exception.ProcessExceptionEnum;
@@ -55,7 +56,7 @@ public class ProcessTrigger {
                         node.execute(context);
                     }
                 } catch (Exception e) {
-                    log.error("node:{},执行失败,参数:{},原因:{}.", node.getNodeCode(), JSONUtil.toJsonStr(context), e);
+                    log.error("node:{},执行失败,参数:{},原因:", node.getNodeCode(), JacksonUtil.toJson(context), e);
                     throw new FlowProcessException(ProcessExceptionEnum.FLOW_TRIGGER_120002, e);
                 } finally {
                     // 结束当前节点计时

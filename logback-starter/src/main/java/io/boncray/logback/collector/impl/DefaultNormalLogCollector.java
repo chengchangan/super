@@ -4,11 +4,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import io.boncray.bean.constants.LogConstant;
 import io.boncray.bean.mode.log.LogType;
 import io.boncray.bean.mode.log.NormalLog;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.logback.collector.Collectable;
 import org.springframework.stereotype.Component;
 
@@ -88,9 +87,11 @@ public class DefaultNormalLogCollector implements Collectable<NormalLog> {
         }
         Map<String, Object> messageMap = new LinkedHashMap<>();
         messageMap.put("messageInfo", iLoggingEvent.getFormattedMessage());
-        JSONObject node = JSONUtil.parseObj(iLoggingEvent.getThrowableProxy());
-        node.forEach(messageMap::put);
-        item.setMessage(JSONUtil.toJsonPrettyStr(messageMap));
+        messageMap.put("cause", iLoggingEvent.getThrowableProxy().getMessage());
+        // todo 原因待查明，数据库字段超长，抛出异常，此处 JSONUtil.parseObj 栈溢出
+//        JSONObject node = JSONUtil.parseObj(iLoggingEvent.getThrowableProxy());
+//        node.forEach(messageMap::put);
+        item.setMessage(JacksonUtil.toJson(messageMap));
     }
 
 }
