@@ -4,7 +4,7 @@
     <!--<springProperty scope="context" name="logLevel" source="log.level"/>-->
 
     <!--日志存放的路径-->
-    <springProperty scope="context" name="OPEN_FILE_PATH" source="log.path"/>
+<!--    <springProperty scope="context" name="OPEN_FILE_PATH" source="log.path"/>-->
     <!--日志文件夹的名称 这里即为项目的name-->
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
@@ -33,10 +33,9 @@
     <appender name="OPEN-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--不能有这项配置！！！！！-->
         <!--<Encoding>UTF-8</Encoding>-->
-        <!--<File>${OPEN_FILE_PATH}/${APP_NAME}.log</File>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${OPEN_FILE_PATH}/${APP_NAME}/all/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <FileNamePattern>logs/all/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
             <totalSizeCap>10GB</totalSizeCap>
@@ -54,7 +53,7 @@
     <!--输出到debug-->
     <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${OPEN_FILE_PATH}/${APP_NAME}/debug/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <FileNamePattern>logs/debug/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
             <MaxHistory>30</MaxHistory>
             <totalSizeCap>10GB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -77,7 +76,7 @@
     <!--输出到info-->
     <appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${OPEN_FILE_PATH}/${APP_NAME}/info/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <FileNamePattern>logs/info/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
             <MaxHistory>30</MaxHistory>
             <totalSizeCap>10GB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -99,7 +98,7 @@
     <!--输出到error-->
     <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${OPEN_FILE_PATH}/${APP_NAME}/error/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <FileNamePattern>logs/error/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
             <MaxHistory>30</MaxHistory>
             <totalSizeCap>10GB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -121,7 +120,7 @@
     <!--输出到warn-->
     <appender name="warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${OPEN_FILE_PATH}/${APP_NAME}/warn/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
+            <FileNamePattern>logs/warn/${APP_NAME}.%d{yyyy-MM-dd}-%i.log.zip</FileNamePattern>
             <MaxHistory>30</MaxHistory>
             <totalSizeCap>10GB</totalSizeCap>
             <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
