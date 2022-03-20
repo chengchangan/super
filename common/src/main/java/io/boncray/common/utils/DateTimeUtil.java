@@ -20,6 +20,8 @@ public class DateTimeUtil {
             .ofPattern("yyyy-MM-dd HH:mm");
     public static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter
             .ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter DATETIME_FORMATTER_1 = DateTimeFormatter
+            .ofPattern("yyyy.MM.dd HH:mm");
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter NO_SPLIT_FORMATTER = DateTimeFormatter
             .ofPattern("yyyyMMddHHmmss");
