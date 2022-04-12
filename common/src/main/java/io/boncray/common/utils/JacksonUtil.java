@@ -136,6 +136,16 @@ public class JacksonUtil {
         return toCollection(json, Set.class, cls);
     }
 
+
+    public static byte[] writeAsBytes(Object obj){
+        try {
+             return mapper.writeValueAsBytes(obj);
+        } catch (JsonProcessingException e) {
+            throw new JacksonSerializationException(e);
+        }
+    }
+
+
     private static <T> T toCollection(String json, Class<?> collectionClass, Class<?> cls) {
         JavaType javaType = getCollectionType(collectionClass, cls);
         try {
@@ -191,6 +201,10 @@ public class JacksonUtil {
 
     private static class JacksonSerializationException extends RuntimeException {
         public JacksonSerializationException() {
+        }
+
+        public JacksonSerializationException(Throwable cause) {
+            super(cause);
         }
 
         public JacksonSerializationException(String message, Throwable cause) {
