@@ -79,8 +79,12 @@ public class DefaultRpcLogCollector implements Collectable<RpcLog> {
     private void parseLogArg(Object[] logArgs, RpcLog item) {
         if ("start".equals(logArgs[1].toString())) {
             Map<String, Object> requestParam = new HashMap<>(4);
-            requestParam.put("body", logArgs[4]);
-            requestParam.put("header", logArgs[5]);
+            if (logArgs[4] != null && StrUtil.isNotBlank(logArgs[4].toString())) {
+                requestParam.put("body", JacksonUtil.toObj(String.valueOf(logArgs[4]), Map.class));
+            }
+            if (logArgs[5] != null && StrUtil.isNotBlank(logArgs[5].toString())) {
+                requestParam.put("header", JacksonUtil.toObj(String.valueOf(logArgs[5]), Map.class));
+            }
             item.setMethod(logArgs[2].toString());
             item.setRequestPath(logArgs[3].toString());
             item.setRequestParam(JacksonUtil.toJson(requestParam));
