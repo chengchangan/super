@@ -57,7 +57,8 @@ public class RewriteResponseFilter extends OncePerRequestFilter {
                     result.setRequestId(trackMetric.getCurrentTrackId());
                     // 写入请求的response
                     this.writeResponse(customResponse.getResponse(), JacksonUtil.toJson(result));
-                    // 写入自定义的response
+                    // 清除之前的responseData，写入自定义的response
+                    customResponse.reset();
                     this.writeResponse(customResponse, JacksonUtil.toJson(result));
                 } else {
                     this.writeResponse(customResponse.getResponse(), responseData);
