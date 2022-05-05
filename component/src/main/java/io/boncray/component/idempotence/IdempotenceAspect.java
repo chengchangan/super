@@ -249,7 +249,7 @@ public class IdempotenceAspect {
 
         public ReentrantLock get(String key) {
             if (EXPIRING_MAP.containsKey(key)) {
-                EXPIRING_MAP.getExpectedExpiration(key);
+                EXPIRING_MAP.resetExpiration(key);
             } else {
                 EXPIRING_MAP.put(key, PRESENT);
             }
