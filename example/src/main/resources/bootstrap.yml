@@ -8,7 +8,7 @@ spring:
       discovery:
         register-enabled: false
       config:
-        server-addr: 101.34.35.72:8848 #服务配置中心地址
+        server-addr: 39.108.97.141:8848 #服务配置中心地址
         namespace: 71f02626-4b72-4793-aab0-291c4cfed63b
         group: DEFAULT_GROUP
         file-extension: yaml
@@ -22,7 +22,7 @@ log:
     transferDataSource:
       username: root
       password: P!UgKAa5
-      url: jdbc:mysql://101.34.35.72:3306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false
+      url: jdbc:mysql://39.108.97.141:3306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false
       driverClassName: com.mysql.cj.jdbc.Driver
     transferStrategy:
       always: false
