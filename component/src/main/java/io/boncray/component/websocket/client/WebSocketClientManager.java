@@ -55,7 +55,7 @@ public class WebSocketClientManager implements ApplicationContextAware {
     private static final Set<String> WAIT_RETRY_CONNECTION_SERVER_PATH = Collections.synchronizedSet(new HashSet<>());
 
     private static final ScheduledExecutorService RETRY_CONNECT_EXECUTOR = Executors.newScheduledThreadPool(1,
-            x -> new Thread(x, "baas.chia.remote.webSocket.WebSocketClientManager"));
+            x -> new Thread(x, WebSocketClientManager.class.getName()));
 
     /**
      * 客户端全局配置信息

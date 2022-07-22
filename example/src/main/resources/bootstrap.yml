@@ -17,7 +17,6 @@ spring:
             group: DEFAULT_GROUP
 log:
   manager:
-    collectEnabled: true
     transferChannel: none
     transferDataSource:
       username: root
