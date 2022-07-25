@@ -4,11 +4,14 @@ import cn.hutool.core.util.BooleanUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.fastjson.JSON;
 import com.zaxxer.hikari.HikariDataSource;
+import io.boncray.bean.exception.BizException;
 import io.boncray.bean.mode.inner.GenerateDTO;
 import io.boncray.common.utils.FileUtil;
+import io.boncray.common.utils.JacksonUtil;
 import io.boncray.generate.domain.Configuration;
 import io.boncray.generate.domain.property.DataBase;
 import io.boncray.generate.generate.Generator;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,7 @@ import java.time.LocalDateTime;
  * @date 2021/1/21 16:33
  */
 @Component
+@Slf4j
 public class GeneratorApplication implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -57,11 +61,12 @@ public class GeneratorApplication implements ApplicationContextAware {
 
             parseConfig(config, generateDTO);
             Generator generator = new Generator();
-            System.out.println("generate begin 开始：" + LocalDateTime.now());
+            log.info("generate begin 开始：{}", LocalDateTime.now());
             generator.run(config);
-            System.out.println("all generator finishes ! ! ! ,结束：" + LocalDateTime.now());
+            log.info("all generator finishes ! ! ! ,结束：{}", LocalDateTime.now());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("生成代码异常，参数：【{}】，异常信息：", JacksonUtil.toJson(generateDTO), e);
+            throw new BizException(1000, "代码生成异常");
         }
     }
 
