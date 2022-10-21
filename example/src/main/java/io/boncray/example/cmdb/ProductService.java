@@ -19,12 +19,6 @@ import javax.annotation.Resource;
 @Service
 public class ProductService {
 
-    @Order(20)
-    @Bean
-    PageInterceptor pageInterceptor(){
-        return new PageInterceptor();
-    }
-
 
     @Resource
     private ProductMapper productMapper;

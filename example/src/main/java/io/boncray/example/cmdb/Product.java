@@ -66,7 +66,7 @@ public class Product extends BaseDO {
     private String commissionType;
 
     @ApiModelProperty(value = "淘客30天推广量")
-    private Integer totalSales;
+    private Integer monthSales;
 
     @ApiModelProperty(value = "一级分类名称")
     private String levelOneCategoryName;

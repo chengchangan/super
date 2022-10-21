@@ -21,7 +21,7 @@ log:
     transferDataSource:
       username: root
       password: P!UgKAa5
-      url: jdbc:mysql://39.108.97.141:3306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false
+      url: jdbc:mysql://39.108.97.141:13306/log_center?serverTimezone=Hongkong&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false
       driverClassName: com.mysql.cj.jdbc.Driver
     transferStrategy:
       always: false

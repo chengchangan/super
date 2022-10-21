@@ -4,7 +4,7 @@
 
 <mapper namespace="io.boncray.example.cmdb.ProductMapper">
 
-    <sql id="columns">id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,total_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description</sql>
+    <sql id="columns">id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,month_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description</sql>
 
     <resultMap id="resultMap" type="io.boncray.example.cmdb.Product">
         <id column="id" property="id"/>
@@ -23,7 +23,7 @@
         <result column="post_fee" property="postFee"/>
         <result column="commission_rate" property="commissionRate"/>
         <result column="commission_type" property="commissionType"/>
-        <result column="total_sales" property="totalSales"/>
+        <result column="month_sales" property="monthSales"/>
         <result column="level_one_category_name" property="levelOneCategoryName"/>
         <result column="level_one_category_id" property="levelOneCategoryId"/>
         <result column="level_two_category_name" property="levelTwoCategoryName"/>
@@ -48,7 +48,7 @@
         post_fee                AS postFee,
         commission_rate                AS commissionRate,
         commission_type                AS commissionType,
-        total_sales                AS totalSales,
+        month_sales                AS monthSales,
         level_one_category_name                AS levelOneCategoryName,
         level_one_category_id                AS levelOneCategoryId,
         level_two_category_name                AS levelTwoCategoryName,
@@ -145,8 +145,8 @@
             <if test="ew.commissionType!=null and ew.commissionType!=''">
                 AND commission_type=#{ew.commissionType}
             </if>
-            <if test="ew.totalSales!=null">
-                AND total_sales=#{ew.totalSales}
+            <if test="ew.monthSales!=null">
+                AND month_sales=#{ew.monthSales}
             </if>
             <if test="ew.levelOneCategoryName!=null and ew.levelOneCategoryName!=''">
                 AND level_one_category_name=#{ew.levelOneCategoryName}
@@ -171,7 +171,7 @@
     </sql>
 
     <insert id="insert" parameterType="io.boncray.example.cmdb.Product">
-        INSERT INTO c_product(id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,total_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description)
+        INSERT INTO c_product(id,item_id,item_url,title,short_title,main_image,white_image,small_images,item_share_url,fixed_price,discount_fixed_price,superior_brand,item_location,post_fee,commission_rate,commission_type,month_sales,level_one_category_name,level_one_category_id,level_two_category_name,level_two_category_id,item_description)
         VALUES(
         <trim suffixOverrides=",">
             #{entity.id},
@@ -190,7 +190,7 @@
             #{entity.postFee},
             #{entity.commissionRate},
             #{entity.commissionType},
-            #{entity.totalSales},
+            #{entity.monthSales},
             #{entity.levelOneCategoryName},
             #{entity.levelOneCategoryId},
             #{entity.levelTwoCategoryName},
@@ -218,7 +218,7 @@
             <if test="entity.postFee!=null">post_fee=#{entity.postFee},</if>
             <if test="entity.commissionRate!=null">commission_rate=#{entity.commissionRate},</if>
             <if test="entity.commissionType!=null">commission_type=#{entity.commissionType},</if>
-            <if test="entity.totalSales!=null">total_sales=#{entity.totalSales},</if>
+            <if test="entity.monthSales!=null">month_sales=#{entity.monthSales},</if>
             <if test="entity.levelOneCategoryName!=null">level_one_category_name=#{entity.levelOneCategoryName},</if>
             <if test="entity.levelOneCategoryId!=null">level_one_category_id=#{entity.levelOneCategoryId},</if>
             <if test="entity.levelTwoCategoryName!=null">level_two_category_name=#{entity.levelTwoCategoryName},</if>
@@ -274,8 +274,8 @@
             <if test="ew.commissionType!=null">
                 AND commission_type=#{ew.commissionType}
             </if>
-            <if test="ew.totalSales!=null">
-                AND total_sales=#{ew.totalSales}
+            <if test="ew.monthSales!=null">
+                AND month_sales=#{ew.monthSales}
             </if>
             <if test="ew.levelOneCategoryName!=null">
                 AND level_one_category_name=#{ew.levelOneCategoryName}
@@ -315,7 +315,7 @@
             <if test="entity.postFee!=null">post_fee=#{entity.postFee},</if>
             <if test="entity.commissionRate!=null">commission_rate=#{entity.commissionRate},</if>
             <if test="entity.commissionType!=null">commission_type=#{entity.commissionType},</if>
-            <if test="entity.totalSales!=null">total_sales=#{entity.totalSales},</if>
+            <if test="entity.monthSales!=null">month_sales=#{entity.monthSales},</if>
             <if test="entity.levelOneCategoryName!=null">level_one_category_name=#{entity.levelOneCategoryName},</if>
             <if test="entity.levelOneCategoryId!=null">level_one_category_id=#{entity.levelOneCategoryId},</if>
             <if test="entity.levelTwoCategoryName!=null">level_two_category_name=#{entity.levelTwoCategoryName},</if>
